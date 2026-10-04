@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. Library Deprecated Functions &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Additional Resources" href="../additional_info/index.html" />
+    <link rel="prev" title="6. Protocol Defines" href="tformat_lib_protocol.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system/index.html">T-Format System Solution</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">T-Format Encoder Interface Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_integration.html">1. T-Format Library Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_port_to_cpu2.html">2. T-Format Library Porting to CPU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_globals.html">3. Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_interface.html">4. T-Format Encoder Interface API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_private.html">5. Library Private Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_protocol.html">6. Protocol Defines</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">7. Library Deprecated Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">T-Format Encoder Interface Library</a> &raquo;</li>
+        
+      <li><span class="section-number">7. </span>Library Deprecated Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="library-deprecated-functions">
+<h1><span class="section-number">7. </span>Library Deprecated Functions<a class="headerlink" href="#library-deprecated-functions" title="Permalink to this headline">¶</a></h1>
+<p id="lnk-lib-deprecated">The following functions are deprecated and no longer used.</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PM_tformat_setupCommand">
+<span class="target" id="group___t_f_o_r_m_a_t___a_p_i___d_e_p_r_e_c_a_t_e_d_1ga4ee158a72b249e2102ee34817d6ed20f"></span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PM_tformat_setupCommand</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">dataID</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">eepromAddr</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">eepromData</span></span>, <span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">crc</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="pre">__attribute__((deprecated(&quot;Replace</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">command-specific</span> <span class="pre">function.&quot;)))</span><a class="headerlink" href="#c.PM_tformat_setupCommand" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Setup a command (Deprecated) </p>
+<p>To improve performance, this function has been split into command-specific functions shown below.</p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p>Command specific functions:<ul class="simple">
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___s_t_a_r_t___c_o_m_m_a_n_d_s_1ga76e23e34f7a24beeb72acf3c7d43d256"><span class="std std-ref">PM_tformat_setupCommandReadEEPROM()</span></a></p></li>
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___s_t_a_r_t___c_o_m_m_a_n_d_s_1gace36ee6557d2822ac963d7e990c92a6c"><span class="std std-ref">PM_tformat_setupCommandWriteEEPROM()</span></a></p></li>
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___s_t_a_r_t___c_o_m_m_a_n_d_s_1gac8058b801a86e26bbc358de77a6d395e"><span class="std std-ref">PM_tformat_setupCommandReadoutOrReset()</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PM_tformat_receiveData">
+<span class="target" id="group___t_f_o_r_m_a_t___a_p_i___d_e_p_r_e_c_a_t_e_d_1ga3843c999abed974bf7271b7346b3627d"></span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PM_tformat_receiveData</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">dataID</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="pre">__attribute__((deprecated(&quot;Replace</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">command-specific</span> <span class="pre">function.&quot;)))</span><a class="headerlink" href="#c.PM_tformat_receiveData" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Receive data (Deprecated) </p>
+<p>To improve performance, this function has been split into command-specific functions.</p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p>Command-specific functions:<ul class="simple">
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___r_e_c_e_i_v_e___d_a_t_a_1gad68ba5d681a9ba9aabdabea1e5cfd61e"><span class="std std-ref">PM_tformat_receiveDataID0_1_7_8_C()</span></a></p></li>
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___r_e_c_e_i_v_e___d_a_t_a_1ga45df67bde9373ee985d739e804a6e854"><span class="std std-ref">PM_tformat_receiveDataID2()</span></a></p></li>
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___r_e_c_e_i_v_e___d_a_t_a_1gab389442214e279c855097c28f671f555"><span class="std std-ref">PM_tformat_receiveDataID3()</span></a></p></li>
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___r_e_c_e_i_v_e___d_a_t_a_1gabd0d5fe7ed753f2f7964eed124b0b8fe"><span class="std std-ref">PM_tformat_receiveDataIDD()</span></a></p></li>
+<li><p><a class="reference internal" href="tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___r_e_c_e_i_v_e___d_a_t_a_1ga1b221c6afcacbfad2d9367121fb96048"><span class="std std-ref">PM_tformat_receiveDataID6()</span></a> </p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../additional_info/index.html" class="btn btn-neutral float-right" title="Additional Resources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tformat_lib_protocol.html" class="btn btn-neutral float-left" title="6. Protocol Defines" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

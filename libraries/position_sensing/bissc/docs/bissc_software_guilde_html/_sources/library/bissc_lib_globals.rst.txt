@@ -1,0 +1,40 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Library Structures and Arrays
+************************************************************
+
+.. _lnk-lib-globals:
+
+The library uses the following structures and arrays. 
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_include.h
+    :language: c
+    :caption: Single-cycle-data processing parameters: /libraries/position_sensing/bissc/pm_bissc_include.h
+    :start-after: [doc-scd-struct-start]
+    :end-before:  [doc-scd-struct-end]
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_include.h
+    :language: c
+    :caption: Control-data frame processing: /libraries/position_sensing/bissc/pm_bissc_include.h
+    :start-after: [doc-cd-struct-start]
+    :end-before:  [doc-cd-struct-end]
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_include.h
+    :language: c
+    :caption: Register access processing: /libraries/position_sensing/bissc/pm_bissc_include.h
+    :start-after: [doc-register-struct-start]
+    :end-before:  [doc-register-struct-end]
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_include.h
+    :language: c
+    :caption: Encoder information: /libraries/position_sensing/bissc/pm_bissc_include.h
+    :start-after: [doc-encoder-struct-start]
+    :end-before:  [doc-encoder-struct-end]
+
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_include.h
+    :language: c
+    :caption: Single-cycle data received buffer: /libraries/position_sensing/bissc/pm_bissc_include.h
+    :start-after: [doc-scd-rx-array-start]
+    :end-before:  [doc-scd-rx-array-end]

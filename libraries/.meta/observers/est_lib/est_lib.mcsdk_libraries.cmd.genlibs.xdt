@@ -1,0 +1,15 @@
+% let Common   = system.getScript("/driverlib/Common.js");
+% var moduleName = "est_lib"
+% var libraryFolder = "observers"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+% if (module != null) {
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+    % }
+/* libraries required for /libraries/`libraryFolder`/`moduleName` */
+% if (Common.getDeviceName() == "F28E12x") {
+-l"/libraries/`libraryFolder`/`moduleName`/lib/fast_full_s32_fpu.lib"
+% } else { 
+-l"/libraries/`libraryFolder`/`moduleName`/lib/`instance.estLibVariant`.lib"
+% }
+% }

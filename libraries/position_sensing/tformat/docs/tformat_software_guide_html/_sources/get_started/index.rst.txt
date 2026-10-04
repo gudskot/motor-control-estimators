@@ -1,0 +1,13 @@
+
+Getting Started
+---------------------------
+
+.. toctree::
+   :maxdepth: 3
+   :numbered:
+     
+   tformat_overview
+   tformat_steps
+   tformat_migration
+   tformat_requirements
+   tformat_install_directory

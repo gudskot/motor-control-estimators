@@ -1,0 +1,6 @@
+% let Common   = system.getScript("/driverlib/Common.js");
+% var moduleName = "mpid"
+% var libraryFolder = "observers"
+/* libraries required for /libraries/`libraryFolder`/`moduleName` */
+-l"/libraries/`libraryFolder`/`moduleName`/lib/est_trajState.lib"
+-l"/libraries/`libraryFolder`/`moduleName`/lib/fluxHF.lib"

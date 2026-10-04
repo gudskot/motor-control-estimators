@@ -1,0 +1,5 @@
+% let Common   = system.getScript("/driverlib/Common.js");
+% var moduleName = "queue"
+% var libraryFolder = "utilities"
+/* libraries required for /libraries/`libraryFolder`/`moduleName` */
+-l"/libraries/`libraryFolder`/`moduleName`/ccs/`Common.getDeviceName().toLowerCase()`/Release/`moduleName`.lib"

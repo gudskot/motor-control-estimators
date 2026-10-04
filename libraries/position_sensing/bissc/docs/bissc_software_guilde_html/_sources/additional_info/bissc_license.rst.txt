@@ -1,0 +1,14 @@
+.. include:: ../bissc_replacements.rst
+
+BiSS-C License
+************************************************************
+
+.. _lnk-license:
+
+|BISSC_TRADEMARK_NAME| The purchase of TI MCUs does not automatically include a license to use the BiSS IPs (e.g. for marketing). 
+Users of the BiSS Interface have to apply for their own license |BISSC_LICENSE_NAME|_
+
+BiSS-C Protocol Description
+************************************************************
+
+For more details on the protocol and implementation aspects, see the |BISSC_WEB_NAME|_ website.

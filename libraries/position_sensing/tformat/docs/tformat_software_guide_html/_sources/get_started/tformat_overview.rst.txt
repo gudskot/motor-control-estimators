@@ -1,0 +1,44 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+Overview
+************************************************************
+|TFORMAT_SPEC_NAME|_, is designed for serial transfer of digital data between linear, rotary or angle
+encoders, touch probes, accelerometers and the subsequent electronics, such as numerical controls,
+servo amplifiers and programmable logic controllers. 
+
+For more details on the protocol and implementation aspects, see the |TAMAGAWA_WEB_NAME|_ website.
+
+The C2000 T-Format Encoder Interface Reference is divided into three parts: 
+
+#. Hardware and overall design. This is described in |TFORMAT_LIB_NAME|_.
+#. Software: T-Format encoder interface Application Programming Interface (API)
+#. Software: System solution demonstration
+
+This document focuses on the T-Format API and system example.
+
+T-Format API
+------------------------------------------------------------
+The T-Format API provides functions and definitions used to implement the T-Format encoder interface.
+
+Key Features of the library:
+
+* Encoder interface integrated into a C2000 real-time microcontroller solution 
+* Meets the encoder interface clocking requirements
+* Supports all T-Format commands
+* Cyclic Redundancy Check (CRC) calculations
+* All source code is provided
+    
+System Example
+------------------------------------------------------------
+Provides support functions to configure a C2000 Real-Time Control device to support T-format.
+    
+Key Features:
+
+* Provides a blueprint for how to integrate the library into a project
+* Command processing to perform basic error checks, update position, turns and encoder ID.
+* All source code is provided.
+
+.. note:: 
+   For device-specific requirements, refer to the |TFORMAT_TIDM|_ T-Format Encoder Interface design guide.
+

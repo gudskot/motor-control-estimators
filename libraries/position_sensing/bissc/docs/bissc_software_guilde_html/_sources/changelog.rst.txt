@@ -1,0 +1,7 @@
+#########
+Changelog
+#########
+C2000 MotorControl SDK Version 5.03.00.00
+-----------------------------------------------------------
+* Initial release for the F28P65x
+  

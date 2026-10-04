@@ -1,0 +1,16 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+Getting Started Steps
+************************************************************
+
+.. _lnk-get-started:
+
+The recommended sequence to get started is:
+
+#. Review and install the tools as described in :ref:`the minimum requirements <lnk-requirements>`.
+#. Run the :ref:`system example <lnk-sys-example>`.
+#. If implementing your own system, refer to :ref:`T-Format library integration <lnk-integration>`.
+
+.. warning::
+    If you are migrating your application from V04.01.00.00 or earlier, :ref:`library migration <lnk-migration>` includes important information regarding changes and enhancements. 

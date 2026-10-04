@@ -1,0 +1,14 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Getting Started Steps
+************************************************************
+
+.. _lnk-get-started:
+
+The recommended sequence to get started is:
+
+#. Review and install the tools as described in :ref:`the minimum requirements <lnk-requirements>`.
+#. Run the :ref:`system example <lnk-sys-example>`.
+#. If implementing your own system, refer to :ref:`BiSS-C library integration <lnk-integration>`.
+#. Obtain your development license. |BISSC_TRADEMARK_NAME| |BISSC_LICENSE_NAME|_ For more details on the protocol and implementation aspects, see the |BISSC_WEB_NAME|_ website.

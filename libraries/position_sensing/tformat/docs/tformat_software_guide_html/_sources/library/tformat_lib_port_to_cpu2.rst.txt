@@ -1,0 +1,49 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+T-Format Library Porting to CPU2
+************************************************************
+
+.. _lnk-integration:
+
+Some devices include a C28x CPU2. This section provides an overview of the steps to run the encoder interface from CPU2 instead of CPU1. 
+
+Resolve Resource Conflicts
+-----------------------------------------------------------
+
+If you are incorporating the library into your own project on CPU2, it is suggested to get a simple example running on CPU1 with any and all resource conflicts within your application resolved. Then focus on porting from CPU1 to CPU2. For information on incorporating the library into your own application, refer to :ref:`T-Format Library Integration <lnk-integration>`. 
+
+CPU1 Project
+-----------------------------------------------------------
+The project must be built with the pre-defined symbol CPU1. 
+
+The CPU1 sub-system initialization will include these steps:
+
+* Initialize the device
+* Allocate desired global memory blocks to CPU2
+* Configure the CLB tiles for T-Format
+* Allocate the peripheral access control and CPU for CLB tiles to CPU2
+* Configure the PinMux, CLB_INPUT/OUTPUTXBAR, and CLB MUX as needed. 
+* Allocate needed GPIO pins to CPU2.
+* Allocate the SPI peripheral to CPU2
+* Boot CPU2
+* Continue configuration of CPU1 sub-system
+
+For F2837xD:
+
+* The CLBx Tile is clocked by the ePWMx clock. That is, CLB1 is clocked by ePWM1 clock CLB2 by ePWM2, and so forth. This means the ePWMx module must also be assigned to CPU2 as well. 
+
+CPU2 Project
+-----------------------------------------------------------
+The project must be built with the pre-defined symbol CPU2. 
+  
+The CPU2 sub-system initialization will include these steps:
+
+* Enable the clock to the CLB tiles
+* Set the T-Format frequency
+* Setup the SPI interrupt in the PIE vector table, PIE IER register, and CPU IER register
+* Enable the SPI peripheral
+
+For F2837xD:
+
+* To enable the clock to the CLB Tiles, enable the clocks to the corresponding ePWMx modules. For example: enable ePWM1 clock CPU2 will also enable the clock to the CLB1 Tile.

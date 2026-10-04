@@ -1,0 +1,12 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+Library Deprecated Functions
+************************************************************
+
+.. _lnk-lib-deprecated:
+
+The following functions are deprecated and no longer used. 
+
+.. doxygengroup:: TFORMAT_API_DEPRECATED
+   :content-only:

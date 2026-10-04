@@ -1,0 +1,618 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>6. Protocol Defines &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Library Deprecated Functions" href="tformat_lib_deprecated.html" />
+    <link rel="prev" title="5. Library Private Functions" href="tformat_lib_private.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system/index.html">T-Format System Solution</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">T-Format Encoder Interface Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_integration.html">1. T-Format Library Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_port_to_cpu2.html">2. T-Format Library Porting to CPU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_globals.html">3. Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_interface.html">4. T-Format Encoder Interface API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_private.html">5. Library Private Functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">6. Protocol Defines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#command-and-response-format">6.1. Command and Response Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spi-clocks-required-to-send-receive">6.2. SPI Clocks Required to Send/receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#spi-fifo-level">6.3. SPI FIFO Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-id-code-format">6.4. Data ID Code Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-field-cf">6.5. Command Field (CF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crc-calculations">6.6. CRC Calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_deprecated.html">7. Library Deprecated Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">T-Format Encoder Interface Library</a> &raquo;</li>
+        
+      <li><span class="section-number">6. </span>Protocol Defines</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="protocol-defines">
+<h1><span class="section-number">6. </span>Protocol Defines<a class="headerlink" href="#protocol-defines" title="Permalink to this headline">¶</a></h1>
+<p id="lnk-defines">The library header file includes a number of T-Format protocol-based defines.  Some of these are shown below for reference.  Information on specific fields and commands can be found in the <a class="reference internal" href="../additional_info/tformat_glossary.html#lnk-glossery"><span class="std std-ref">glossery</span></a>.</p>
+<div class="section" id="command-and-response-format">
+<h2><span class="section-number">6.1. </span>Command and Response Format<a class="headerlink" href="#command-and-response-format" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 6.1 </span><span class="caption-text">/libraries/position_sensing/tformat/include/pm_tformat_include.h</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">// Transmit packet (request)</span>
+<span class="c1">//      Number of 10-bit fields (command) for each Data ID code:</span>
+<span class="c1">//</span>
+<span class="c1">//      ID0: TX 1 field    CF</span>
+<span class="c1">//      ID1: TX 1 field    CF</span>
+<span class="c1">//      ID2: TX 1 field    CF</span>
+<span class="c1">//      ID3: TX 1 field    CF</span>
+<span class="c1">//      ID7: TX 1 field    CF</span>
+<span class="c1">//      ID8: TX 1 field    CF</span>
+<span class="c1">//      IDC: TX 1 field    CF</span>
+<span class="c1">//      ID6: TX 4 fields   CF + ADF + EDF + CRC      (EEPROM write)</span>
+<span class="c1">//      IDD: TX 3 fields   CF + ADF + CRC            (EEPROM read)</span>
+<span class="c1">//</span>
+<span class="c1">// Receive packet (response)</span>
+<span class="c1">//      Number of 10-bit fields received for each request</span>
+<span class="c1">//</span>
+<span class="c1">//      ID0: RX 6 fields:  CF + SF + DF0 + DF1 + DF2 + CRC</span>
+<span class="c1">//                                   DF0-DF2 == ABS0-ABS2</span>
+<span class="c1">//</span>
+<span class="c1">//      ID1: RX 6 fields:  CF + SF + DF0 + DF1 + DF2 + CRC</span>
+<span class="c1">//                                   DF0-DF2 == ABM0-ABM2</span>
+<span class="c1">//</span>
+<span class="c1">//      ID2: RX 4 fields:  CF + SF + DF0 + CRC</span>
+<span class="c1">//                                   DF0 == ENID</span>
+<span class="c1">//</span>
+<span class="c1">//      ID3: RX 11 fields: CF + SF + DF0 + DF1 + DF2....DF7 + CRC</span>
+<span class="c1">//                                   DF0-DF2 == ABS0-ABS2</span>
+<span class="c1">//                                   DF3 == ENID</span>
+<span class="c1">//                                   DF4-DF6 == ABM0-ABM2</span>
+<span class="c1">//                                   DF7 == ALMC</span>
+<span class="c1">//</span>
+<span class="c1">//      ID7: RX 6 fields:  CF + SF + DF0 + DF1 + DF2 + CRC</span>
+<span class="c1">//                                   DF0-DF2 == ABS0-ABS2</span>
+<span class="c1">//</span>
+<span class="c1">//      ID8: RX 6 fields:  CF + SF + DF0 + DF1 + DF2 + CRC</span>
+<span class="c1">//                                   DF0-DF2 == ABS0-ABS2</span>
+<span class="c1">//</span>
+<span class="c1">//      IDC: RX 6 fields:  CF + SF + DF0 + DF1 + DF2 + CRC</span>
+<span class="c1">//                                   DF0-DF2 == ABS0-ABS2</span>
+<span class="c1">//</span>
+<span class="c1">//      ID6: RX 4 fields:  CF + ADF + EDF + CRC</span>
+<span class="c1">//</span>
+<span class="c1">//      IDD: RX 4 fields:  CF + ADF + EDF + CRC</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID0    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID1    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID2    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID3    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID7    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID8    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_IDC    1u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_ID6    4u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_IDD    3u</span>
+
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID0    6u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID1    6u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID2    4u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID3    11u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID7    6u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID8    6u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_IDC    6u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_ID6    4u</span>
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_IDD    4u</span>
+
+<span class="cp">#define PM_TFORMAT_RX_FIELDS_MAX    11u</span>
+<span class="cp">#define PM_TFORMAT_TX_FIELDS_MAX     4u</span>
+<span class="cp">#define PM_TFORMAT_FIELDS_MAX                                                  \</span>
+<span class="cp">           (PM_TFORMAT_TX_FIELDS_ID3 + PM_TFORMAT_RX_FIELDS_ID3)</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="spi-clocks-required-to-send-receive">
+<h2><span class="section-number">6.2. </span>SPI Clocks Required to Send/receive<a class="headerlink" href="#spi-clocks-required-to-send-receive" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 6.2 </span><span class="caption-text">/libraries/position_sensing/tformat/include/pm_tformat_include.h</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Number of SPI clocks required to transmit a request is:</span>
+<span class="c1">// = 1 idle bit + (number of TX fields * number of field bits)</span>
+<span class="c1">// = 1 idle bit + total number of TX bits</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID0 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_ID0 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID1 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_ID1 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID2 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_ID2 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID3 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                +  (PM_TFORMAT_TX_FIELDS_ID3 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID6 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_ID6 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID7 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_ID7 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_ID8 (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_ID8 * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_IDC (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_IDC * PM_TFORMAT_FIELD_BITS))</span>
+<span class="cp">#define PM_TFORMAT_TX_CLOCKS_IDD (PM_TFORMAT_IDLE_BIT                          \</span>
+<span class="cp">                + (PM_TFORMAT_TX_FIELDS_IDD * PM_TFORMAT_FIELD_BITS))</span>
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Number of SPI clocks required to receive a response is:</span>
+<span class="c1">// = number of RX fields * number of field bits</span>
+<span class="c1">// = total number of RX bits</span>
+<span class="c1">//</span>
+<span class="c1">// In the case of an error, the encoder will respond with ID3.  An error</span>
+<span class="c1">// can be the wrong TX CRC or an invalid command.  Therefore the RX clocks</span>
+<span class="c1">// will correspond to an ID3 response or PM_TFORMAT_TX_FIELDS_MAX</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID0                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID0 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID1                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID1 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID2                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID2 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID3                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID3 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID6                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID6 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID7                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID7 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_ID8                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID8 * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_IDC                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_IDC * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_IDD                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_IDD * PM_TFORMAT_FIELD_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_MAX                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_MAX * PM_TFORMAT_FIELD_BITS)</span>
+
+<span class="cp">#define PM_TFORMAT_RX_CLOCKS_IDX                                               \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID3 * PM_TFORMAT_FIELD_BITS)</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="spi-fifo-level">
+<h2><span class="section-number">6.3. </span>SPI FIFO Level<a class="headerlink" href="#spi-fifo-level" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 6.3 </span><span class="caption-text">/libraries/position_sensing/tformat/include/pm_tformat_include.h</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Since SPISTEN is always active, the RX FIFO will see both the</span>
+<span class="c1">// TX and RX data.  Thus the required FIFO level is the sum of the two.</span>
+<span class="c1">// In the current design, this FIFO level is used for both TX and RX.</span>
+<span class="c1">//</span>
+<span class="c1">// On some devices the CLB can directly control the SPISTEN signal.  Changing</span>
+<span class="c1">// the state of the signal is a potential design change that a developer may</span>
+<span class="c1">// want to consider.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID0                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID0 + PM_TFORMAT_TX_FIELDS_ID0)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID1                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID1 + PM_TFORMAT_TX_FIELDS_ID1)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID2                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID2 + PM_TFORMAT_TX_FIELDS_ID2)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID3                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID3 + PM_TFORMAT_TX_FIELDS_ID3)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID6                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID6 + PM_TFORMAT_TX_FIELDS_ID6)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID7                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID7 + PM_TFORMAT_TX_FIELDS_ID7)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_ID8                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_ID8 + PM_TFORMAT_TX_FIELDS_ID8)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_IDC                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_IDC + PM_TFORMAT_TX_FIELDS_IDC)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_IDD                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_IDD + PM_TFORMAT_TX_FIELDS_IDD)</span>
+<span class="cp">#define PM_TFORMAT_FIFO_LEVEL_MAX                                              \</span>
+<span class="cp">                    (PM_TFORMAT_RX_FIELDS_MAX + PM_TFORMAT_TX_FIELDS_MAX)</span>
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="data-id-code-format">
+<h2><span class="section-number">6.4. </span>Data ID Code Format<a class="headerlink" href="#data-id-code-format" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 6.4 </span><span class="caption-text">/libraries/position_sensing/tformat/include/pm_tformat_include.h</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Data ID Code</span>
+<span class="c1">// Unique code for each command. Defined in the T-Format specification.</span>
+<span class="c1">// IDx = code (4-bits) + parity (1-bit)</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_CODEID0  0x00u   </span><span class="c1">// 0b0000:0 = code0:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEID1  0x11u   </span><span class="c1">// 0b1000:1 = code1:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEID2  0x09u   </span><span class="c1">// 0b0100:1 = code2:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEID3  0x18u   </span><span class="c1">// 0b1100:0 = code3:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEID6  0x0Cu   </span><span class="c1">// 0b0110:0 = code6:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEIDD  0x17u   </span><span class="c1">// 0b1011:1 = codeD:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEID7  0x1Du   </span><span class="c1">// 0b1110:1 = code7:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEID8  0x03u   </span><span class="c1">// 0b0001:1 = code8:parity</span>
+<span class="cp">#define PM_TFORMAT_CODEIDC  0x06u   </span><span class="c1">// 0b0011:0 = codeC:parity</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="command-field-cf">
+<h2><span class="section-number">6.5. </span>Command Field (CF)<a class="headerlink" href="#command-field-cf" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">Listing 6.5 </span><span class="caption-text">/libraries/position_sensing/tformat/include/pm_tformat_include.h</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Control Field (CF)</span>
+<span class="c1">// First 10-bit field in any transmitted or received packet</span>
+<span class="c1">//</span>
+<span class="c1">//    idle   start  sink code   Data ID code   Delimiter</span>
+<span class="c1">//  ...1,1     0      010          xxxx:x         1</span>
+<span class="c1">//</span>
+<span class="c1">// * 1-bit start:       fixed (0)</span>
+<span class="c1">// * 3-bit sink code:   fixed (0,1,0)</span>
+<span class="c1">// * 5-bit DataIDCode:  code (4-bits) + parity (1-bit)</span>
+<span class="c1">// * 1-bit Delimiter:   fixed (1)</span>
+<span class="c1">//</span>
+<span class="c1">//  Note: The delimiter is added in the PM_TFORMAT_IDx enumerations</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_CFID0 (PM_TFORMAT_CODEID0 | 0x40u) </span><span class="c1">//CF: 0b010:0000:0 = 0x40</span>
+<span class="cp">#define PM_TFORMAT_CFID1 (PM_TFORMAT_CODEID1 | 0x40u) </span><span class="c1">//CF: 0b010:1000:1 = 0x51</span>
+<span class="cp">#define PM_TFORMAT_CFID2 (PM_TFORMAT_CODEID2 | 0x40u) </span><span class="c1">//CF: 0b010:0100:1 = 0x49</span>
+<span class="cp">#define PM_TFORMAT_CFID3 (PM_TFORMAT_CODEID3 | 0x40u) </span><span class="c1">//CF: 0b010:1100:0 = 0x58</span>
+<span class="cp">#define PM_TFORMAT_CFID6 (PM_TFORMAT_CODEID6 | 0x40u) </span><span class="c1">//CF: 0b010:0110:0 = 0x4C</span>
+<span class="cp">#define PM_TFORMAT_CFIDD (PM_TFORMAT_CODEIDD | 0x40u) </span><span class="c1">//CF: 0b010:1011:1 = 0x57</span>
+<span class="cp">#define PM_TFORMAT_CFID7 (PM_TFORMAT_CODEID7 | 0x40u) </span><span class="c1">//CF: 0b010:1110:1 = 0x5D</span>
+<span class="cp">#define PM_TFORMAT_CFID8 (PM_TFORMAT_CODEID8 | 0x40u) </span><span class="c1">//CF: 0b010:0001:1 = 0x43</span>
+<span class="cp">#define PM_TFORMAT_CFIDC (PM_TFORMAT_CODEIDC | 0x40u) </span><span class="c1">//CF: 0b010:0011:0 = 0x46</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="crc-calculations">
+<h2><span class="section-number">6.6. </span>CRC Calculations<a class="headerlink" href="#crc-calculations" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-number">Listing 6.6 </span><span class="caption-text">/libraries/position_sensing/tformat/include/pm_tformat_include.h</span><a class="headerlink" href="#id6" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// CRC related declarations</span>
+<span class="c1">// T-format polynomial: x^8 + 1</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_CRC_START        0</span>
+<span class="cp">#define PM_TFORMAT_NBITS_POLY       8u</span>
+<span class="cp">#define PM_TFORMAT_POLY             0x01u</span>
+<span class="cp">#define PM_TFORMAT_CRCTABLE_SIZE    256u</span>
+<span class="cp">#define PM_TFORMAT_CRC_MASK         0xFFu</span>
+
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Number of bits to use in CRC calculations:</span>
+<span class="c1">//</span>
+<span class="c1">// Each field is a total of 10 bits, with 8 bits being actual data.</span>
+<span class="c1">// This defines the number of bytes, or bits, of data used to calculate the CRC.</span>
+<span class="c1">// The number of bytes used is one less than the total bytes in the packet.</span>
+<span class="c1">// The extra byte received is the CRC sent from the encoder.</span>
+<span class="c1">//</span>
+<span class="c1">// For example:</span>
+<span class="c1">//     ID7: RX 6 fields:  CF + SF + DF0 + DF1 + DF2 + CRC</span>
+<span class="c1">//                        -------------------------</span>
+<span class="c1">//                        5 fields used to calc CRC</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID0   (PM_TFORMAT_RX_FIELDS_ID0 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID1   (PM_TFORMAT_RX_FIELDS_ID1 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID2   (PM_TFORMAT_RX_FIELDS_ID2 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID3   (PM_TFORMAT_RX_FIELDS_ID3 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID6   (PM_TFORMAT_RX_FIELDS_ID6 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_IDD   (PM_TFORMAT_RX_FIELDS_IDD - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID7   (PM_TFORMAT_RX_FIELDS_ID7 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_ID8   (PM_TFORMAT_RX_FIELDS_ID8 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BYTES_IDC   (PM_TFORMAT_RX_FIELDS_IDC - 1u)</span>
+
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID0    (PM_TFORMAT_RX_CRC_BYTES_ID0 *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID1    (PM_TFORMAT_RX_CRC_BYTES_ID1 *           \</span>
+<span class="cp">                                             PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID2    (PM_TFORMAT_RX_CRC_BYTES_ID2 *           \</span>
+<span class="cp">                                             PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID3    (PM_TFORMAT_RX_CRC_BYTES_ID3 *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID6    (PM_TFORMAT_RX_CRC_BYTES_ID6 *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_IDD    (PM_TFORMAT_RX_CRC_BYTES_IDD *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID7    (PM_TFORMAT_RX_CRC_BYTES_ID7 *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_ID8    (PM_TFORMAT_RX_CRC_BYTES_ID8 *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_RX_CRC_BITS_IDC    (PM_TFORMAT_RX_CRC_BYTES_IDC *           \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// The number of transmitted bytes, or bits, of data used to calculate the CRC</span>
+<span class="c1">// for the EEPROM read/write commands.  Other commands do not have a transmit</span>
+<span class="c1">// CRC.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define PM_TFORMAT_TX_CRC_BYTES_ID6  (PM_TFORMAT_TX_FIELDS_ID6 - 1u)</span>
+<span class="cp">#define PM_TFORMAT_TX_CRC_BYTES_IDD  (PM_TFORMAT_TX_FIELDS_IDD - 1u)</span>
+
+<span class="cp">#define PM_TFORMAT_TX_CRC_BITS_ID6   (PM_TFORMAT_TX_CRC_BYTES_ID6 *            \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+<span class="cp">#define PM_TFORMAT_TX_CRC_BITS_IDD   (PM_TFORMAT_TX_CRC_BYTES_IDD *            \</span>
+<span class="cp">                                            PM_TFORMAT_FIELD_DATA_BITS)</span>
+
+<span class="c1">//</span>
+<span class="c1">// Error codes for certain T-format functions.</span>
+<span class="c1">// Note: 16-bit error codes are used so they will be different from any valid</span>
+<span class="c1">// 8-bit CRC value.</span>
+<span class="c1">//</span>
+<span class="cp">#define PM_TFORMAT_PASS               0</span>
+<span class="cp">#define PM_TFORMAT_CRC_CLB_ERROR      0xFFFF</span>
+<span class="cp">#define PM_TFORMAT_CRC_CHECK_ERROR    0xFFFEP</span>
+<span class="cp">#define PM_TFORMAT_EEPROM_BUSY        0xFFFD</span>
+<span class="cp">#define PM_TFORMAT_ID_CHECK_ERROR     0xFFFC</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tformat_lib_deprecated.html" class="btn btn-neutral float-right" title="7. Library Deprecated Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tformat_lib_private.html" class="btn btn-neutral float-left" title="5. Library Private Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

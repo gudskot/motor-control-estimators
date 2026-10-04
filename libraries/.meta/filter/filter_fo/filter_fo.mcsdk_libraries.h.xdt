@@ -1,0 +1,22 @@
+% var moduleName = "filter_fo"
+% var libraryFolder = "filter"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+#include <filter_fo.h>
+    % if (module.$instances) {
+#define FILTER_FO_COUNT `module.$instances.length`
+    % }
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+#define filter_fo_`instance.$name`_a1 `instance.a1`
+#define filter_fo_`instance.$name`_b0 `instance.b0`
+#define filter_fo_`instance.$name`_b1 `instance.b1`
+#define filter_fo_`instance.$name`_x1 `instance.x1`
+#define filter_fo_`instance.$name`_y1 `instance.y1`
+extern  FILTER_FO_Handle filter_fo_`instance.$name`_Handle;
+void    filter_fo_`instance.$name`_init();
+    % }
+%}
+%

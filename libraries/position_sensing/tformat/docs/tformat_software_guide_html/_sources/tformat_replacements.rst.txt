@@ -1,0 +1,39 @@
+.. |C2000WARE_NAME| replace:: C2000Ware for C2000 MCUs v5.00.00.00
+.. |COMPILER_NAME| replace:: C2000 Code Generation Tools v22.6.0.LTS
+.. |SDK_NAME| replace:: C2000Ware Motor Control SDK v5_00_00_00
+.. |CCS_NAME| replace:: Code Composer Studio v12.4.0
+.. |PM_BP_NAME| replace:: C2000 DesignDRIVE position manager BoosterPack plug-in module (BOOSTXL-POSMGR)
+.. |PM_BP_SHORT_NAME| replace:: BOOSTXL-POSMGR
+.. |TFORMAT_LIB_NAME| replace:: C2000 T-Format Encoder Interface TI Design (TIDM-1011)
+.. |TFORMAT_LIB_SHORT_NAME| replace:: T-Format Encoder Interface
+.. |TFORMAT_TIDM| replace:: TIDM-1011
+.. |TMDXIDDK379D| replace:: TMDXIDDK379D Development Kit
+.. |COMPILER_GUIDE| replace:: TMS320C28x Optimizing C/C++ Compiler User's Guide
+.. |ASSEMBLY_GUIDE| replace:: TMS320C28x Assembly Language Tools
+.. |CCS_GUIDE| replace:: Code Composer Studio User’s Guide
+.. |SDK_ROOT| replace:: ``C:/ti/c2000/C2000Ware_MotorControl_SDK_<version>``
+.. |SYS_ROOT| replace:: ``[MC_SDK_ROOT]/solutions/boostxl_posmgr/``
+.. |SYS_ROOT_DEVICE| replace:: ``[MC_SDK_ROOT]/solutions/boostxl_posmgr/<device>``
+.. |API_ROOT| replace:: ``[MC_SDK_ROOT]/libraries/position_sensing/tformat``
+.. |OPTIMIZATION_GUIDE| replace:: C2000 Optimization Guide
+.. |F28004x_LAUNCHPAD_LONG_NAME| replace:: C2000 Piccolo MCU F280049C LaunchPad™ development kit
+.. |F28004x_LAUNCHPAD_SHORT_NAME| replace:: LAUNCHXL-F280049C
+.. |TFORMAT_SPEC_NAME| replace:: T-Format Encoder Interface by Tamagawa Seiki
+.. |TAMAGAWA_WEB_NAME| replace:: Tamagawa Seiki
+.. _C2000WARE_NAME: https://www.ti.com/tool/C2000WARE
+.. _CCS_NAME: https://www.ti.com/tool/CCSTUDIO
+.. _COMPILER_NAME: https://www.ti.com/tool/C2000-CGT
+.. _COMPILER_GUIDE: https://www.ti.com/lit/spru514
+.. _ASSEMBLY_GUIDE: https://www.ti.com/lit/spru513
+.. _SDK_NAME: https://www.ti.com/tool/C2000WARE-MOTORCONTROL-SDK
+.. _OPTIMIZATION_GUIDE: https://software-dl.ti.com/C2000/docs/optimization_guide/index.html
+.. _F28004x_LAUNCHPAD_LONG_NAME: https://www.ti.com/tool/LAUNCHXL-F280049C
+.. _F28004x_LAUNCHPAD_SHORT_NAME: https://www.ti.com/tool/LAUNCHXL-F280049C
+.. _PM_BP_NAME: https://www.ti.com/tool/BOOSTXL-POSMGR
+.. _PM_BP_SHORT_NAME: https://www.ti.com/tool/BOOSTXL-POSMGR
+.. _CCS_GUIDE: https://software-dl.ti.com/ccs/esd/documents/users_guide/index.html
+.. _TFORMAT_SPEC_NAME: https://www.tamagawa-seiki.com/
+.. _TAMAGAWA_WEB_NAME: https://www.tamagawa-seiki.com/
+.. _TFORMAT_TIDM: https://www.ti.com/tool/TIDM-1011
+.. _TMDXIDDK379D: https://www.ti.com/tool/TMDXIDDK379D   
+.. _TFORMAT_LIB_NAME: https://www.ti.com/tool/TIDM-1011  

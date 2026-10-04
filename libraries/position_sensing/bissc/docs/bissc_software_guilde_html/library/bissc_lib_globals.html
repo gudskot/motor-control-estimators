@@ -1,0 +1,402 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Library Structures and Arrays &mdash; C2000 BiSS-C Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Encoder Interface API" href="bissc_lib_interface.html" />
+    <link rel="prev" title="2. BiSS-C Library Porting to CPU2" href="bissc_lib_port_to_cpu2.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 BiSS-C Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.03.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bissc_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system/index.html">System Solution</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Encoder Interface Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bissc_lib_integration.html">1. BiSS-C Library Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_lib_port_to_cpu2.html">2. BiSS-C Library Porting to CPU2</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3. Library Structures and Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_lib_interface.html">4. Encoder Interface API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_lib_private.html">5. Library Private Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_lib_protocol.html">6. Protocol Defines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 BiSS-C Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Encoder Interface Library</a> &raquo;</li>
+        
+      <li><span class="section-number">3. </span>Library Structures and Arrays</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="library-structures-and-arrays">
+<h1><span class="section-number">3. </span>Library Structures and Arrays<a class="headerlink" href="#library-structures-and-arrays" title="Permalink to this headline"></a></h1>
+<p id="lnk-lib-globals">The library uses the following structures and arrays.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 3.2 </span><span class="caption-text">Single-cycle-data processing parameters: /libraries/position_sensing/bissc/pm_bissc_include.h</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Parameters needed to process single-cycle-data</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">PM_bissc_scdStruct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">bool</span><span class="w">  </span><span class="n">dataReady</span><span class="p">;</span><span class="w">   </span><span class="c1">// false: not ready. true: ready</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crcBits</span><span class="p">;</span><span class="w">          </span><span class="c1">// Size of polynomial</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crcPoly</span><span class="p">;</span><span class="w">          </span><span class="c1">// Polynomial</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crcStart</span><span class="p">;</span><span class="w">         </span><span class="c1">// CRC initial value</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crc_M</span><span class="p">;</span><span class="w">            </span><span class="c1">// Mask value to extract the CRC</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">spiFIFOWidth</span><span class="p">;</span><span class="w">     </span><span class="c1">// SPI FIFO word size</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">spiFIFOMask</span><span class="p">;</span><span class="w">      </span><span class="c1">// Mask for a SPI FIFO word</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">spiFIFOLevel</span><span class="p">;</span><span class="w">     </span><span class="c1">// SPI FIFO depth</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">numDataClocks</span><span class="p">;</span><span class="w">    </span><span class="c1">// Number of clocks required to receive SCD</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">positionSTBits</span><span class="p">;</span><span class="w">   </span><span class="c1">// Number of single-turn bits</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">positionST_S</span><span class="p">;</span><span class="w">     </span><span class="c1">// Shift to extract ST bits</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">positionMTBits</span><span class="p">;</span><span class="w">   </span><span class="c1">// Number of multi-turn bits</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">positionMT_S</span><span class="p">;</span><span class="w">     </span><span class="c1">// Shift to extract MT bits</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">positionBits</span><span class="p">;</span><span class="w">     </span><span class="c1">// Total position bits (MT + ST)</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">  </span><span class="n">positionMT_M</span><span class="p">;</span><span class="w">     </span><span class="c1">// Mask to extract MT bits</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">  </span><span class="n">positionST_M</span><span class="p">;</span><span class="w">     </span><span class="c1">// Mask to extract ST bits</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w">  </span><span class="n">position_M</span><span class="p">;</span><span class="w">       </span><span class="c1">// Mask to extract the total position</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w">  </span><span class="n">posErrWarnBits</span><span class="p">;</span><span class="w">   </span><span class="c1">// Number of error and warn bits</span>
+<span class="p">}</span><span class="w"> </span><span class="n">PM_bissc_scdStruct</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">PM_bissc_scdStruct</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">PM_bissc_scdStruct_Handle</span><span class="p">;</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 3.3 </span><span class="caption-text">Control-data frame processing: /libraries/position_sensing/bissc/pm_bissc_include.h</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Control-data frame parameters and states</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">cdState</span><span class="w">                   </span><span class="c1">// Control data state machine</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_NEW_REQUEST</span><span class="p">,</span><span class="w">   </span><span class="c1">// New read or write request pending</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_TRANSMITTING</span><span class="p">,</span><span class="w">  </span><span class="c1">// Read or write is in progress</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_COMPLETE</span><span class="p">,</span><span class="w">      </span><span class="c1">// Read or write has completed</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_PARSED</span><span class="p">,</span><span class="w">        </span><span class="c1">// CD data has been parsed</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_WAIT</span><span class="p">,</span><span class="w">          </span><span class="c1">// BiSS required wait between CD frames</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_NONE</span>
+<span class="p">};</span>
+
+
+<span class="c1">//</span>
+<span class="c1">// The cdStatus will remain until either the application clears it (sets it to</span>
+<span class="c1">// PM_BISSC_CD_PASS) or a new CD Request is made.</span>
+<span class="c1">//</span>
+<span class="c1">// PASS                     No error detected</span>
+<span class="c1">// WRITE_FAIL               Write access failure. The data echoback (received</span>
+<span class="c1">//                          data) did not match the data transmitted</span>
+<span class="c1">// CRC_FAIL:                Calculated CRC did not match received CRC</span>
+<span class="c1">// READ_WRITE_INVALID       The combination of R+W is invalid per the</span>
+<span class="c1">//                          protocol specification</span>
+<span class="c1">// READ_WRITE_UNSUPPORTED   Unsupported feature. Likely the encoder requires</span>
+<span class="c1">//                          wait-states to access the register</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">cdStatus</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_PASS</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_WRITE_FAIL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_WRITE_PASS</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_READ_FAIL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_READ_PASS</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_CRC_FAIL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_READ_WRITE_INVALID</span><span class="p">,</span>
+<span class="w">    </span><span class="n">PM_BISSC_CD_READ_WRITE_UNSUPPORTED</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w">  </span><span class="nc">PM_bissc_cdStruct</span><span class="p">{</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="n">cdState</span><span class="w"> </span><span class="n">cdState</span><span class="p">;</span><span class="w">      </span><span class="c1">// State machine current state</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="n">cdStatus</span><span class="w"> </span><span class="n">cdStatus</span><span class="p">;</span><span class="w">    </span><span class="c1">// Pass or Fail status</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">  </span><span class="n">cdmStream</span><span class="p">;</span><span class="w">       </span><span class="c1">// Least significant bit is next CM to transmit</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">  </span><span class="n">cdsStream</span><span class="p">;</span><span class="w">       </span><span class="c1">// CDS stream without the CRC</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crcBits</span><span class="p">;</span><span class="w">         </span><span class="c1">// Size of CRC polynomial</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crcPoly</span><span class="p">;</span><span class="w">         </span><span class="c1">// CRC polynomial without the leading 1</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">crcStart</span><span class="p">;</span><span class="w">        </span><span class="c1">// CRC initial value</span>
+<span class="p">}</span><span class="w"> </span><span class="n">PM_bissc_cdStruct</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">PM_bissc_cdStruct</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">PM_bissc_cdStruct_Handle</span><span class="p">;</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 3.4 </span><span class="caption-text">Register access processing: /libraries/position_sensing/bissc/pm_bissc_include.h</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Register access parameters used to specify address and access type</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="k">enum</span><span class="w"> </span><span class="n">cdRegisterAccessType</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">PM_BISSC_REGISTER_READ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2U</span><span class="p">,</span><span class="w">    </span><span class="c1">// R:W = 1 0 = read access</span>
+<span class="w">    </span><span class="n">PM_BISSC_REGISTER_WRITE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1U</span><span class="w">    </span><span class="c1">// R:W = 0 1 = write access</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">PM_bissc_registerStruct</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">                    </span><span class="n">address</span><span class="p">;</span><span class="w">    </span><span class="c1">// Address of register to access</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">                    </span><span class="n">rxData</span><span class="p">;</span><span class="w">     </span><span class="c1">// Data read from the register</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">                    </span><span class="n">txData</span><span class="p">;</span><span class="w">     </span><span class="c1">// Data to write to the register</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="n">cdRegisterAccessType</span><span class="w">   </span><span class="n">accessType</span><span class="p">;</span><span class="w"> </span><span class="c1">// Specify read or write access</span>
+<span class="p">}</span><span class="w"> </span><span class="n">PM_bissc_registerStruct</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">PM_bissc_registerStruct</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">PM_bissc_registerStruct_Handle</span><span class="p">;</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 3.5 </span><span class="caption-text">Encoder information: /libraries/position_sensing/bissc/pm_bissc_include.h</span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Encoder information parsed from the single-cycle-data.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">PM_bissc_encoderStruct</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">  </span><span class="n">positionMT</span><span class="p">;</span><span class="w">   </span><span class="c1">// Multi-turn position</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">  </span><span class="n">positionST</span><span class="p">;</span><span class="w">   </span><span class="c1">// Single-turn position</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w">  </span><span class="n">position</span><span class="p">;</span><span class="w">     </span><span class="c1">// MT::ST position</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">error</span><span class="p">;</span><span class="w">        </span><span class="c1">// Error bit</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w">  </span><span class="n">warning</span><span class="p">;</span><span class="w">      </span><span class="c1">// Warning bit</span>
+<span class="p">}</span><span class="w"> </span><span class="n">PM_bissc_encoderStruct</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">PM_bissc_encoderStruct</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">PM_bissc_encoderStruct_Handle</span><span class="p">;</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-number">Listing 3.6 </span><span class="caption-text">Single-cycle data received buffer: /libraries/position_sensing/bissc/pm_bissc_include.h</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// This array is loaded with the received single-cycle-data from</span>
+<span class="c1">// the encoder during the SPI interrupt routine.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="k">extern</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scdRxData</span><span class="p">[</span><span class="n">PM_BISSC_SPI_FIFO_MAX_LEVEL</span><span class="p">];</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bissc_lib_interface.html" class="btn btn-neutral float-right" title="4. Encoder Interface API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bissc_lib_port_to_cpu2.html" class="btn btn-neutral float-left" title="2. BiSS-C Library Porting to CPU2" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2024, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Sep 06, 2024.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

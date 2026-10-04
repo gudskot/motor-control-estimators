@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1. Overview &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Getting Started Steps" href="tformat_steps.html" />
+    <link rel="prev" title="Getting Started" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#t-format-api">1.1. T-Format API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-example">1.2. System Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_steps.html">2. Getting Started Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_migration.html">3. Migrating from an Earlier Version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_requirements.html">4. Minimum Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_install_directory.html">5. Installation and Directory Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system/index.html">T-Format System Solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../library/index.html">T-Format Encoder Interface Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+        
+      <li><span class="section-number">1. </span>Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="overview">
+<h1><span class="section-number">1. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://www.tamagawa-seiki.com/">T-Format Encoder Interface by Tamagawa Seiki</a>, is designed for serial transfer of digital data between linear, rotary or angle
+encoders, touch probes, accelerometers and the subsequent electronics, such as numerical controls,
+servo amplifiers and programmable logic controllers.</p>
+<p>For more details on the protocol and implementation aspects, see the <a class="reference external" href="https://www.tamagawa-seiki.com/">Tamagawa Seiki</a> website.</p>
+<p>The C2000 T-Format Encoder Interface Reference is divided into three parts:</p>
+<ol class="arabic simple">
+<li><p>Hardware and overall design. This is described in <a class="reference external" href="https://www.ti.com/tool/TIDM-1011">C2000 T-Format Encoder Interface TI Design (TIDM-1011)</a>.</p></li>
+<li><p>Software: T-Format encoder interface Application Programming Interface (API)</p></li>
+<li><p>Software: System solution demonstration</p></li>
+</ol>
+<p>This document focuses on the T-Format API and system example.</p>
+<div class="section" id="t-format-api">
+<h2><span class="section-number">1.1. </span>T-Format API<a class="headerlink" href="#t-format-api" title="Permalink to this headline">¶</a></h2>
+<p>The T-Format API provides functions and definitions used to implement the T-Format encoder interface.</p>
+<p>Key Features of the library:</p>
+<ul class="simple">
+<li><p>Encoder interface integrated into a C2000 real-time microcontroller solution</p></li>
+<li><p>Meets the encoder interface clocking requirements</p></li>
+<li><p>Supports all T-Format commands</p></li>
+<li><p>Cyclic Redundancy Check (CRC) calculations</p></li>
+<li><p>All source code is provided</p></li>
+</ul>
+</div>
+<div class="section" id="system-example">
+<h2><span class="section-number">1.2. </span>System Example<a class="headerlink" href="#system-example" title="Permalink to this headline">¶</a></h2>
+<p>Provides support functions to configure a C2000 Real-Time Control device to support T-format.</p>
+<p>Key Features:</p>
+<ul class="simple">
+<li><p>Provides a blueprint for how to integrate the library into a project</p></li>
+<li><p>Command processing to perform basic error checks, update position, turns and encoder ID.</p></li>
+<li><p>All source code is provided.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For device-specific requirements, refer to the <a class="reference external" href="https://www.ti.com/tool/TIDM-1011">TIDM-1011</a> T-Format Encoder Interface design guide.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tformat_steps.html" class="btn btn-neutral float-right" title="2. Getting Started Steps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

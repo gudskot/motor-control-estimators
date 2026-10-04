@@ -1,0 +1,362 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C2000 T-Format Encoder Interface Software Guide &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="get_started/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system/index.html">T-Format System Solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library/index.html">T-Format Encoder Interface Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>C2000 T-Format Encoder Interface Software Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c2000-t-format-encoder-interface-software-guide">
+<h1>C2000 T-Format Encoder Interface Software Guide<a class="headerlink" href="#c2000-t-format-encoder-interface-software-guide" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get_started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="get_started/tformat_overview.html">1. Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_overview.html#t-format-api">1.1. T-Format API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_overview.html#system-example">1.2. System Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="get_started/tformat_steps.html">2. Getting Started Steps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="get_started/tformat_migration.html">3. Migrating from an Earlier Version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_migration.html#code-changes">3.1. Code Changes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#review-the-system-example">3.1.1. Review the system example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#global-variable-changes">3.1.2. Global variable changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#spi-isr-changes-in-tformat-spirxisr">3.1.3. SPI ISR changes in tformat_spiRxISR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#command-request-setup-changes">3.1.4. Command (request) setup changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#receive-data-changes">3.1.5. Receive data changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#crc-calculations-moved-to-the-library">3.1.6. CRC calculations moved to the library</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#new-api-functions">3.1.7. New API functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_migration.html#design-changes">3.2. Design Changes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#receive-crc-generation-requires-clb-type-2">3.2.1. Receive CRC generation (requires CLB type 2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#transmit-crc-generation-requires-vcrc-module">3.2.2. Transmit CRC generation (requires VCRC module)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#clb-spi-clk-out-to-spiclk-in-pin-connection-requires-clb-type-2">3.2.3. CLB_SPI_CLK (out) to SPICLK (in) pin connection (requires CLB type 2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#spiclock-alignment-with-data">3.2.4. SPICLOCK alignment with data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#fifo-wordsize">3.2.5. FIFO wordsize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="get_started/tformat_migration.html#inputxbar-and-outputxbar-usage">3.2.6. INPUTXBAR and OUTPUTXBAR usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="get_started/tformat_requirements.html">4. Minimum Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_requirements.html#development-environment">4.1. Development Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_requirements.html#software-development-kit">4.2. Software Development Kit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_requirements.html#hardware">4.3. Hardware</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="get_started/tformat_install_directory.html">5. Installation and Directory Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_install_directory.html#installing-the-examples">5.1. Installing the Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_install_directory.html#root-directory">5.2. Root Directory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_install_directory.html#system-example-directory-structure">5.3. System Example Directory Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="get_started/tformat_install_directory.html#library-directory-structure">5.4. Library Directory Structure</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system/index.html">T-Format System Solution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="system/tformat_configuration.html">1. Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system/tformat_configuration.html#system-example-configuration">1.1. System Example Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system/tformat_configuration.html#library-configuration">1.2. Library Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system/tformat_sys_example.html">2. Build and Run the Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system/tformat_sys_example.html#hardware-connections">2.1. Hardware Connections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system/tformat_sys_example.html#import-and-run-example-project">2.2. Import and Run Example Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="system/tformat_sys_functions.html">3. System-Level Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="system/tformat_sys_functions.html#system-initialization-functions">3.1. System Initialization Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="system/tformat_sys_functions.html#system-run-time-functions">3.2. System Run-time Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="library/index.html">T-Format Encoder Interface Library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_integration.html">1. T-Format Library Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#resolve-resource-conflicts">1.1. Resolve Resource Conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#add-header-files">1.2. Add Header Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#update-code-composer-studio-search-locations">1.3. Update Code Composer Studio Search Locations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#add-system-level-functions">1.4. Add System-Level Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#create-global-structures">1.5. Create Global Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#initialize-the-system">1.6. Initialize the System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_integration.html#implement-background-loop-spi-isr">1.7. Implement Background Loop, SPI ISR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_port_to_cpu2.html">2. T-Format Library Porting to CPU2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_port_to_cpu2.html#resolve-resource-conflicts">2.1. Resolve Resource Conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_port_to_cpu2.html#cpu1-project">2.2. CPU1 Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_port_to_cpu2.html#cpu2-project">2.3. CPU2 Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_globals.html">3. Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_interface.html">4. T-Format Encoder Interface API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_interface.html#initialization-api">4.1. Initialization API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_interface.html#run-time-api">4.2. Run-time API</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="library/tformat_lib_interface.html#setup-and-send-command">4.2.1. Setup and Send Command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="library/tformat_lib_interface.html#retrieve-response">4.2.2. Retrieve Response</a></li>
+<li class="toctree-l4"><a class="reference internal" href="library/tformat_lib_interface.html#update-encoder-parameters">4.2.3. Update Encoder Parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_private.html">5. Library Private Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_private.html#initialization-functions">5.1. Initialization Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_private.html#run-time-configuration-functions">5.2. Run-time Configuration Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_private.html#crc-run-time-functions">5.3. CRC Run-time Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="library/tformat_lib_private.html#clb-crc">5.3.1. CLB CRC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="library/tformat_lib_private.html#vcrc-crc">5.3.2. VCRC CRC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="library/tformat_lib_private.html#c28x-look-up-table-crc">5.3.3. C28x Look-up Table CRC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_protocol.html">6. Protocol Defines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_protocol.html#command-and-response-format">6.1. Command and Response Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_protocol.html#spi-clocks-required-to-send-receive">6.2. SPI Clocks Required to Send/receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_protocol.html#spi-fifo-level">6.3. SPI FIFO Level</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_protocol.html#data-id-code-format">6.4. Data ID Code Format</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_protocol.html#command-field-cf">6.5. Command Field (CF)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="library/tformat_lib_protocol.html#crc-calculations">6.6. CRC Calculations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="library/tformat_lib_deprecated.html">7. Library Deprecated Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="additional_info/index.html">Additional Resources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="additional_info/tformat_glossary.html">1. Abbreviations and Acronyms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#c2000-motorcontrol-sdk-version-5-00-00-00">C2000 MotorControl SDK Version 5.00.00.00</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#c2000-motorcontrol-sdk-version-4-01-00-00">C2000 MotorControl SDK Version 4.01.00.00</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="disclaimer.html">Disclaimer</a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="get_started/index.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+|PROTOCOL_NAME| Library Integration
+************************************************************
+
+.. _lnk-integration:
+
+Reference the included System Example as a blueprint for integrating the library into an application.  This section provides an overview of the steps required. 
+
+Resolve Resource Conflicts
+-----------------------------------------------------------
+
+#. Review the resources used by the Encoder Interface. The resource utilization is described in |BISSC_TIDM|_.
+#. Resolve any resource conflicts with your specific application. Include the CLB tiles, XBARS and GPIO pins in this evaluation. In some cases, a specific resource was used due to the LaunchPad pinout.  Your own application may have different hardware requirements and limitations.  For example, a specific CLB tile may be able to access a GPIO through a specific XBAR. 
+#. Implement and test changes using the stand-alone example. The booster pack can be connected to a LaunchPad or ControlCard through wires to test the changes.
+#. Proceed with integration into your application.
+
+SPI Instance
+===========================================================
+
+If you change the SPI instance make it matches in the following locations:
+
+#. System communication demo .syscfg file
+#. Library pm_bissc_include.h file
+
+
+Add Header Files
+-----------------------------------------------------------
+Include the following header files in the project source:
+
+#. BiSS-C library header file:  ``#include "pm_bissc_include.h"``   
+#. System functions header file: ``#include "bissc.h"``
+
+Update Code Composer Studio Search Locations
+-----------------------------------------------------------
+CCS searches specific locations for header files and the library (.lib) files.  Referring to the :ref:`directory structure <lnk-directory>` and update the search locations by the following steps:
+
+#. In Code Composer Studio Project Explorer window: *Right click project name*
+#. Select: *Properties -> Build -> C2000 Compiler Options -> Include Options*
+#. Add the **directory path for each include file** to the compiler search path. 
+#. Once again, *Right click project name*
+#. Select: *Properties -> Build -> C2000 Linker -> File search Path*.
+#. Include the library binary in the linker options. For example: ``pm_bissc_f28p65x.lib``
+#. Add the directory path for the lib to the library search path. 
+
+Add System-Level Functions
+-----------------------------------------------------------
+The System Example includes functions which you may wish to include in your project. Depending on your specific needs, you can copy functions or include the source files from the example by following these steps: 
+
+#. In Code Composer Studio: *Right click project name*
+#. Select: *Add Files*
+#. Select the file(s) to include.  
+
+Create Global Structures
+-----------------------------------------------------------
+These structures are documented in the :ref:`the System Example. <lnk-sys-globals>`
+
+The library requires global variables to share data between modules and with the system.
+ 
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :language: c
+    :caption: Global structures and arrays: /boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :start-after: [doc-library-globals-start]
+    :end-before: [doc-library-globals-end]
+
+There are additional globals that are used by this specific system example.  These are not required for |PROTOCOL_NAME| communication, but may be useful in your application.  These are shown below.
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :language: c
+    :caption: /boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :start-after: [doc-sys-test-vars-start]
+    :end-before: [doc-sys-test-vars-end]
+    
+Initialize the System
+-----------------------------------------------------------
+Refer to the example :ref:`system initialization functions <lnk-sys-init>`. Some functions may require modification for your specific system.  Check that the BISSC_FREQ_DIVIDER is correctly defined for your device CLB clock frequency.  This is defined in the system bissc.h header file.
+
+Implement Background Loop, SPI ISR
+-----------------------------------------------------------
+Use the provided :ref:`system run-time functions <lnk-sys-run>` as a template, implement the following functions:
+
+End of single-cycle data interrupt (SPI RX ISR). Populate the RX data array with the content of the SPI RX FIFO.  
+
+  .. literalinclude:: ../../../../../../solutions/boostxl_posmgr/shared/source/bissc.c
+    :language: c
+    :caption: SPI ISR: /boostxl_posmgr/shared/source/bissc.c
+    :start-after: [doc-spi-isr-start]
+    :end-before: [doc-spi-isr-end]
+
+.. _lnk-runtime-flow:
+
+Send MA and Receive Response
+-----------------------------------------------------------
+  An example of the run-time flow is shown below. The library functions called are documented in the :ref:`Library Public API section. <lnk-lib-public-run>`
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/shared/source/bissc.c
+    :start-after: [doc-sys-run-time-example-start]
+    :end-before: [doc-sys-run-time-example-end]
+    :language: c
+    :caption: Run-time flow example: /solutions/boostxl_posmgr/shared/source/bissc.c

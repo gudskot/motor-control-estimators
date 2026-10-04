@@ -1,0 +1,399 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1. T-Format Library Integration &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. T-Format Library Porting to CPU2" href="tformat_lib_port_to_cpu2.html" />
+    <link rel="prev" title="T-Format Encoder Interface Library" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system/index.html">T-Format System Solution</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">T-Format Encoder Interface Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1. T-Format Library Integration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#resolve-resource-conflicts">1.1. Resolve Resource Conflicts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-header-files">1.2. Add Header Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update-code-composer-studio-search-locations">1.3. Update Code Composer Studio Search Locations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#add-system-level-functions">1.4. Add System-Level Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-global-structures">1.5. Create Global Structures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialize-the-system">1.6. Initialize the System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implement-background-loop-spi-isr">1.7. Implement Background Loop, SPI ISR</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_port_to_cpu2.html">2. T-Format Library Porting to CPU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_globals.html">3. Global Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_interface.html">4. T-Format Encoder Interface API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_private.html">5. Library Private Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_protocol.html">6. Protocol Defines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_lib_deprecated.html">7. Library Deprecated Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">T-Format Encoder Interface Library</a> &raquo;</li>
+        
+      <li><span class="section-number">1. </span>T-Format Library Integration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="t-format-library-integration">
+<h1><span class="section-number">1. </span>T-Format Library Integration<a class="headerlink" href="#t-format-library-integration" title="Permalink to this headline">¶</a></h1>
+<p id="lnk-integration">Reference the included System Example as a blueprint for integrating the library into an application.  This section provides an overview of the steps required.</p>
+<div class="section" id="resolve-resource-conflicts">
+<h2><span class="section-number">1.1. </span>Resolve Resource Conflicts<a class="headerlink" href="#resolve-resource-conflicts" title="Permalink to this headline">¶</a></h2>
+<p>Review the resources used by the T-Format Encoder Interface. The resource utilization is described in <a class="reference external" href="https://www.ti.com/tool/TIDM-1011">TIDM-1011</a>.</p>
+<p>Resolve any resource conflicts with your specific application. Include the CLB tiles, XBARS and GPIO pins in this evaluation. In some cases, a specific resource was used due to the LaunchPad pinout.  Your own application may have different hardware requirements and limitations.  For example, a specific CLB tile may be able to access a GPIO through a specific XBAR.</p>
+</div>
+<div class="section" id="add-header-files">
+<h2><span class="section-number">1.2. </span>Add Header Files<a class="headerlink" href="#add-header-files" title="Permalink to this headline">¶</a></h2>
+<p>Include the following header files in the project source:</p>
+<ol class="arabic simple">
+<li><p>T-Format library header file:  <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&quot;pm_tformat_include.h&quot;</span></code></p></li>
+<li><p>System functions header file: <code class="docutils literal notranslate"><span class="pre">#include</span> <span class="pre">&quot;tformat.h&quot;</span></code></p></li>
+</ol>
+</div>
+<div class="section" id="update-code-composer-studio-search-locations">
+<h2><span class="section-number">1.3. </span>Update Code Composer Studio Search Locations<a class="headerlink" href="#update-code-composer-studio-search-locations" title="Permalink to this headline">¶</a></h2>
+<p>CCS searches specific locations for header files and the library (.lib) files.  Referring to the <a class="reference internal" href="../get_started/tformat_install_directory.html#lnk-directory"><span class="std std-ref">directory structure</span></a> and update the search locations by the following steps:</p>
+<ol class="arabic simple">
+<li><p>In Code Composer Studio Project Explorer window: <em>Right click project name</em></p></li>
+<li><p>Select: <em>Properties -&gt; Build -&gt; C2000 Compiler Options -&gt; Include Options</em></p></li>
+<li><p>Add the <strong>directory path for each include file</strong> to the compiler search path.</p></li>
+<li><p>Once again, <em>Right click project name</em></p></li>
+<li><p>Select: <em>Properties -&gt; Build -&gt; C2000 Linker -&gt; File search Path</em>.</p></li>
+<li><p>Include the library binary in the linker options. For example: <code class="docutils literal notranslate"><span class="pre">pm_tformat_f28003x.lib</span></code></p></li>
+<li><p>Add the directory path for the lib to the library search path.</p></li>
+</ol>
+</div>
+<div class="section" id="add-system-level-functions">
+<h2><span class="section-number">1.4. </span>Add System-Level Functions<a class="headerlink" href="#add-system-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>The System Example includes functions which you may wish to include in your project. Depending on your specific needs, you can copy functions or include the source files from the example by following these steps:</p>
+<ol class="arabic simple">
+<li><p>In Code Composer Studio: <em>Right click project name</em></p></li>
+<li><p>Select: <em>Add Files</em></p></li>
+<li><p>Select the file(s) to include.</p></li>
+</ol>
+</div>
+<div class="section" id="create-global-structures">
+<h2><span class="section-number">1.5. </span>Create Global Structures<a class="headerlink" href="#create-global-structures" title="Permalink to this headline">¶</a></h2>
+<p>The library requires global variables to share data between modules and with the system.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 1.3 </span><span class="caption-text">/boostxl_posmgr/f28003x/source/pm_tformat_main.c</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>    <span class="c1">//</span>
+    <span class="c1">// Globals used by the library</span>
+    <span class="c1">// - Lookup table for CRC calculations</span>
+    <span class="c1">// - tformatData structure to track key parameters.</span>
+    <span class="c1">//</span>
+    <span class="n">PM_tformat_DataStruct</span> <span class="n">tformatData</span><span class="p">;</span>
+    <span class="k">volatile</span> <span class="kt">uint16_t</span> <span class="n">tformatRxData</span><span class="p">[</span><span class="n">PM_TFORMAT_FIELDS_MAX</span><span class="p">];</span>
+
+    <span class="cp">#if defined(PM_TFORMAT_CRC_TABLE)</span>
+        <span class="kt">uint16_t</span> <span class="n">tformatCRCtable</span><span class="p">[</span><span class="n">PM_TFORMAT_CRCTABLE_SIZE</span><span class="p">];</span>
+    <span class="cp">#endif</span>
+
+    <span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+<p>There are additional globals that are used by this specific system example.  These are not required for BiSS-C communication, but may be useful in your application.  These are shown below.</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 1.4 </span><span class="caption-text">/boostxl_posmgr/f28003x/source/pm_tformat_main.c</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>    <span class="c1">//</span>
+    <span class="c1">// These structures are used to display the received</span>
+    <span class="c1">// data in Code Composer Studio&#39;s Expressions</span>
+    <span class="c1">// window during development.  Because the structure is</span>
+    <span class="c1">// set, but never used, the pragma RETAIN</span>
+    <span class="c1">// has been applied.  Volatile is used for the</span>
+    <span class="c1">// tformatSpiRxIsrTicker since it is updated within</span>
+    <span class="c1">// the SPI ISR.</span>
+    <span class="c1">//</span>
+    <span class="cp">#pragma RETAIN (encoderData);</span>
+    <span class="cp">#pragma RETAIN (errorData);</span>
+    <span class="cp">#pragma RETAIN (commandData);</span>
+
+    <span class="n">PM_tformat_encoderStruct</span> <span class="n">encoderData</span><span class="p">;</span>
+    <span class="n">PM_tformat_errorStruct</span> <span class="n">errorData</span><span class="p">;</span>
+    <span class="n">PM_tformat_commandStruct</span> <span class="n">commandData</span><span class="p">;</span>
+    <span class="k">volatile</span> <span class="kt">uint32_t</span> <span class="n">tformatSpiRxIsrTicker</span><span class="p">;</span>
+
+    <span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="initialize-the-system">
+<h2><span class="section-number">1.6. </span>Initialize the System<a class="headerlink" href="#initialize-the-system" title="Permalink to this headline">¶</a></h2>
+<p>Refer to the example <a class="reference internal" href="../system/tformat_sys_functions.html#lnk-sys-init"><span class="std std-ref">system initialization functions</span></a>. Some functions may require modification for your specific system.  Check that the TFORMAT_FREQ_DIVIDER is correctly defined for your device CLB clock frequency.  This is defined in the system tformat.h header file.</p>
+</div>
+<div class="section" id="implement-background-loop-spi-isr">
+<h2><span class="section-number">1.7. </span>Implement Background Loop, SPI ISR<a class="headerlink" href="#implement-background-loop-spi-isr" title="Permalink to this headline">¶</a></h2>
+<p>Use the provided <a class="reference internal" href="../system/tformat_sys_functions.html#lnk-sys-run"><span class="std std-ref">system run-time functions</span></a> as a template, implement the following functions:</p>
+<p>End-of-frame interrupt (SPI RX ISR)</p>
+<blockquote>
+<div><p>Populate the RX data array with the content of the SPI RX FIFO.</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 1.5 </span><span class="caption-text">/boostxl_posmgr/shared/source/tformat.c</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+    <span class="cp">#pragma MUST_ITERATE(5, 12, 1)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tformatData</span><span class="p">.</span><span class="n">fifoLevel</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">tformatRxData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPI_readDataNonBlocking</span><span class="p">(</span><span class="n">PM_TFORMAT_SPI</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div></blockquote>
+<p>Send Commands and Receive Response</p>
+<blockquote>
+<div><p>An example of the run-time flow is shown below:</p>
+</div></blockquote>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-number">Listing 1.6 </span><span class="caption-text">/solutions/boostxl_posmgr/shared/source/tformat.c</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>        <span class="c1">//</span>
+        <span class="c1">// 1) Setup the command</span>
+        <span class="c1">// 2) Start the operation (transmission)</span>
+        <span class="c1">// 3) Wait for the response to be received by the SPI.</span>
+        <span class="c1">//    The SPI RX FIFO ISR will set the dataReady flag.</span>
+        <span class="c1">// 4) Unpack, or receive, the data.</span>
+        <span class="c1">// 5) System specific: check and respond to errors</span>
+        <span class="c1">// 6) Update any encoder parameters (position, turns, ID)</span>
+        <span class="c1">//</span>
+        <span class="n">PM_tformat_setupCommandReadoutOrReset</span><span class="p">(</span><span class="n">PM_TFORMAT_ID0</span><span class="p">,</span>
+                                <span class="n">PM_TFORMAT_RX_CLOCKS_ID0</span><span class="p">,</span>
+                                <span class="n">PM_TFORMAT_RX_FIELDS_ID0</span><span class="p">,</span>
+                                <span class="n">PM_TFORMAT_TX_CLOCKS_ID0</span><span class="p">,</span>
+                                <span class="n">PM_TFORMAT_FIFO_LEVEL_ID0</span><span class="p">);</span>
+        <span class="n">PM_tformat_startOperation</span><span class="p">();</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">tformatData</span><span class="p">.</span><span class="n">dataReady</span> <span class="o">!=</span> <span class="nb">true</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="n">PM_tformat_receiveDataID0_1_7_8_C</span><span class="p">();</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">tformat_checkError</span><span class="p">(</span><span class="n">PM_TFORMAT_CFID0</span><span class="p">)</span> <span class="o">!=</span> <span class="n">PM_TFORMAT_PASS</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ESTOP0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">encoderData</span><span class="p">.</span><span class="n">position</span> <span class="o">=</span>
+                <span class="n">PM_tformat_updatePositionOrTurns</span><span class="p">(</span><span class="n">tformatData</span><span class="p">.</span><span class="n">dataField0</span><span class="p">,</span>
+                                                 <span class="n">tformatData</span><span class="p">.</span><span class="n">dataField1</span><span class="p">,</span>
+                                                 <span class="n">tformatData</span><span class="p">.</span><span class="n">dataField2</span><span class="p">);</span>
+        <span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tformat_lib_port_to_cpu2.html" class="btn btn-neutral float-right" title="2. T-Format Library Porting to CPU2" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="T-Format Encoder Interface Library" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

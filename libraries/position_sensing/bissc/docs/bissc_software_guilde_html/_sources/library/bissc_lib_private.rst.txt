@@ -1,0 +1,14 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Library Private Functions
+************************************************************
+
+.. _lnk-lib-private:
+
+The following functions are not called directly by the application. They are called from other functions within the library.  
+
+.. doxygengroup:: BISSC_API_PRIVATE
+   :content-only:
+
+

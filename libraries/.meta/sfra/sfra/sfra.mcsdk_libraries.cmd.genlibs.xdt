@@ -1,0 +1,5 @@
+% let Common   = system.getScript("/driverlib/Common.js");
+% var moduleName = "sfra"
+% var libraryFolder = "sfra"
+/* libraries required for /libraries/`libraryFolder`/`moduleName` */
+-l"/libraries/`libraryFolder`/lib/`moduleName`.lib"

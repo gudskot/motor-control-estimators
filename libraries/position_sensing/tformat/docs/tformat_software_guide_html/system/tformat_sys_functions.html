@@ -1,0 +1,364 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. System-Level Functions &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="T-Format Encoder Interface Library" href="../library/index.html" />
+    <link rel="prev" title="2. Build and Run the Example" href="tformat_sys_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">T-Format System Solution</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tformat_configuration.html">1. Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_sys_example.html">2. Build and Run the Example</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3. System-Level Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system-initialization-functions">3.1. System Initialization Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-run-time-functions">3.2. System Run-time Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../library/index.html">T-Format Encoder Interface Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">T-Format System Solution</a> &raquo;</li>
+        
+      <li><span class="section-number">3. </span>System-Level Functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="system-level-functions">
+<h1><span class="section-number">3. </span>System-Level Functions<a class="headerlink" href="#system-level-functions" title="Permalink to this headline">¶</a></h1>
+<p>This section describes functions which act at the system-level.  This includes initialization of the C2000 device, start-up functions and interrupt service routine.</p>
+<p>Many of these functions make calls to the T-Format Library which is described in <a class="reference internal" href="../library/tformat_lib_interface.html#lnk-lib-top"><span class="std std-ref">the T-Format Library Documentation</span></a>.</p>
+<div class="section" id="system-initialization-functions">
+<h2><span class="section-number">3.1. </span>System Initialization Functions<a class="headerlink" href="#system-initialization-functions" title="Permalink to this headline">¶</a></h2>
+<p id="lnk-sys-init">The following functions are called to initialize the example system.</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.tformat_init">
+<span class="target" id="group___t_f_o_r_m_a_t___s_y_s___i_n_i_t_1ga56710de40d76263b9b7b99721cced6b1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tformat_init</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.tformat_init" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Initialize the T-Format subsystem. </p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.tformat_initSPIFIFO">
+<span class="target" id="group___t_f_o_r_m_a_t___s_y_s___i_n_i_t_1ga0848db767ec30a4fe596da686fe13af5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tformat_initSPIFIFO</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n"><span class="pre">devLSPCLKFreq</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.tformat_initSPIFIFO" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Configure the SPI peripheral. </p>
+<p>Configures the PM_TFORMAT_SPI peripheral as required for T-Format communication</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>devLSPCLKFreq</strong> – SPI clock rate </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="system-run-time-functions">
+<h2><span class="section-number">3.2. </span>System Run-time Functions<a class="headerlink" href="#system-run-time-functions" title="Permalink to this headline">¶</a></h2>
+<p id="lnk-sys-run">The following functions are called during run-time.  They perform application specific functions make calls into the solution library.</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.tformat_exCommands">
+<span class="target" id="group___t_f_o_r_m_a_t___s_y_s___r_u_n_1gaa363a448caeed8db736ae8e558614b0c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tformat_exCommands</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="pre">__attribute__((ramfunc))</span><span class="w"> </span><span class="pre">__attribute__((noreturn))</span><a class="headerlink" href="#c.tformat_exCommands" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Execute read-out and reset commands. </p>
+<p>This function is the main test for the system example. It tests the following command IDs: ID0, ID1, ID2, ID3, ID7, ID8 and IDC</p>
+<p>For each command ID:</p>
+<p><ol class="loweralpha simple">
+<li><p>Clear the tformatData structure (optional) Not required, but useful for debug.</p></li>
+<li><p>Wait…The idle time between commands is for demo purposes. The idle time is not tied to any specification</p></li>
+<li><p>Setup the SPI and CLB for the command</p></li>
+<li><p>Start the operation</p></li>
+<li><p>Wait for the dataReady flag to be set by the SPI RX ISR.</p></li>
+<li><p>Unpack the data from the SPI FIFO into the tformatData structure</p></li>
+<li><p>Check for errors using <a class="reference internal" href="#group___t_f_o_r_m_a_t___s_y_s___r_u_n_1ga9a427ecd43bdef9e9ff695e77c9b13a4"><span class="std std-ref">tformat_checkError()</span></a>;</p></li>
+<li><p>Update the turns, position, and ID when appropriate by calling the <a class="reference internal" href="../library/tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___u_p_d_a_t_e___p_a_r_a_m_e_t_e_r_s_1ga06d53901506adeafdd043a06681375ad"><span class="std std-ref">PM_tformat_updatePositionOrTurns()</span></a> and <a class="reference internal" href="../library/tformat_lib_interface.html#group___t_f_o_r_m_a_t___a_p_i___r_u_n___u_p_d_a_t_e___p_a_r_a_m_e_t_e_r_s_1ga7d3404550154d06dc68886d86a7c4a31"><span class="std std-ref">PM_tformat_updateEncoderID()</span></a> library functions.</p></li>
+</ol>
+</p>
+<p>This function runs in a infinite while() loop.</p>
+<p><dl class="simple">
+<dt><strong>See</strong></dt><dd><p>The EEPROM read and write commands are tested in the function <a class="reference internal" href="#group___t_f_o_r_m_a_t___s_y_s___r_u_n_1ga4f234918f04ec0e895bfb6d733673f26"><span class="std std-ref">tformat_testEEPROMCommands()</span></a></p>
+</dd>
+</dl>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.tformat_testEEPROMCommands">
+<span class="target" id="group___t_f_o_r_m_a_t___s_y_s___r_u_n_1ga4f234918f04ec0e895bfb6d733673f26"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tformat_testEEPROMCommands</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="pre">__attribute__((ramfunc))</span><a class="headerlink" href="#c.tformat_testEEPROMCommands" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Execute EEPROM read and write commands. </p>
+<p>Test read (ID6) and write (IDD) EEPROM commands.</p>
+<p><ol class="loweralpha simple">
+<li><p>Write all 0’s to EEPROM address in the range defined by TFORMAT_EEPROM_TEST_ADDR_START and TFORMAT_EEPROM_TEST_ADDR_END.</p></li>
+<li><p>Read out the data and check that all data read is 0x0</p></li>
+<li><p>Write a decrementing pattern: 0xFF, 0xFE, 0xFD … to the EEPROM address range</p></li>
+<li><p>Read out the pattern and check that the data matches what was written.</p></li>
+</ol>
+</p>
+<p>After each read or write:</p>
+<p>Check the response from the encoder against the command. The controlField (CF), eepromAddressField (ADF) and eepromDataField (EDF) received from the encoder should match the command that was sent.</p>
+<p>Note: Some write attempts will occur when the EEPROM is busy. In this case the PM_TFORMAT_EEPROM_BUSY flag will be set and the write will be re-tried by the test.</p>
+<p>All of the other commands are tested in the <a class="reference internal" href="#group___t_f_o_r_m_a_t___s_y_s___r_u_n_1gaa363a448caeed8db736ae8e558614b0c"><span class="std std-ref">tformat_exCommands()</span></a> function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.tformat_checkError">
+<span class="target" id="group___t_f_o_r_m_a_t___s_y_s___r_u_n_1ga9a427ecd43bdef9e9ff695e77c9b13a4"></span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tformat_checkError</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint16_t</span></span><span class="w"> </span><span class="n"><span class="pre">controlFieldID</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="pre">__attribute__((ramfunc))</span><a class="headerlink" href="#c.tformat_checkError" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Basic error check for received fields. </p>
+<p>Provides basic checks of the following:</p>
+<p><ol class="loweralpha simple">
+<li><p>The received control field (CF) should match the request CF</p></li>
+<li><p>The calculated CRC for the data should match the received CRC field</p></li>
+<li><p>For EEPROM read and write commands, check the request address and data fields against the received fields.</p></li>
+</ol>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>controlFieldID</strong> – The control field (CF) of the request in the format PM_TFORMAT_CFIDx. For example PM_TFORMAT_CFID6 for command ID6. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.tformat_spiRxISR">
+<span class="target" id="group___t_f_o_r_m_a_t___s_y_s___r_u_n_1ga3c984e258cf176bed53e27169ff7b1b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tformat_spiRxISR</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="pre">__attribute__((interrupt(&quot;HPI&quot;)))</span><span class="w"> </span><span class="pre">__attribute__((ramfunc))</span><a class="headerlink" href="#c.tformat_spiRxISR" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Service the SPI FIFO receive interrupt. </p>
+<p>This interrupt service routine will move the contents of the SPI RX FIFO into the tformatRxData array. Each FIFO word is masked with 0xFF to extract only the 8-bits of data corresponding to the for the specific T-Format field.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This interrupt service routine is defined as a high-priority interrupt for performance reasons. This means the ISR can not be interrupted by another ISR (no nesting allowed). Refer to the <a class="reference external" href="https://www.ti.com/lit/spru514">C2000 compiler guide </a> for more information. </p>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../library/index.html" class="btn btn-neutral float-right" title="T-Format Encoder Interface Library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tformat_sys_example.html" class="btn btn-neutral float-left" title="2. Build and Run the Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

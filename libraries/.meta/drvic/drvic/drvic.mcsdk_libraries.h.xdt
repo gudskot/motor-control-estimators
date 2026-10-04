@@ -1,0 +1,410 @@
+% var moduleName = "drvic"
+% var libraryFolder = "drvic"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + "drvic.js"];
+%if (module != null)
+%{
+    % if (module.$instances) {
+    % }
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+            % if (instance.interfaceType == "spi") {
+% var drvicRegisters = system.modules['/libraries/drvic/drvicRegister.js'];
+% var drvicRegisterBits = system.modules['/libraries/drvic/drvicRegisterBit.js'];
+% let motorDriveName = instance.motorDriver == "custom" ? instance.driverName : instance.motorDriver
+% let hasFaultBit = false;
+% let faultReg = "";
+% let faultBit = "";
+% if (drvicRegisters && drvicRegisterBits) {
+    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+            % if (drvicRegisters.$instances[i].drvicRegisterBit[j].$name.toLowerCase() == "fault") {
+                % hasFaultBit = true
+                % faultReg = `${motorDriveName}_ADDRESS_${drvicRegisters.$instances[i].$name.toUpperCase()}`
+                % faultBit = `${motorDriveName}_${drvicRegisters.$instances[i].drvicRegisterBit[j].$name}_BITS`
+            % }
+        % }
+    % }
+% }
+// **************************************************************************
+// the `motorDriveName` defines
+
+//! \brief Defines the address mask
+//!
+#define `motorDriveName`_ADDR_MASK                (`instance.spiInterface.addressMask`)
+
+//! \brief Defines the data mask
+//!
+#define `motorDriveName`_DATA_MASK                (`instance.spiInterface.dataMask`)
+
+//! \brief Defines the R/W mask
+//!
+#define `motorDriveName`_RW_MASK                  (`instance.spiInterface.rwMask`)
+% if (instance.spiInterface.crcMode != "none") {
+
+//! \brief Defines the CRC mask
+//!
+#define `motorDriveName`_CRC_MASK                 (`instance.spiInterface.crcMask`)
+% }
+
+                % if (drvicRegisters) {
+//! \brief Defines the register address
+//!
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name
+% let currRegOffset = drvicRegisters.$instances[i].offset.toString(16).toUpperCase()
+#define `currRegName`_ADDR 0x`currRegOffset`
+                    % }
+                % }
+
+                % if (drvicRegisters && drvicRegisterBits) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].registerName.toUpperCase()
+//
+// `currRegName`
+//
+                        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+% let currBitName = drvicRegisters.$instances[i].drvicRegisterBit[j].$name
+% let currBitWidth = drvicRegisters.$instances[i].drvicRegisterBit[j].bitWidth
+% let currBitStart = drvicRegisters.$instances[i].drvicRegisterBit[j].startBit
+% let currBitDescription = drvicRegisters.$instances[i].drvicRegisterBit[j].description
+#define `motorDriveName`_`currBitName`_BITS (`Math.pow(2, currBitWidth) - 1` << `currBitStart`) // `currBitDescription`
+                        % }
+
+                    % }
+                % }
+// **************************************************************************
+// the `motorDriveName` typedefs
+
+//------------------------------------------------------------------------------
+//! \brief Enumeration for the R/W modes
+//!
+typedef enum
+{
+% if (instance.spiInterface.rwSelectBits[0]) {
+    `motorDriveName`_CTRLMODE_WRITE    = (`instance.spiInterface.writeBitValue` << `instance.spiInterface.rwSelectBits[0] % 16`),  //!< Write Mode
+    `motorDriveName`_CTRLMODE_READ     = (`instance.spiInterface.readBitValue` << `instance.spiInterface.rwSelectBits[0] % 16`)   //!< Read Mode
+% }
+} `motorDriveName`_CtrlMode_e;
+
+//! \brief Enumeration for the register addresses
+//!
+typedef enum
+{
+                % if (drvicRegisters) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name.toUpperCase()
+% let currRegRegisterName = drvicRegisters.$instances[i].registerName
+% let currRegOffset = drvicRegisters.$instances[i].offset.toString(16).toUpperCase()
+    % // `motorDriveName`_ADDRESS_`currRegName`  = (0x`currRegOffset` << `instance.spiInterface.addressSelectBits[0]`),  //!< `currRegRegisterName`
+    `motorDriveName`_ADDRESS_`currRegName`  = (0x`currRegOffset` << `instance.spiInterface.addressSelectBits[0] % 16`),  //!< `currRegRegisterName`
+                    % }
+                % }
+} `motorDriveName`_Address_e;
+                % if (drvicRegisters && drvicRegisterBits) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name
+% let currRegisterName = drvicRegisters.$instances[i].registerName
+
+//! \brief Enumeration for the `currRegisterName` register
+//!
+typedef enum
+{
+                        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+% let currBitName = drvicRegisters.$instances[i].drvicRegisterBit[j].$name
+% let currBitWidth = drvicRegisters.$instances[i].drvicRegisterBit[j].bitWidth
+% let currBitStart = drvicRegisters.$instances[i].drvicRegisterBit[j].startBit
+% let currBitDescription = drvicRegisters.$instances[i].drvicRegisterBit[j].description
+    `motorDriveName`_`currBitName` = (`Math.pow(2, currBitWidth) - 1` << `currBitStart`), //!< `currBitDescription`
+                        % }
+} `motorDriveName`_`currRegName`_e;
+                        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+% let currBitName = drvicRegisters.$instances[i].drvicRegisterBit[j].$name
+% let currBitWidth = drvicRegisters.$instances[i].drvicRegisterBit[j].bitWidth
+% let currBitEnumEnable = drvicRegisters.$instances[i].drvicRegisterBit[j].enumEnable
+                            % if (currBitEnumEnable) {
+
+//! \brief Enumeration for the `currBitName` field
+//!
+typedef enum
+{
+                                % for (let k = 0; k < drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum.length ; k++) {
+% let currBitEnumName = drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].$name
+% let currBitEnumBitValue = drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].bitValue
+% if (currBitWidth >= 4) {
+%   currBitEnumBitValue = `0x${currBitEnumBitValue.toString(16).toUpperCase()}`
+%}
+% let currBitEnumDescription = drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].description
+    `motorDriveName`_`currBitEnumName` = `currBitEnumBitValue`, //!< `currBitEnumDescription`
+                                % }
+} `motorDriveName`_`currBitName`_e;
+                            % }
+                        % }
+                    % }
+                % }
+                
+// **************************************************************************
+// the `motorDriveName` objects
+
+//------------------------------------------------------------------------------
+                % if (drvicRegisters && drvicRegisterBits) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name.toUpperCase()
+% let currRegRegisterName = drvicRegisters.$instances[i].registerName
+//! \brief Object for the `motorDriveName` `currRegName` register
+//!
+struct `motorDriveName`_`currRegName`_BITS {
+                        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+% let currBitName = drvicRegisters.$instances[i].drvicRegisterBit[j].$name
+% let currBitWidth = drvicRegisters.$instances[i].drvicRegisterBit[j].bitWidth
+% let currBitStart = drvicRegisters.$instances[i].drvicRegisterBit[j].startBit
+% let currBitEnd = drvicRegisters.$instances[i].drvicRegisterBit[j].endBit
+% let currBitDescription = drvicRegisters.$instances[i].drvicRegisterBit[j].description
+% let currBitEnumEnable = drvicRegisters.$instances[i].drvicRegisterBit[j].enumEnable
+% let currDataType;
+% if (currBitEnumEnable) {
+%   currDataType = `${motorDriveName}_${currBitName}_e`
+% } else if (currBitWidth == 1) {
+%   currDataType = "bool"
+% } else if (currBitWidth <= 8) {
+%   currDataType = "uint8_t"
+% } else if (currBitWidth <= 16) {
+%   currDataType = "uint16_t"
+% } else if (currBitWidth <= 32) {
+%   currDataType = "uint32_t"
+% }
+    `currDataType` `currBitName`:`currBitWidth`; // Bit`currBitWidth != 1 ? "s " + currBitEnd + "-" : " "``currBitStart`
+                        % }
+};
+
+union `motorDriveName`_`currRegName`_REG
+{
+    uint16_t all;
+    struct   `motorDriveName`_`currRegName`_BITS bit;
+};
+
+                    % }
+                % }
+//! \brief Object for the `motorDriveName` registers and commands
+//!
+typedef struct _`instance.$name`_VARS_t_
+{
+                % if (drvicRegisters) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name
+% let currRegNameUpper = drvicRegisters.$instances[i].$name.toUpperCase()
+% let currRegRegisterName = drvicRegisters.$instances[i].registerName
+    union `motorDriveName`_`currRegNameUpper`_REG `currRegName`;
+                    % }
+                % }
+
+    bool                writeCmd;
+    bool                readCmd;
+    bool                manWriteCmd;
+    bool                manReadCmd;
+    uint16_t            manWriteAddr;
+    uint16_t            manReadAddr;
+    uint16_t            manWriteData;
+    uint16_t            manReadData;
+} `instance.$name`_VARS_t;
+
+//! \brief Defines the `instance.$name`_VARS_t handle
+//!
+typedef struct _`instance.$name`_VARS_t_ *`motorDriveName`VARS_Handle;
+
+//! \brief Defines the `motorDriveName` object
+//!
+typedef struct _`instance.$name`_Obj_
+{
+    uint32_t  spiHandle;     //!< handle for the serial peripheral interface (SPI)
+    uint32_t  gpioNumber_CS; //!< GPIO connected to the `motorDriveName` CS pin
+    uint32_t  gpioNumber_EN; //!< GPIO connected to the `motorDriveName` enable pin
+    bool      rxTimeOut;     //!< timeout flag for the RX FIFO
+    bool      enableTimeOut; //!< timeout flag for `motorDriveName` enable
+% if (instance.spiInterface.crcMode == "crc") {
+    uint16_t  crcTable[256]; //!< table for CRC lookups
+% }
+} `instance.$name`_Obj;
+
+//! \brief Defines the `motorDriveName` handle
+//!
+typedef struct _`instance.$name`_Obj_ *`instance.$name`_Handle;
+
+//! \brief Defines the `motorDriveName` Word type
+//!
+% if (instance.spiInterface.spiFrameSize == "8bits") {
+typedef uint16_t DRV_Word_t;
+% } else if (instance.spiInterface.spiFrameSize == "16bits") {
+typedef uint16_t DRV_Word_t;
+% } else if (instance.spiInterface.spiFrameSize == "24bits") {
+typedef uint32_t DRV_Word_t;
+% } else if (instance.spiInterface.spiFrameSize == "32bits") {  
+typedef uint32_t DRV_Word_t;
+% }
+
+// **************************************************************************
+// the `motorDriveName` function prototypes
+
+//! \brief     Initializes the `motorDriveName` object
+//! \param[in] pMemory   A pointer to the memory for the `motorDriveName` object
+//! \param[in] numBytes  The number of bytes allocated for the `motorDriveName`
+//!                      object, bytes
+//! \return    The `motorDriveName` object handle
+extern `instance.$name`_Handle `instance.$name`_init(void *pMemory);
+
+% if (instance.spiInterface.crcMode == "crc") {
+//! \brief     Generates the CRC lookup table
+//! \param[in] handle     The `motorDriveName` handle
+extern void `instance.$name`_generateCrcTable(`instance.$name`_Handle handle);
+
+//! \brief     Lookup CRC table
+//! \param[in] ctrlMode  The CRC input
+//! \param[in] data      The data
+//! \return    The CRC lookup value
+extern DRV_Word_t `instance.$name`_crcLookup(`instance.$name`_Handle handle, 
+                                            DRV_Word_t crcInput, 
+                                            uint16_t data);
+
+% }
+//! \brief     Builds the control word
+//! \param[in] handle    The `motorDriveName` handle
+//! \param[in] ctrlMode  The control mode
+//! \param[in] regName   The register name
+//! \param[in] data      The data
+//! \return    The control word
+static inline DRV_Word_t `instance.$name`_buildCtrlWord(`instance.$name`_Handle handle, 
+                                            const `motorDriveName`_CtrlMode_e ctrlMode,
+                                            const `motorDriveName`_Address_e regAddr,
+                                            const uint16_t data)
+{
+% if (instance.spiInterface.crcMode == "parity") {
+    DRV_Word_t p_addr = regAddr;
+    DRV_Word_t p_data = data;
+    DRV_Word_t p_mode = ctrlMode;
+
+    DRV_Word_t calc = (p_mode & `motorDriveName`_RW_MASK) | (p_addr & `motorDriveName`_ADDR_MASK) | (p_data & `motorDriveName`_DATA_MASK);
+    DRV_Word_t parity = 0;
+    while(calc)
+    {
+        parity ^= (calc & 1);
+        calc >>= 1;
+    }
+
+% if (instance.spiInterface.spiFrameSize == "8bits") {
+    parity = (parity * 0xFFU) & `motorDriveName`_CRC_MASK;
+% } else if (instance.spiInterface.spiFrameSize == "16bits") {
+    parity = (parity * 0xFFFFU) & `motorDriveName`_CRC_MASK;
+% } else if (instance.spiInterface.spiFrameSize == "24bits") {
+    parity = (parity * 0xFFFFFFU) & `motorDriveName`_CRC_MASK;
+% } else if (instance.spiInterface.spiFrameSize == "32bits") {  
+    parity = (parity * 0xFFFFFFFFU) & `motorDriveName`_CRC_MASK;
+% }
+
+    DRV_Word_t ctrlWord = ctrlMode | regAddr | parity | (data & `motorDriveName`_DATA_MASK);
+% } else if (instance.spiInterface.crcMode == "crc") {
+    DRV_Word_t c_addr = regAddr;
+    DRV_Word_t c_data = data;
+    DRV_Word_t c_mode = ctrlMode;
+
+    DRV_Word_t calc = (c_mode & `motorDriveName`_RW_MASK) | (c_addr & `motorDriveName`_ADDR_MASK) | (c_data & `motorDriveName`_DATA_MASK);
+    DRV_Word_t crc = `instance.spiInterface.crcInitValue`;
+
+    crc = `instance.$name`_crcLookup(handle, crc, calc);
+
+    DRV_Word_t ctrlWord = ctrlMode | regAddr | crc | (data & `motorDriveName`_DATA_MASK);
+% } else {
+    DRV_Word_t ctrlWord = ctrlMode | regAddr | (data & `motorDriveName`_DATA_MASK);
+% }
+
+    return(ctrlWord);
+} // end of `instance.$name`_buildCtrlWord() function
+
+//! \brief     Enables the `motorDriveName`
+//! \param[in] handle     The `motorDriveName` handle
+extern void `instance.$name`_enable(`instance.$name`_Handle handle);
+
+//! \brief     Sets up the `motorDriveName` register map
+//! \param[in] handle     The `motorDriveName` handle
+extern void `instance.$name`_setupRegisters(`instance.$name`_Handle handle);
+
+% if (hasFaultBit) {
+//! \brief     Queries the `motorDriveName` for the fault status
+//! \param[in] handle     The `motorDriveName` handle
+//! \return    The fault status from the `motorDriveName`
+extern bool `instance.$name`_getFaultStatus(`instance.$name`_Handle handle);
+
+% }
+//! \brief     Sets the SPI handle in the `motorDriveName`
+//! \param[in] handle     The `motorDriveName` handle
+//! \param[in] spiHandle  The SPI handle to use
+void `instance.$name`_setSPIHandle(`instance.$name`_Handle handle, uint32_t spiHandle);
+ 
+//! \brief     Sets the GPIO CS number in the `motorDriveName`
+//! \param[in] handle       The `motorDriveName` handle
+//! \param[in] gpioHandle   The GPIO number to use
+void `instance.$name`_setGPIOCSNumber(`instance.$name`_Handle handle, uint32_t gpioNumber);
+ 
+//! \brief     Sets the GPIO En number in the `motorDriveName`
+//! \param[in] handle       The `motorDriveName` handle
+//! \param[in] gpioHandle   The GPIO number to use
+void `instance.$name`_setGPIOENNumber(`instance.$name`_Handle handle, uint32_t gpioNumber);
+
+//! \brief     Resets the enable timeout flag
+//! \param[in] handle   The `motorDriveName` handle
+static inline void `instance.$name`_resetEnableTimeout(`instance.$name`_Handle handle)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+ 
+    obj->enableTimeOut = false;
+ 
+    return;
+} // end of `instance.$name`_resetEnableTimeout() function
+ 
+//! \brief     Resets the RX fifo timeout flag
+//! \param[in] handle   The `motorDriveName` handle
+static inline void `instance.$name`_resetRxTimeout(`instance.$name`_Handle handle)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+ 
+    obj->rxTimeOut = false;
+ 
+    return;
+} // end of `instance.$name`_resetRxTimeout() function
+ 
+//! \brief     Initialize the interface to all 8320 SPI variables
+//! \param[in] handle  The `motorDriveName` handle
+extern void `instance.$name`_setupSPI(`instance.$name`_Handle handle,
+                             `instance.$name`_VARS_t *`motorDriveName.toLowerCase()`Vars);
+ 
+//! \brief     Reads data from the `motorDriveName` register
+//! \param[in] handle   The `motorDriveName` handle
+//! \param[in] regAddr  The register address
+//! \return    The data value
+extern uint16_t `instance.$name`_readSPI(`instance.$name`_Handle handle,
+                                const `motorDriveName`_Address_e regAddr);
+ 
+//! \brief     Writes data to the `motorDriveName` register
+//! \param[in] handle   The `motorDriveName` handle
+//! \param[in] regAddr  The register name
+//! \param[in] data     The data value
+extern void `instance.$name`_writeSPI(`instance.$name`_Handle handle,
+                             const `motorDriveName`_Address_e regAddr,
+                             const uint16_t data);
+ 
+//! \brief     Write to the `motorDriveName` SPI registers
+//! \param[in] handle  The `motorDriveName` handle
+//! \param[in] `motorDriveName.toLowerCase()`Vars  The (`instance.$name`_VARS_t) structure that contains
+//!                           all `motorDriveName` Status/Control register options
+extern void `instance.$name`_writeData(`instance.$name`_Handle handle,
+                              `instance.$name`_VARS_t *`motorDriveName.toLowerCase()`Vars);
+ 
+//! \brief     Read from the `motorDriveName` SPI registers
+//! \param[in] handle  The `motorDriveName` handle
+//! \param[in] `motorDriveName.toLowerCase()`Vars  The (`instance.$name`_VARS_t) structure that contains
+//!                           all `motorDriveName` Status/Control register options
+extern void `instance.$name`_readData(`instance.$name`_Handle handle,
+                             `instance.$name`_VARS_t *`motorDriveName.toLowerCase()`Vars);
+            % }
+    % }
+%}
+%

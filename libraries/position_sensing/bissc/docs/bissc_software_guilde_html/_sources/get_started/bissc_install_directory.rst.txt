@@ -1,0 +1,66 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Installation and Directory Structure
+************************************************************
+
+Installing the Examples
+------------------------------------------------------------
+
+.. _lnk-install:
+
+After installing the tools described in :ref:`requirements <lnk-requirements>`, the library and example projects can be found in the following SDK directory:
+
+.. _lnk-directory:
+
+Root Directory
+------------------------------------------------------------
+
+The default install location is shown below:
+
+.. tabularcolumns:: |l|l|l|
+
+===================  ===================    ======================================================================================
+Contents              Abbreviation            Default Location
+===================  ===================    ======================================================================================
+Motor Control SDK     ``[MC_SDK_ROOT]``     |SDK_ROOT|
+System Example        ``[SYS_ROOT]``        |SYS_ROOT|
+API Library           ``[API_ROOT]``        |API_ROOT|
+===================  ===================    ======================================================================================
+
+System Example Directory Structure
+------------------------------------------------------------
+
+The system reference example source is located in the following directory structure with respect to |SYS_ROOT|:
+
+.. tabularcolumns:: |l|l|
+
+==================================================     ======================================================================================
+System Reference Directory                              Contents
+==================================================     ======================================================================================
+``[SYS_ROOT]/ccs/bissc/``                              Code Composer Studio projectspec file
+``[SYS_ROOT]/shared/include/bissc*.h``                 System Header file. Shared between devices
+``[SYS_ROOT]/shared/source/bissc*.c``                  System source code. Shared between devices
+``[SYS_ROOT]/shared/debug/bissc_vars.txt``             CCS expressions import file.
+``[SYS_ROOT]/<device>/cmd``                            Linker command file. Device specific
+``[SYS_ROOT]/<device>/source/*bissc*.c``               C28x C-source files. Device specific
+``[SYS_ROOT]/<device>/source/bissc*.syscfg``           Device-specific pin-Mux and XBAR, CLB interconnect
+==================================================     ======================================================================================
+
+Library Directory Structure
+------------------------------------------------------------
+
+The API source is located in the following directory structure with respect to |API_ROOT|:
+
+.. tabularcolumns:: |l|l|
+
+==================================================     ======================================================================================
+API Library Reference                                   Contents
+==================================================     ======================================================================================
+``[API_ROOT]/ccs/<device>``                                     Code Composer Studio projectspec file
+``[API_ROOT]/include``                                          Header files
+``[API_ROOT]/source/pm_bissc_source.c``                         C28x communication C-source code
+``[API_ROOT]/source/pm_bissc_crc.c``                            C28x CRC C-source code
+``[API_ROOT]/source/pm_bissc<device>.syscfg``                   CLB Tool: tile configuration. Device specific.
+``[API_ROOT]/lib/pm_bissc_<device>.lib``                        Device-specific binary
+==================================================     ======================================================================================

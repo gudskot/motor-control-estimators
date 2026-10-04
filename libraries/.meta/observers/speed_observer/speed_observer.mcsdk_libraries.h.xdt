@@ -1,0 +1,16 @@
+% var moduleName = "speed_observer"
+% var libraryFolder = "observers"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+#include <`moduleName`.h>
+    % if (module.$instances) {
+#define `module.mcsdkLibraryName`_COUNT `module.$instances.length`
+    % }
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+void    `instance.$name`_init();
+    % }
+%}
+%

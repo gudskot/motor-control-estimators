@@ -1,0 +1,46 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Overview
+************************************************************
+|BISSC_SPEC_NAME|_, is designed for serial transfer of digital data between linear, rotary or angle
+encoders, touch probes, accelerometers and the subsequent electronics, such as numerical controls,
+servo amplifiers and programmable logic controllers. 
+
+.. note:: 
+   |BISSC_TRADEMARK_NAME| |BISSC_LICENSE_NAME|_ For more details on the protocol and implementation aspects, see the |BISSC_WEB_NAME|_ website.
+
+The C2000 |PROTOCOL_NAME| Encoder Interface Reference is divided into three parts: 
+
+#. Hardware and overall design. This is described in |BISSC_LIB_NAME|_.
+#. Software: |PROTOCOL_NAME| encoder interface Application Programming Interface (API)
+#. Software: System solution demonstration
+
+This document focuses on the API and system example.
+
+Application Programming Interface (API)
+------------------------------------------------------------
+The API provides functions and definitions used to implement the encoder interface.
+
+Key Features of the library:
+
+* Encoder interface integrated into a C2000 real-time microcontroller solution 
+* Meets the encoder interface clocking requirements
+* Supports read and write of registers through the control data (CD) frame
+* Cyclic Redundancy Check (CRC) calculations
+* All source code is provided
+    
+System Example
+------------------------------------------------------------
+Provides support functions to configure a C2000 Real-Time Control device to support |PROTOCOL_NAME|.
+    
+Key Features:
+
+* Provides a blueprint for how to integrate the library into a project.
+* Processing to perform basic error checks, update multi-turn and single-turn position.
+* Example to read and write to registers through control data.
+* All source code is provided.
+
+.. note:: 
+   For device-specific requirements, refer to the |BISSC_TIDM|_ |PROTOCOL_NAME| Encoder Interface design guide.
+

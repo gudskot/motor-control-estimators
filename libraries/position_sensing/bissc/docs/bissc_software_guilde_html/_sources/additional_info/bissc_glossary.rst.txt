@@ -1,0 +1,58 @@
+.. include:: ../bissc_replacements.rst
+
+Abbreviations and Acronyms
+************************************************************
+
+.. _lnk-glossery:
+
+API
+   Application Programming Interface. The definition of the library which enables the encoder interface protocol.
+
+BiSS
+   In this document, BiSS Interface or BiSS refer to the BiSS-C protocol introduced in 2007. BiSS-C stands for Bidirectional Serial Synchronous Continuous mode. |BISSC_LICENSE_NAME|_ For more details on the protocol and implementation aspects, see the |BISSC_WEB_NAME|_ website.
+
+BiSS frame
+   Single-cycle-data plus one bit of control-data. The BiSS frame is sent as a response every BiSS cycle.
+
+CD
+   From the BiSS-C specification. Control Data. Data transmitted one bit per BiSS cycle. For example, the CD permits the reading and writing of encoder registers.
+
+CDM
+   From the BiSS-C specification. Control Data Master. One bit of control data, CD, sent each BiSS frame by the controller to the encoder.
+
+CDS   
+   From the BiSS-C specification. Control Data Slave. One bit of control data, CD, sent each BiSS frame by the encoder to the controller.
+
+CLB
+   Configurable Logic Block peripheral on C2000 devices.
+
+CRC
+   Cyclic Redundancy Check.
+
+CTS 
+   From the BiSS-C specification. ConTrol Select bit. A BiSS-C control data (CD) frame begins with a start bit followed by the CTS bit. 
+   If CTS is 0, the control frame is a command frame. If CTS is 1, then the control frame is a register access frame.
+
+MA
+   From the BiSS-C specification. Master clock. This pulse train output is sent from the controller to the encoder/sensor. 
+   It consists of the encoder clock plus one bit of control data from the master.
+
+PM
+   Position Manager. Foundation hardware and software on C28x devices for position sensing
+
+PM_bissc or PM_BISSC
+   Prefix used for the library functions and #defines
+
+Point-to-point Topology
+   A configuration in which only one device (encoder or sensor) is interfaced to the master.
+
+SCD
+   Single-Cycle Data. Information transmitted in one BiSS frame. This includes the position information.
+
+SL 
+   From the BiSS-C specification. Slave return. Data input to the BiSS-C master from the slave. This is the encoder 
+   response including position and one bit of CD data each BiSS frame.
+
+SPI
+   Serial Peripheral Interface
+

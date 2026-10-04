@@ -1,0 +1,30 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Configuration
+************************************************************
+
+.. _lnk-configuration:
+
+System Example Configuration
+------------------------------------------------------------
+If you wish to change the default configuration of the system example, edit the example's header file. The parameters that can be changed are shown below.
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/shared/include/bissc.h
+    :start-after: [doc-sys-config-start]
+    :end-before: [doc-sys-config-end]
+    :language: c
+    :caption: /solutions/boostxl_posmgr/shared/include/bissc.h
+
+Library Configuration
+------------------------------------------------------------
+If you wish to change the default configuration of the library, edit the library's public header file. The parameters that can be changed are shown below.
+
+.. note:: 
+    * If you change the library configuration then recompile **both** the library **and** the system example. 
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_include.h
+    :start-after: [doc-library-config-start]
+    :end-before: [doc-library-config-end]
+    :language: c
+    :caption: /libraries/position_sensing/bissc/include/pm_bissc_include.h

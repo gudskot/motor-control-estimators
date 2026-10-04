@@ -1,0 +1,112 @@
+.. include:: ../tformat_replacements.rst
+
+.. _lnk-sys-example:
+
+************************************************************
+Build and Run the Example
+************************************************************
+This example provides a roadmap for integration of the library into an application.
+
+.. note:: For Code Composer Studio information, refer to the |CCS_GUIDE|_. 
+
+Hardware Connections
+------------------------------------------------------------
+Setup the hardware as described in the |TFORMAT_TIDM|_ design guide.
+
+Import and Run Example Project
+------------------------------------------------------------
+
+The system example directory, |SYS_ROOT_DEVICE|, contains a Code Composer Studio projectspec file.  To import the project into CCS, follow these steps:
+
+    #. Install the minimum required tools. Refer to :ref:`Minimum Requirements <lnk-requirements>`.
+
+    #. Import the example system demonstration.
+
+        #. In Code Composer Studio (CCS), click *Project --> import CCS Projects..*
+        #. Navigate to the system example directory: 
+           |SYS_ROOT_DEVICE|
+        #. In the ``ccs/tformat/`` directory, select the ``tformat_systemtest.projectspec`` file
+        #. Click *Finish*.
+        #. In the CCS Project Explorer you should now see the demo and library projects as shown in :numref:`ccs_project_explorer_view`.
+
+        .. note:: When you import the system example, CCS will also import the associated library project.
+
+        .. figure:: ../images/ccs_project_explorer_view.png
+            :align: center
+            :name: ccs_project_explorer_view
+
+            Code Composer Studio Project Explorer Window.
+
+    #. Select the build configuration of choice
+
+        #. To select the build configuration: *right-click on the project*
+        #. Select: *build configurations* and *set active*. 
+        #. Select the build configuration.
+
+    The build configurations are:
+
+        boostxl_posmgr_site2_RAM: 
+            Builds the solution to load and run from RAM.  The pin-out corresponds to the LaunchPad + BOOSTXL_POSMGR site2 as described in |TFORMAT_TIDM|_ design guide.  
+        boostxl_posmgr_site2_FLASH: 
+            The solution loads the demo to flash. At run-time, critical portions are copied to execute from RAM.
+        tidxiddk379d_h1_RAM:
+            This option is available for some devices.  In this case, the pinout corresponds to the H1 connector on the |TMDXIDDK379D|_.      
+    
+        .. note:: A LaunchPad is not available for F28388x devices.  The demo can be run on either the |TMDXIDDK379D|_ or a controlCard.  For a controlCard, the user must manually connect the required pins to a BOOSTXL-POSMGR.   
+
+    #. Select the active board configuration
+
+       #. Some projects include two board configuration files (.ccxml) as shown in :numref:`ccs_board_config_selection`. This occurs when the LaunchPad and ControlCard use different JTAG connections. 
+       #. *Right-click* on the board configuration matching your hardware. 
+       #. Select *Set as active target configuration*
+
+        .. figure:: ../images/ccs_board_config_selection.png
+            :align: center
+            :name: ccs_board_config_selection
+
+            Board Configurations
+
+    #. Build the system example project
+
+        #. In the project manager window, *Right-click* on the project name ``tformat_<device>_boostxl_posmgr_site2``
+        #. Select *Rebuild Project*
+        #. Observe the console window for any errors or for successful completion of the build.
+        #. Once the build completes, without errors, execute the project by selecting *Run --> Debug*
+
+    #. Populate the expressions window
+
+        #. *Right-click* on the expressions window
+        #. Select *import*
+        #. Browse to the location ``[SYS_ROOT]/shared/debug/`` 
+        #. Select the file ``tformat_vars.txt`` and click *open*
+        #. At the top of the expressions window, enable *continuous refresh* as shown in :numref:`ccs_continuous_refresh`.
+
+        .. figure:: ../images/ccs_import_expressions.png
+            :align: center
+            :name: ccs_import_expressions
+
+            Code Composer Studio Import Expressions.
+
+        .. figure:: ../images/ccs_expressions_window.png
+            :align: center
+            :name: ccs_expressions_window
+
+            Code Composer Studio Expressions Window.
+
+        .. note:: The system example clears the tformatData structure between commands. For this reason, the structure may appear to be all zero when running the demo.  To view the content, set a breakpoint before the structure is cleared.             
+
+        .. figure:: ../images/ccs_continuous_refresh.png
+            :align: center
+            :name: ccs_continuous_refresh
+
+            Enable Continuous Refresh.
+
+    #. Run the code
+
+        #. Press the *Run/Resume* button
+        #. Manually turn the shaft of the motor or encoder
+        #. Monitor the signals and variables described below:
+
+    .. doxygengroup:: TFORMAT_API_DATA_STRUCT
+
+    .. doxygengroup:: TFORMAT_SYS_GLOBAL_STRUCTURES

@@ -1,0 +1,13 @@
+#########
+Changelog
+#########
+C2000 MotorControl SDK Version 5.00.00.00
+-----------------------------------------------------------
+* Added support for F28P65x LaunchPad
+* Enabled the pull-up on the SPI SIMO (PICO) pin. This is to keep the signal high if the encoder should become disconnected.
+* Updated the resetCLB function to perform a soft reset of the module. 
+* Fixed the argument to the SPI enable function call. 
+  
+C2000 MotorControl SDK Version 4.01.00.00
+-----------------------------------------------------------
+Changes were focused on performance improvement, ease of use, and supporting new device features.  Refer to the section :ref:`library migration <lnk-migration>` for specific details. 

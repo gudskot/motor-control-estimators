@@ -1,0 +1,61 @@
+.. include:: ../tformat_replacements.rst
+
+Protocol Defines
+************************************************************
+.. _lnk-defines:
+
+The library header file includes a number of T-Format protocol-based defines.  Some of these are shown below for reference.  Information on specific fields and commands can be found in the :ref:`glossery <lnk-glossery>`.
+
+Command and Response Format
++++++++++++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-tformat-command-format-start]
+    :end-before: [doc-library-tformat-command-format-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h
+
+SPI Clocks Required to Send/receive
+++++++++++++++++++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-tformat-txrx-clocks-start]
+    :end-before: [doc-library-tformat-txrx-clocks-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h
+
+SPI FIFO Level
+++++++++++++++++++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-tformat-fifo-start]
+    :end-before: [doc-library-tformat-fifo-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h    
+
+Data ID Code Format
+++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-tformat-idcode-start]
+    :end-before: [doc-library-tformat-idcode-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h
+
+Command Field (CF)
++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-tformat-cf-start]
+    :end-before: [doc-library-tformat-cf-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h
+
+CRC Calculations
+++++++++++++++++++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-tformat-crc-len-start]
+    :end-before: [doc-library-tformat-crc-len-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h   

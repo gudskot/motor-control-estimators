@@ -1,0 +1,427 @@
+% var moduleName = "drvic"
+% var libraryFolder = "drvic"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+    % }
+
+    % var initFunctions = [];
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+            % if (instance.interfaceType == "spi") {
+% var drvicRegisters = system.modules['/libraries/drvic/drvicRegister.js'];
+% var drvicRegisterBits = system.modules['/libraries/drvic/drvicRegisterBit.js'];
+% let motorDriveName = instance.motorDriver == "custom" ? instance.driverName : instance.motorDriver
+% let hasFaultBit = false;
+% let faultReg = "";
+% let faultBit = "";
+% if (drvicRegisters && drvicRegisterBits) {
+    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+            % if (drvicRegisters.$instances[i].drvicRegisterBit[j].$name.toLowerCase() == "fault") {
+                % hasFaultBit = true
+                % faultReg = `${motorDriveName}_ADDRESS_${drvicRegisters.$instances[i].$name.toUpperCase()}`
+                % faultBit = `${motorDriveName}_${drvicRegisters.$instances[i].drvicRegisterBit[j].$name}_BITS`
+            % }
+        % }
+    % }
+% }
+// **************************************************************************
+// the `motorDriveName` function prototypes
+
+`instance.$name`_Handle `instance.$name`_init(void *pMemory)
+{
+    `instance.$name`_Handle handle;
+
+    // assign the handle
+    handle = (`instance.$name`_Handle)pMemory;
+
+    `instance.$name`_resetRxTimeout(handle);
+    `instance.$name`_resetEnableTimeout(handle);
+% if (instance.spiInterface.crcMode == "crc") {
+    `instance.$name`_generateCrcTable(handle);
+% }
+
+    return(handle);
+} // end of `instance.$name`_init() function
+
+% if (instance.spiInterface.crcMode == "crc") {
+void `instance.$name`_generateCrcTable(`instance.$name`_Handle handle)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+    int16_t i, j;
+    uint16_t crc;
+
+    for (i = 0; i < 256; i++) 
+    {
+        crc = i;
+        for (j = 8; j > 0; j--) 
+        {
+            if ((crc & 0x80) != 0) 
+            {
+                crc <<= 1;
+                crc ^= 0x12F;
+            } 
+            else 
+            {
+                crc <<= 1;
+            }
+        }
+        obj->crcTable[i] = crc;
+    }
+
+    return;
+} // end of `instance.$name`_generateCrcTable() function
+
+DRV_Word_t `instance.$name`_crcLookup(`instance.$name`_Handle handle,
+                      DRV_Word_t crcInput, const uint16_t data)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+    uint16_t crc, crcout;
+    
+    crc = crcInput^data;
+    crcout = obj->crcTable[crc];
+    
+    return crcout;
+} // end of `instance.$name`_crcLookup() function
+
+% }
+void `instance.$name`_enable(`instance.$name`_Handle handle)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+    volatile uint16_t enableWaitTimeOut;
+
+    // Enable the `motorDriveName`
+    GPIO_writePin(obj->gpioNumber_EN, 0);
+    GPIO_writePin(obj->gpioNumber_EN, 0);
+
+    // Wait for the `motorDriveName` to go through start up sequence
+    DEVICE_DELAY_US(655);
+
+    enableWaitTimeOut = 0;
+
+% if (hasFaultBit) {
+    // Make sure the FAULT bit is not set during startup
+    while(((`instance.$name`_readSPI(handle, `faultReg`) &
+            `faultBit`) != 0) && (enableWaitTimeOut < 1000))
+    {
+        if(++enableWaitTimeOut > 999)
+        {
+            obj->enableTimeOut = true;
+        }
+    }
+
+% }
+    // Wait for the `motorDriveName` to go through start up sequence
+    DEVICE_DELAY_US(655);
+
+    // Initializing register fields (if any)
+    `instance.$name`_setupRegisters(handle);
+
+    return;
+} // end of `instance.$name`_enable() function
+
+void `instance.$name`_setupRegisters(`instance.$name`_Handle handle)
+{
+                % if (drvicRegisters && drvicRegisterBits) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegNameUpper = drvicRegisters.$instances[i].$name.toUpperCase()
+% let enabledEnumsList = []
+                        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+% let currBitEnumEnable = drvicRegisters.$instances[i].drvicRegisterBit[j].enumEnable
+                            % if (currBitEnumEnable) {
+                                % for (let k = 0; k < drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum.length ; k++) {
+% let currBitEnumName = drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].$name
+                                    % if (currBitEnumName.toUpperCase().includes("UNLOCK")) {
+                                        % if (drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].enableBitEnum) {
+% enabledEnumsList.push(`${motorDriveName}_${currBitEnumName}`)
+                                        % }
+                                    % }
+                                % }
+                            % }
+                        % }
+                        % if (enabledEnumsList.length) {
+    `instance.$name`_writeSPI(handle, `motorDriveName`_ADDRESS_`currRegNameUpper`, `enabledEnumsList.join(" | ")`);
+    DEVICE_DELAY_US(1);
+
+                        % }
+                    % }
+                % }
+                % if (drvicRegisters && drvicRegisterBits) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegNameUpper = drvicRegisters.$instances[i].$name.toUpperCase()
+% let enabledEnumsList = []
+                        % for (let j = 0; j < drvicRegisters.$instances[i].drvicRegisterBit.length ; j++) {
+% let currBitEnumEnable = drvicRegisters.$instances[i].drvicRegisterBit[j].enumEnable
+                            % if (currBitEnumEnable) {
+                                % for (let k = 0; k < drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum.length ; k++) {
+% let currBitEnumName = drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].$name
+                                    % if (drvicRegisters.$instances[i].drvicRegisterBit[j].drvicRegisterBitEnum[k].enableBitEnum) {
+% enabledEnumsList.push(`${motorDriveName}_${currBitEnumName}`)
+                                    % }
+                                % }
+                            % }
+                        % }
+                        % if (enabledEnumsList.length) {
+    `instance.$name`_writeSPI(handle, `motorDriveName`_ADDRESS_`currRegNameUpper`, `enabledEnumsList.join(" | ")`);
+                        % }
+                    % }
+                % }
+
+    return;
+} // end of `instance.$name`_setupRegisters() function
+
+% if (hasFaultBit) {
+bool `instance.$name`_getFaultStatus(`instance.$name`_Handle handle)
+{
+    return `instance.$name`_readSPI(handle, `faultReg`) & `faultBit`;
+} // end of `instance.$name`_getFaultStatus() function
+
+% }
+void `instance.$name`_setSPIHandle(`instance.$name`_Handle handle, uint32_t spiHandle)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+
+    // initialize the serial peripheral interface object
+    obj->spiHandle = spiHandle;
+
+    return;
+} // end of `instance.$name`_setSPIHandle() function
+
+void `instance.$name`_setGPIOCSNumber(`instance.$name`_Handle handle, uint32_t gpioNumber)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+
+    // initialize the gpio interface object
+    obj->gpioNumber_CS = gpioNumber;
+
+    return;
+} // end of `instance.$name`_setGPIOCSNumber() function
+
+void `instance.$name`_setGPIOENNumber(`instance.$name`_Handle handle, uint32_t gpioNumber)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+
+    // initialize the gpio interface object
+    obj->gpioNumber_EN = gpioNumber;
+
+    return;
+} // end of `instance.$name`_setGPIOENNumber() function
+
+void `instance.$name`_setupSPI(`instance.$name`_Handle handle,
+                      `instance.$name`_VARS_t *`motorDriveName.toLowerCase()`Vars)
+{
+    `motorDriveName`_Address_e drvRegAddr;
+    uint16_t drvDataNew;
+
+    // Set Default Values
+    // Manual Read/Write
+    `motorDriveName.toLowerCase()`Vars->manReadAddr  = 0;
+    `motorDriveName.toLowerCase()`Vars->manReadData  = 0;
+    `motorDriveName.toLowerCase()`Vars->manReadCmd = false;
+    `motorDriveName.toLowerCase()`Vars->manWriteAddr = 0;
+    `motorDriveName.toLowerCase()`Vars->manWriteData = 0;
+    `motorDriveName.toLowerCase()`Vars->manWriteCmd = false;
+
+    // Read/Write
+    `motorDriveName.toLowerCase()`Vars->readCmd  = false;
+    `motorDriveName.toLowerCase()`Vars->writeCmd = false;
+
+    // Read registers for default values
+                % if (drvicRegisters) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name
+% let currRegNameUpper = drvicRegisters.$instances[i].$name.toUpperCase()
+% let currRegRegisterName = drvicRegisters.$instances[i].registerName
+    // Read `currRegRegisterName`
+    drvRegAddr = `motorDriveName`_ADDRESS_`currRegNameUpper`;
+    drvDataNew = `instance.$name`_readSPI(handle, drvRegAddr);
+    `motorDriveName.toLowerCase()`Vars->`currRegName`.all = drvDataNew;
+        
+                    % }
+                % }
+    return;
+} // end of `instance.$name`_setupSPI() function
+
+uint16_t `instance.$name`_readSPI(`instance.$name`_Handle handle,
+                         const `motorDriveName`_Address_e regAddr)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+    uint16_t ctrlWord;
+    const uint16_t data = 0;
+    volatile uint16_t readWord;
+    volatile uint16_t WaitTimeOut = 0;
+
+    volatile SPI_RxFIFOLevel RxFifoCnt = SPI_FIFO_RXEMPTY;
+
+    // build the control word
+    ctrlWord = (uint16_t)`instance.$name`_buildCtrlWord(handle, `motorDriveName`_CTRLMODE_READ, regAddr, data);
+
+#ifdef DRV_CS_GPIO
+    GPIO_writePin(obj->gpioNumber_CS, 0);
+    GPIO_writePin(obj->gpioNumber_CS, 0);
+#endif  // DRV_CS_GPIO
+
+    // wait for registers to update
+    DEVICE_DELAY_US(0.08);
+
+    // reset the Rx fifo pointer to zero
+    SPI_resetRxFIFO(obj->spiHandle);
+    SPI_enableFIFO(obj->spiHandle);
+
+    // wait for registers to update
+    DEVICE_DELAY_US(0.32);
+
+    // write the command
+    SPI_writeDataBlockingNonFIFO(obj->spiHandle, ctrlWord);
+
+    // wait for two words to populate the RX fifo, or a wait timeout will occur
+    while(RxFifoCnt < SPI_FIFO_RX1)
+    {
+        RxFifoCnt = SPI_getRxFIFOStatus(obj->spiHandle);
+
+        if(++WaitTimeOut > 0xfffe)
+        {
+            obj->rxTimeOut = true;
+        }
+    }
+
+    WaitTimeOut = 0xffff;
+
+    // wait for registers to update
+    DEVICE_DELAY_US(2.56);
+
+#ifdef DRV_CS_GPIO
+    GPIO_writePin(obj->gpioNumber_CS, 1);
+    GPIO_writePin(obj->gpioNumber_CS, 1);
+#endif  // DRV_CS_GPIO
+
+    // Read the word
+    readWord = SPI_readDataNonBlocking(obj->spiHandle);
+
+    return(readWord & `motorDriveName`_DATA_MASK);
+} // end of `instance.$name`_readSPI() function
+
+
+void `instance.$name`_writeSPI(`instance.$name`_Handle handle, const `motorDriveName`_Address_e regAddr,
+                      const uint16_t data)
+{
+    `instance.$name`_Obj *obj = (`instance.$name`_Obj *)handle;
+    uint16_t ctrlWord;
+
+    // build the control word
+    ctrlWord = (uint16_t)`instance.$name`_buildCtrlWord(handle, `motorDriveName`_CTRLMODE_WRITE, regAddr, data);
+
+#ifdef DRV_CS_GPIO
+    GPIO_writePin(obj->gpioNumber_CS, 0);
+    GPIO_writePin(obj->gpioNumber_CS, 0);
+#endif  // DRV_CS_GPIO
+
+    // wait for GPIO
+    DEVICE_DELAY_US(0.08);
+
+    // reset the Rx fifo pointer to zero
+    SPI_resetRxFIFO(obj->spiHandle);
+    SPI_enableFIFO(obj->spiHandle);
+
+    // wait for registers to update
+    DEVICE_DELAY_US(0.64);
+
+    // write the command
+    SPI_writeDataBlockingNonFIFO(obj->spiHandle, ctrlWord);
+
+    // wait for registers to update
+    DEVICE_DELAY_US(2.56);
+
+#ifdef DRV_CS_GPIO
+    GPIO_writePin(obj->gpioNumber_CS, 1);
+    GPIO_writePin(obj->gpioNumber_CS, 1);
+#endif  // DRV_CS_GPIO
+
+    return;
+}  // end of `instance.$name`_writeSPI() function
+
+
+void `instance.$name`_writeData(`instance.$name`_Handle handle, `instance.$name`_VARS_t *`motorDriveName.toLowerCase()`Vars)
+{
+    `motorDriveName`_Address_e drvRegAddr;
+    uint16_t drvDataNew;
+
+    if(`motorDriveName.toLowerCase()`Vars->writeCmd)
+    {
+                % if (drvicRegisters) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+                        % if (drvicRegisters.$instances[i].registerType == "control") {
+% let currRegName = drvicRegisters.$instances[i].$name
+% let currRegNameUpper = drvicRegisters.$instances[i].$name.toUpperCase()
+% let currRegRegisterName = drvicRegisters.$instances[i].registerName
+        // Write `currRegRegisterName`
+        drvRegAddr = `motorDriveName`_ADDRESS_`currRegNameUpper`;
+        drvDataNew = `motorDriveName.toLowerCase()`Vars->`currRegName`.all & `motorDriveName`_DATA_MASK;
+        `instance.$name`_writeSPI(handle, drvRegAddr, drvDataNew);
+
+                        % }
+                    % }
+                % }
+        `motorDriveName.toLowerCase()`Vars->writeCmd = false;
+    }
+
+    // Manual write to the `motorDriveName`
+    if(`motorDriveName.toLowerCase()`Vars->manWriteCmd)
+    {
+        // Custom Write
+        % // drvRegAddr = (`motorDriveName`_Address_e)(`motorDriveName.toLowerCase()`Vars->manWriteAddr << `instance.spiInterface.addressSelectBits[0]`);
+        drvRegAddr = (`motorDriveName`_Address_e)(`motorDriveName.toLowerCase()`Vars->manWriteAddr << `instance.spiInterface.addressSelectBits[0] % 16`);
+        drvDataNew = `motorDriveName.toLowerCase()`Vars->manWriteData;
+        `instance.$name`_writeSPI(handle, drvRegAddr, drvDataNew);
+
+        `motorDriveName.toLowerCase()`Vars->manWriteCmd = false;
+    }
+
+    return;
+}  // end of `instance.$name`_writeData() function
+
+void `instance.$name`_readData(`instance.$name`_Handle handle, `instance.$name`_VARS_t *`motorDriveName.toLowerCase()`Vars)
+{
+    `motorDriveName`_Address_e drvRegAddr;
+    uint16_t drvDataNew;
+
+    if(`motorDriveName.toLowerCase()`Vars->readCmd)
+    {
+        // Read registers for default values
+                % if (drvicRegisters) {
+                    % for (let i = 0; i < drvicRegisters.$instances.length; i++) {
+% let currRegName = drvicRegisters.$instances[i].$name
+% let currRegNameUpper = drvicRegisters.$instances[i].$name.toUpperCase()
+% let currRegRegisterName = drvicRegisters.$instances[i].registerName
+        // Read `currRegRegisterName`
+        drvRegAddr = `motorDriveName`_ADDRESS_`currRegNameUpper`;
+        drvDataNew = `instance.$name`_readSPI(handle, drvRegAddr);
+        `motorDriveName.toLowerCase()`Vars->`currRegName`.all = drvDataNew;
+        
+                    % }
+                % }
+        `motorDriveName.toLowerCase()`Vars->readCmd = false;
+    }
+
+    // Manual read from the `motorDriveName`
+    if(`motorDriveName.toLowerCase()`Vars->manReadCmd)
+    {
+        // Custom Read
+        % // drvRegAddr = (`motorDriveName`_Address_e)(`motorDriveName.toLowerCase()`Vars->manReadAddr << `instance.spiInterface.addressSelectBits[0]`);
+        drvRegAddr = (`motorDriveName`_Address_e)(`motorDriveName.toLowerCase()`Vars->manReadAddr << `instance.spiInterface.addressSelectBits[0] % 16`);
+        drvDataNew = `instance.$name`_readSPI(handle, drvRegAddr);
+        `motorDriveName.toLowerCase()`Vars->manReadData = drvDataNew;
+
+        `motorDriveName.toLowerCase()`Vars->manReadCmd = false;
+    }
+
+    return;
+}  // end of `instance.$name`_readData() function
+            % }
+    % }
+%}
+%

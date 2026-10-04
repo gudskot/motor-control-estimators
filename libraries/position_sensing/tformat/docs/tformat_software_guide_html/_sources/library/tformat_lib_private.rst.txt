@@ -1,0 +1,55 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+Library Private Functions
+************************************************************
+
+.. _lnk-lib-private-run:
+
+The following functions are not called directly by the application. They are called from other functions within the library.  
+
+Initialization Functions
++++++++++++++++++++++++++++++
+
+.. doxygengroup:: TFORMAT_API_INIT_PRIVATE
+   :content-only:
+
+Run-time Configuration Functions
++++++++++++++++++++++++++++++++++
+
+.. doxygengroup:: TFORMAT_API_RUN_PRIVATE
+   :content-only:
+
+CRC Run-time Functions
++++++++++++++++++++++++++++++
+
+Which CRC generation method is used depends on the library configuration.
+
+Refer to :ref:`the configuration section <lnk-configuration>` for more information.
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-crc-config-start]
+    :end-before: [doc-library-crc-config-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h
+
+.. doxygengroup:: TFORMAT_CRC_PRIVATE
+   :content-only:
+
+CLB CRC
+--------------------------------
+
+.. doxygengroup:: TFORMAT_CRC_CLB_PRIVATE
+   :content-only:
+
+VCRC CRC
+--------------------------------
+
+.. doxygengroup:: TFORMAT_CRC_VCRC_PRIVATE
+   :content-only:
+
+C28x Look-up Table CRC
+--------------------------------
+
+.. doxygengroup:: TFORMAT_CRC_C28X_PRIVATE
+   :content-only:

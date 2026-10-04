@@ -1,0 +1,25 @@
+.. include:: ../bissc_replacements.rst
+
+Protocol Defines
+************************************************************
+.. _lnk-defines:
+
+The library private header file includes a number of |PROTOCOL_NAME| protocol-based defines.  Some of these are shown below for reference.  Information on specific fields and commands can be found in the :ref:`glossery <lnk-glossery>`.
+
+Command Data (CD) Frame
++++++++++++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_internal_include.h
+    :start-after: [doc-library-bissc-command-format-start]
+    :end-before: [doc-library-bissc-command-format-end]
+    :language: c
+    :caption: /libraries/position_sensing/bissc/include/pm_bissc_internal_include.h
+
+Single Cycle Data (SCD) Frame
+++++++++++++++++++++++++++++++++++++
+
+   .. literalinclude:: ../../../../../../libraries/position_sensing/bissc/include/pm_bissc_internal_include.h
+    :start-after: [doc-library-bissc-single-cycle-data-start]
+    :end-before: [doc-library-bissc-single-cycle-data-end]
+    :language: c
+    :caption: /libraries/position_sensing/bissc/include/pm_bissc_internal_include.h

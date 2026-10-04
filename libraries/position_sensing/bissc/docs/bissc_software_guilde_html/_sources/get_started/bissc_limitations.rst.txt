@@ -1,0 +1,16 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Limitations
+************************************************************
+
+.. _lnk-limitations:
+
+Some features of |PROTOCOL_NAME| have not been implemented in this communications demonstration. These features can be enabled by the system developer if required.
+
+#. Topologies other than point-to-point.
+#. Sequential (back-to-back) access to multiple registers. Single accesses are supported.
+#. Control data command frames (CTS = 0).
+#. The extension of the control-data frame by the slave. For example if the slave requires additional cycles to read or write to a register.
+#. Broadcast commands
+#. Some encoders require a higher current than the launchPad plus BOOSTXL_POSMGR can supply. If the encoder does not respond, or responds incorrectly, try providing power directly to the encoder from an external supply.

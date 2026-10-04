@@ -1,0 +1,55 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+T-Format Encoder Interface API
+************************************************************
+
+.. _lnk-lib-top:
+
+This section describes the T-Format Encoder Interface Application Programming Interface (API).  Usage of these functions are demonstrated by the system example. 
+
+Initialization API
+------------------------------------------------------------
+
+.. _lnk-lib-init:
+
+The following functions initialize the system.
+
+.. doxygengroup:: TFORMAT_API_INIT
+   :content-only:
+
+Run-time API
+------------------------------------------------------------
+An example of the runtime flow is shown below:
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/shared/source/tformat.c
+    :start-after: [doc-sys-run-time-example-start]
+    :end-before: [doc-sys-run-time-example-end]
+    :language: c
+    :caption: /solutions/boostxl_posmgr/shared/source/tformat.c
+
+.. _lnk-lib-public-run:
+
+Setup and Send Command
+****************************************************
+
+The following functions are called during run-time to setup and start a command transmission.
+
+.. doxygengroup:: TFORMAT_API_RUN_START_COMMANDS
+   :content-only:
+
+Retrieve Response
+****************************************************
+The following functions retrieve and parse the encoder's response.
+
+.. doxygengroup:: TFORMAT_API_RUN_RECEIVE_DATA
+   :content-only:
+
+.. _lnk-lib-encoder_parameters:
+
+Update Encoder Parameters
+****************************************************
+The following functions used to update the encoderData parameters.
+
+.. doxygengroup:: TFORMAT_API_RUN_UPDATE_PARAMETERS
+   :content-only:

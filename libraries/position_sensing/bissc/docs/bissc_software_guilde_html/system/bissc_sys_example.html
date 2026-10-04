@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. Build and Run the Example &mdash; C2000 BiSS-C Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. System Test Structures and Arrays" href="bissc_sys_globals.html" />
+    <link rel="prev" title="1. Configuration" href="bissc_configuration.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 BiSS-C Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.03.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bissc_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System Solution</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bissc_configuration.html">1. Configuration</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2. Build and Run the Example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hardware-connections">2.1. Hardware Connections</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#import-and-run-example-project">2.2. Import and Run Example Project</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_globals.html">3. System Test Structures and Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_globals.html#library-structures-and-arrays">4. Library Structures and Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_functions.html">5. System-Level Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../library/index.html">Encoder Interface Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 BiSS-C Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">System Solution</a> &raquo;</li>
+        
+      <li><span class="section-number">2. </span>Build and Run the Example</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="build-and-run-the-example">
+<span id="lnk-sys-example"></span><h1><span class="section-number">2. </span>Build and Run the Example<a class="headerlink" href="#build-and-run-the-example" title="Permalink to this headline"></a></h1>
+<p>This example provides a roadmap for integration of the library into an application.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For Code Composer Studio information, refer to the <a class="reference external" href="https://software-dl.ti.com/ccs/esd/documents/users_guide/index.html">Code Composer Studio User’s Guide</a>.</p>
+</div>
+<div class="section" id="hardware-connections">
+<h2><span class="section-number">2.1. </span>Hardware Connections<a class="headerlink" href="#hardware-connections" title="Permalink to this headline"></a></h2>
+<p>Setup the hardware as described in the <a class="reference external" href="https://www.ti.com/tool/TIDM-1010">TIDM-1010</a> design guide.</p>
+</div>
+<div class="section" id="import-and-run-example-project">
+<h2><span class="section-number">2.2. </span>Import and Run Example Project<a class="headerlink" href="#import-and-run-example-project" title="Permalink to this headline"></a></h2>
+<p>The system example directory, <code class="docutils literal notranslate"><span class="pre">[MC_SDK_ROOT]/solutions/boostxl_posmgr/&lt;device&gt;</span></code>, contains a Code Composer Studio projectspec file.  To import the project into CCS, follow these steps:</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>Install the minimum required tools. Refer to <a class="reference internal" href="../get_started/bissc_requirements.html#lnk-requirements"><span class="std std-ref">Minimum Requirements</span></a>.</p></li>
+<li><p>Import the example system demonstration.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>In Code Composer Studio (CCS), click <em>Project –&gt; import CCS Projects..</em></p></li>
+<li><p>Navigate to the system example directory:
+<code class="docutils literal notranslate"><span class="pre">[MC_SDK_ROOT]/solutions/boostxl_posmgr/&lt;device&gt;</span></code></p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">ccs/bissc/</span></code> directory, select the <code class="docutils literal notranslate"><span class="pre">bissc_systemtest.projectspec</span></code> file</p></li>
+<li><p>Click <em>Finish</em>.</p></li>
+<li><p>In the CCS Project Explorer you should now see the demo and library projects as shown in <a class="reference internal" href="#ccs-project-explorer-view"><span class="std std-numref">Fig. 2.1</span></a>.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When you import the system example, CCS will also import the associated library project.</p>
+</div>
+<div class="figure align-center" id="ccs-project-explorer-view">
+<img alt="../_images/ccs_project_explorer_view.png" src="../_images/ccs_project_explorer_view.png" />
+<p class="caption"><span class="caption-number">Fig. 2.1 </span><span class="caption-text">Code Composer Studio Project Explorer Window.</span><a class="headerlink" href="#ccs-project-explorer-view" title="Permalink to this image"></a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Select the build configuration of choice</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>To select the build configuration: <em>right-click on the project</em></p></li>
+<li><p>Select: <em>build configurations</em> and <em>set active</em>.</p></li>
+<li><p>Select the build configuration.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<p>The build configurations are:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>boostxl_posmgr_site2_RAM:</dt><dd><p>Builds the solution to load and run from RAM.  The pin-out corresponds to the LaunchPad + BOOSTXL_POSMGR site2 as described in <a class="reference external" href="https://www.ti.com/tool/TIDM-1010">TIDM-1010</a> design guide.</p>
+</dd>
+<dt>boostxl_posmgr_site2_FLASH:</dt><dd><p>The solution loads the demo to flash. At run-time, critical portions are copied to execute from RAM.</p>
+</dd>
+</dl>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Select the active board configuration</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This step may or may not apply to your project. The image shown below is provided as an example only.</p>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Some projects may include two board configuration files (.ccxml) as shown in <a class="reference internal" href="#ccs-board-config-selection"><span class="std std-numref">Fig. 2.2</span></a>. This occurs when the LaunchPad and ControlCard use different JTAG connections.</p></li>
+<li><p><em>Right-click</em> on the board configuration matching your hardware.</p></li>
+<li><p>Select <em>Set as active target configuration</em></p></li>
+</ol>
+<blockquote>
+<div><div class="figure align-center" id="ccs-board-config-selection">
+<img alt="../_images/ccs_board_config_selection.png" src="../_images/ccs_board_config_selection.png" />
+<p class="caption"><span class="caption-number">Fig. 2.2 </span><span class="caption-text">Board Configurations</span><a class="headerlink" href="#ccs-board-config-selection" title="Permalink to this image"></a></p>
+</div>
+</div></blockquote>
+</div></blockquote>
+<ol class="arabic">
+<li><p>Build the system example project</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>In the project manager window, <em>Right-click</em> on the project name <code class="docutils literal notranslate"><span class="pre">bissc_&lt;device&gt;_boostxl_comms_demo</span></code></p></li>
+<li><p>Select <em>Rebuild Project</em></p></li>
+<li><p>Observe the console window for any errors or for successful completion of the build.</p></li>
+<li><p>Once the build completes, without errors, execute the project by selecting <em>Run –&gt; Debug</em></p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Populate the expressions window</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><em>Right-click</em> on the expressions window</p></li>
+<li><p>Select <em>import</em></p></li>
+<li><p>Browse to the location <code class="docutils literal notranslate"><span class="pre">[SYS_ROOT]/shared/debug/</span></code></p></li>
+<li><p>Select the file <code class="docutils literal notranslate"><span class="pre">bissc_vars.txt</span></code> and click <em>open</em></p></li>
+<li><p>At the top of the expressions window, enable <em>continuous refresh</em> as shown in <a class="reference internal" href="#ccs-continuous-refresh"><span class="std std-numref">Fig. 2.5</span></a>.</p></li>
+</ol>
+<div class="figure align-center" id="ccs-import-expressions">
+<img alt="../_images/ccs_import_expressions.png" src="../_images/ccs_import_expressions.png" />
+<p class="caption"><span class="caption-number">Fig. 2.3 </span><span class="caption-text">Code Composer Studio Import Expressions.</span><a class="headerlink" href="#ccs-import-expressions" title="Permalink to this image"></a></p>
+</div>
+<div class="figure align-center" id="ccs-expressions-window">
+<img alt="../_images/ccs_expressions_window.png" src="../_images/ccs_expressions_window.png" />
+<p class="caption"><span class="caption-number">Fig. 2.4 </span><span class="caption-text">Code Composer Studio Expressions Window.</span><a class="headerlink" href="#ccs-expressions-window" title="Permalink to this image"></a></p>
+</div>
+<div class="figure align-center" id="ccs-continuous-refresh">
+<img alt="../_images/ccs_continuous_refresh.png" src="../_images/ccs_continuous_refresh.png" />
+<p class="caption"><span class="caption-number">Fig. 2.5 </span><span class="caption-text">Enable Continuous Refresh.</span><a class="headerlink" href="#ccs-continuous-refresh" title="Permalink to this image"></a></p>
+</div>
+</div></blockquote>
+</li>
+<li><p>Run the code</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Press the <em>Run/Resume</em> button</p></li>
+<li><p>Manually turn the shaft of the motor or encoder</p></li>
+<li><p>Monitor the signals and variables in the expressions window. These structures and arrays are described in the <a class="reference internal" href="bissc_sys_globals.html#lnk-sys-globals"><span class="std std-ref">globals section.</span></a></p></li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bissc_sys_globals.html" class="btn btn-neutral float-right" title="3. System Test Structures and Arrays" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bissc_configuration.html" class="btn btn-neutral float-left" title="1. Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2024, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Sep 06, 2024.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

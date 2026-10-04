@@ -1,0 +1,5 @@
+% let Common   = system.getScript("/driverlib/Common.js");
+% var moduleName = "fast"
+% var libraryFolder = "observers"
+/* libraries required for /libraries/`libraryFolder`/`moduleName` */
+-l"/libraries/`libraryFolder`/`moduleName`/lib/f28004x/f28004x_`moduleName`_rom_symbols_fpu32.lib"

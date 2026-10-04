@@ -1,0 +1,47 @@
+.. |C2000WARE_NAME| replace:: C2000Ware for C2000 MCUs v5.03.00.00
+.. |COMPILER_NAME| replace:: C2000 Code Generation Tools v22.6.1.LTS
+.. |SDK_NAME| replace:: C2000Ware Motor Control SDK v5_03_00_00
+.. |CCS_NAME| replace:: Code Composer Studio v12.7.1
+.. |PM_BP_NAME| replace:: C2000 DesignDRIVE position manager BoosterPack plug-in module (BOOSTXL-POSMGR)
+.. |PM_BP_SHORT_NAME| replace:: BOOSTXL-POSMGR
+.. |PROTOCOL_NAME| replace:: BiSS-C
+.. |BISSC_LIB_NAME| replace:: C2000 BiSS-C Encoder Interface TI Design (TIDM-1010)
+.. |BISSC_LIB_SHORT_NAME| replace:: BiSS-C Encoder Interface
+.. |BISSC_TIDM| replace:: TIDM-1010
+.. |TMDXIDDK379D| replace:: TMDXIDDK379D Development Kit
+.. |COMPILER_GUIDE| replace:: TMS320C28x Optimizing C/C++ Compiler User's Guide
+.. |ASSEMBLY_GUIDE| replace:: TMS320C28x Assembly Language Tools
+.. |CCS_GUIDE| replace:: Code Composer Studio User’s Guide
+.. |SDK_ROOT| replace:: ``C:/ti/c2000/C2000Ware_MotorControl_SDK_<version>``
+.. |SYS_ROOT| replace:: ``[MC_SDK_ROOT]/solutions/boostxl_posmgr/``
+.. |SYS_ROOT_DEVICE| replace:: ``[MC_SDK_ROOT]/solutions/boostxl_posmgr/<device>``
+.. |API_ROOT| replace:: ``[MC_SDK_ROOT]/libraries/position_sensing/bissc``
+.. |OPTIMIZATION_GUIDE| replace:: C2000 Optimization Guide
+.. |F28004x_LAUNCHPAD_LONG_NAME| replace:: C2000 Piccolo MCU F280049C LaunchPad™ development kit
+.. |F28004x_LAUNCHPAD_SHORT_NAME| replace:: LAUNCHXL-F280049C
+.. |F28P65x_LAUNCHPAD_LONG_NAME| replace:: C2000 real-time MCU F28P65x LaunchPad™ development kit
+.. |F28P65x_LAUNCHPAD_SHORT_NAME| replace:: LAUNCHXL-F28P65X
+.. |BISSC_SPEC_NAME| replace:: BiSS-C Encoder Interface by iC-Haus GmbH
+.. |BISSC_WEB_NAME| replace:: BiSS-C Interface
+.. |BISSC_TRADEMARK_NAME| replace:: BiSS is a trademark of iC-Haus GmbH. Developers must obtain their own BiSS license.
+.. |BISSC_LICENSE_NAME| replace:: Information can be found at biss-interface.com.
+.. _C2000WARE_NAME: https://www.ti.com/tool/C2000WARE
+.. _CCS_NAME: https://www.ti.com/tool/CCSTUDIO
+.. _COMPILER_NAME: https://www.ti.com/tool/C2000-CGT
+.. _COMPILER_GUIDE: https://www.ti.com/lit/spru514
+.. _ASSEMBLY_GUIDE: https://www.ti.com/lit/spru513
+.. _SDK_NAME: https://www.ti.com/tool/C2000WARE-MOTORCONTROL-SDK
+.. _OPTIMIZATION_GUIDE: https://software-dl.ti.com/C2000/docs/optimization_guide/index.html
+.. _F28004x_LAUNCHPAD_LONG_NAME: https://www.ti.com/tool/LAUNCHXL-F280049C
+.. _F28004x_LAUNCHPAD_SHORT_NAME: https://www.ti.com/tool/LAUNCHXL-F280049C
+.. _F28P65X_LAUNCHPAD_LONG_NAME: https://www.ti.com/tool/LAUNCHXL-F28P65X
+.. _F28P65x_LAUNCHPAD_SHORT_NAME: https://www.ti.com/tool/LAUNCHXL-F28P65X
+.. _PM_BP_NAME: https://www.ti.com/tool/BOOSTXL-POSMGR
+.. _PM_BP_SHORT_NAME: https://www.ti.com/tool/BOOSTXL-POSMGR
+.. _CCS_GUIDE: https://software-dl.ti.com/ccs/esd/documents/users_guide/index.html
+.. _BISSC_SPEC_NAME: https://biss-interface.com/
+.. _BISSC_WEB_NAME: https://biss-interface.com/
+.. _BISSC_TIDM: https://www.ti.com/tool/TIDM-1010
+.. _TMDXIDDK379D: https://www.ti.com/tool/TMDXIDDK379D   
+.. _BISSC_LIB_NAME: https://www.ti.com/tool/TIDM-1010
+.. _BISSC_LICENSE_NAME : https://biss-interface.com/biss-interface-license-agreement/  

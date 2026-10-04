@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3. Migrating from an Earlier Version &mdash; C2000 T-Format Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Minimum Requirements" href="tformat_requirements.html" />
+    <link rel="prev" title="2. Getting Started Steps" href="tformat_steps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 T-Format Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.00.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Getting Started</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tformat_overview.html">1. Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_steps.html">2. Getting Started Steps</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3. Migrating from an Earlier Version</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#code-changes">3.1. Code Changes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#review-the-system-example">3.1.1. Review the system example</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#global-variable-changes">3.1.2. Global variable changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spi-isr-changes-in-tformat-spirxisr">3.1.3. SPI ISR changes in tformat_spiRxISR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#command-request-setup-changes">3.1.4. Command (request) setup changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#receive-data-changes">3.1.5. Receive data changes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#crc-calculations-moved-to-the-library">3.1.6. CRC calculations moved to the library</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#new-api-functions">3.1.7. New API functions</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#design-changes">3.2. Design Changes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#receive-crc-generation-requires-clb-type-2">3.2.1. Receive CRC generation (requires CLB type 2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#transmit-crc-generation-requires-vcrc-module">3.2.2. Transmit CRC generation (requires VCRC module)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#clb-spi-clk-out-to-spiclk-in-pin-connection-requires-clb-type-2">3.2.3. CLB_SPI_CLK (out) to SPICLK (in) pin connection (requires CLB type 2)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#spiclock-alignment-with-data">3.2.4. SPICLOCK alignment with data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fifo-wordsize">3.2.5. FIFO wordsize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputxbar-and-outputxbar-usage">3.2.6. INPUTXBAR and OUTPUTXBAR usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_requirements.html">4. Minimum Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tformat_install_directory.html">5. Installation and Directory Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tformat_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system/index.html">T-Format System Solution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../library/index.html">T-Format Encoder Interface Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 T-Format Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Getting Started</a> &raquo;</li>
+        
+      <li><span class="section-number">3. </span>Migrating from an Earlier Version</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="migrating-from-an-earlier-version">
+<h1><span class="section-number">3. </span>Migrating from an Earlier Version<a class="headerlink" href="#migrating-from-an-earlier-version" title="Permalink to this headline">¶</a></h1>
+<p id="lnk-migration">The C2000 Motor Control SDK V4.01.00_00 release implemented important changes.
+These changes improve performance, increase ease-of-use, and utilize new device features.</p>
+<p>The changes fall into two categories:</p>
+<ul class="simple">
+<li><p>Code Changes: Changes that require you to modify your source code.</p></li>
+<li><p>Design Changes: Changes that may not impact your code.  These primarily use new device features, but are not required.</p></li>
+</ul>
+<p>A specific list of changes are described in the following sections.</p>
+<div class="section" id="code-changes">
+<h2><span class="section-number">3.1. </span>Code Changes<a class="headerlink" href="#code-changes" title="Permalink to this headline">¶</a></h2>
+<p>The suggested steps to migrate an application to the new library are:</p>
+<div class="section" id="review-the-system-example">
+<h3><span class="section-number">3.1.1. </span>Review the system example<a class="headerlink" href="#review-the-system-example" title="Permalink to this headline">¶</a></h3>
+<p>Illustrates the MCU setup and invokes each of the T-format commands.</p>
+</div>
+<div class="section" id="global-variable-changes">
+<h3><span class="section-number">3.1.2. </span>Global variable changes<a class="headerlink" href="#global-variable-changes" title="Permalink to this headline">¶</a></h3>
+<p>Refer to <a class="reference internal" href="../library/tformat_lib_globals.html#lnk-lib-globals"><span class="std std-ref">global variables</span></a>.  The tformatData structure has changed slightly:</p>
+<ol class="arabic simple">
+<li><p>The tformatRxData[] array is now separate from the tformatData structure. tformatRxData and must be defined in your application.</p></li>
+<li><p>tformatData variable names were updated for clarity.</p></li>
+<li><p>Position and Turns were removed and added to an application level structure.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 3.1 </span><span class="caption-text">/boostxl_posmgr/f28003x/source/pm_tformat_main.c</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>    <span class="c1">//</span>
+    <span class="c1">// Globals used by the library</span>
+    <span class="c1">// - Lookup table for CRC calculations</span>
+    <span class="c1">// - tformatData structure to track key parameters.</span>
+    <span class="c1">//</span>
+    <span class="n">PM_tformat_DataStruct</span> <span class="n">tformatData</span><span class="p">;</span>
+    <span class="k">volatile</span> <span class="kt">uint16_t</span> <span class="n">tformatRxData</span><span class="p">[</span><span class="n">PM_TFORMAT_FIELDS_MAX</span><span class="p">];</span>
+
+    <span class="cp">#if defined(PM_TFORMAT_CRC_TABLE)</span>
+        <span class="kt">uint16_t</span> <span class="n">tformatCRCtable</span><span class="p">[</span><span class="n">PM_TFORMAT_CRCTABLE_SIZE</span><span class="p">];</span>
+    <span class="cp">#endif</span>
+
+    <span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+<p>In the application demo, the following variables have been added to collect data.  They are not required by the library.</p>
+<ol class="arabic simple">
+<li><p>errorData: detected errors are flagged</p></li>
+<li><p>encoderData: encoder position, turns, and id</p></li>
+<li><p>commandData: Command information (command field sent, address, data) can be used by the application for error checking against the command information received.</p></li>
+<li><p>tformatSpiRxIsrTicker: Increments once each time the SPI receive interrupt service routine is called.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 3.2 </span><span class="caption-text">/boostxl_posmgr/f28003x/source/pm_tformat_main.c</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>    <span class="c1">//</span>
+    <span class="c1">// These structures are used to display the received</span>
+    <span class="c1">// data in Code Composer Studio&#39;s Expressions</span>
+    <span class="c1">// window during development.  Because the structure is</span>
+    <span class="c1">// set, but never used, the pragma RETAIN</span>
+    <span class="c1">// has been applied.  Volatile is used for the</span>
+    <span class="c1">// tformatSpiRxIsrTicker since it is updated within</span>
+    <span class="c1">// the SPI ISR.</span>
+    <span class="c1">//</span>
+    <span class="cp">#pragma RETAIN (encoderData);</span>
+    <span class="cp">#pragma RETAIN (errorData);</span>
+    <span class="cp">#pragma RETAIN (commandData);</span>
+
+    <span class="n">PM_tformat_encoderStruct</span> <span class="n">encoderData</span><span class="p">;</span>
+    <span class="n">PM_tformat_errorStruct</span> <span class="n">errorData</span><span class="p">;</span>
+    <span class="n">PM_tformat_commandStruct</span> <span class="n">commandData</span><span class="p">;</span>
+    <span class="k">volatile</span> <span class="kt">uint32_t</span> <span class="n">tformatSpiRxIsrTicker</span><span class="p">;</span>
+
+    <span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="spi-isr-changes-in-tformat-spirxisr">
+<h3><span class="section-number">3.1.3. </span>SPI ISR changes in tformat_spiRxISR<a class="headerlink" href="#spi-isr-changes-in-tformat-spirxisr" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Update the ISR to mask the data (with 0xFF) as it is read from the FIFO.</p></li>
+<li><p>Update the ISR to use tformatRxData[]</p></li>
+<li><p>The use of MUST_ITERATE was added to improve performance. Refer to <a class="reference external" href="https://www.ti.com/lit/spru514">TMS320C28x Optimizing C/C++ Compiler User’s Guide</a>.</p></li>
+<li><p>Refer to the system demonstration code for an example.</p></li>
+</ol>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-number">Listing 3.3 </span><span class="caption-text">/boostxl_posmgr/shared/source/tformat.c</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+    <span class="cp">#pragma MUST_ITERATE(5, 12, 1)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">tformatData</span><span class="p">.</span><span class="n">fifoLevel</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">tformatRxData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">SPI_readDataNonBlocking</span><span class="p">(</span><span class="n">PM_TFORMAT_SPI</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="command-request-setup-changes">
+<h3><span class="section-number">3.1.4. </span>Command (request) setup changes<a class="headerlink" href="#command-request-setup-changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>PM_tformat_setupCommand() split into 3 functions based on the fields transmitted.</p></li>
+<li><p>Refer to <a class="reference internal" href="../library/tformat_lib_deprecated.html#lnk-lib-deprecated"><span class="std std-ref">deprecated command functions</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="receive-data-changes">
+<h3><span class="section-number">3.1.5. </span>Receive data changes<a class="headerlink" href="#receive-data-changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>PM_tformat_receiveData() split into 5 functions based on the fields received.</p></li>
+<li><p>Refer to <a class="reference internal" href="../library/tformat_lib_deprecated.html#lnk-lib-deprecated"><span class="std std-ref">deprecated command functions</span></a>.</p></li>
+</ul>
+</div>
+<div class="section" id="crc-calculations-moved-to-the-library">
+<h3><span class="section-number">3.1.6. </span>CRC calculations moved to the library<a class="headerlink" href="#crc-calculations-moved-to-the-library" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Application level CRC calls are no longer required and can be removed.</p></li>
+<li><p>The calculations are included in the setup command and the received data functions.</p></li>
+<li><p>The CRC result is passed to the application through the tformatData.crcCheck variable.</p></li>
+<li><p>The application can compare tformatData.crcCheck to tformatData.crcField (CRC received from the encoder).</p></li>
+</ul>
+</div>
+<div class="section" id="new-api-functions">
+<h3><span class="section-number">3.1.7. </span>New API functions<a class="headerlink" href="#new-api-functions" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>PM_tformat_updatePositionOrTurns() and PM_tformat_updateEncoderID()</p></li>
+<li><p>New functions added. Previously the translation from response received was left to the application.</p></li>
+<li><p>Refer to <a class="reference internal" href="../library/tformat_lib_interface.html#lnk-lib-encoder-parameters"><span class="std std-ref">Update encoder parameters</span></a>.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="design-changes">
+<h2><span class="section-number">3.2. </span>Design Changes<a class="headerlink" href="#design-changes" title="Permalink to this headline">¶</a></h2>
+<p>These design changes are included in the library or system examples.  There is no specific action to take. They are listed here for reference.</p>
+<div class="section" id="receive-crc-generation-requires-clb-type-2">
+<h3><span class="section-number">3.2.1. </span>Receive CRC generation (requires CLB type 2)<a class="headerlink" href="#receive-crc-generation-requires-clb-type-2" title="Permalink to this headline">¶</a></h3>
+<p>Devices with Type2 CLB, or later, can calculate the RX CRC as the response from the encoder is received.  The library uses this option when available. Refer to <a class="reference internal" href="../system/tformat_configuration.html#lnk-configuration"><span class="std std-ref">system and library configuration instructions</span></a>. No application level change is required.</p>
+</div>
+<div class="section" id="transmit-crc-generation-requires-vcrc-module">
+<h3><span class="section-number">3.2.2. </span>Transmit CRC generation (requires VCRC module)<a class="headerlink" href="#transmit-crc-generation-requires-vcrc-module" title="Permalink to this headline">¶</a></h3>
+<p>When available, the library uses the VCRC module to generate the TX CRC. TX CRC is used by the EEPROM write and EEPROM read commands. Refer to <a class="reference internal" href="../system/tformat_configuration.html#lnk-configuration"><span class="std std-ref">system and library configuration instructions</span></a>. No application level change is required.</p>
+</div>
+<div class="section" id="clb-spi-clk-out-to-spiclk-in-pin-connection-requires-clb-type-2">
+<h3><span class="section-number">3.2.3. </span>CLB_SPI_CLK (out) to SPICLK (in) pin connection (requires CLB type 2)<a class="headerlink" href="#clb-spi-clk-out-to-spiclk-in-pin-connection-requires-clb-type-2" title="Permalink to this headline">¶</a></h3>
+<p>Internal clocking of the SPICLK pin. Devices with CLB type 2, or later, are capable of connecting to the SPICLK (in) directly. Externally connecting the CLB_SPI_CLK output to the SPICLK pin input is not required.  The CLB design takes advantage of this feature when available.  In such a case, the SPICLK can optionally be brought out to a pin to be monitored. Refer to the input/output details in the <a class="reference external" href="https://www.ti.com/tool/TIDM-1011">C2000 T-Format Encoder Interface TI Design (TIDM-1011)</a>.</p>
+</div>
+<div class="section" id="spiclock-alignment-with-data">
+<h3><span class="section-number">3.2.4. </span>SPICLOCK alignment with data<a class="headerlink" href="#spiclock-alignment-with-data" title="Permalink to this headline">¶</a></h3>
+<p>Previously the CLB_SPI_CLK was only aligned with the first falling edge of the encoder’s response.  LUT0 has been modified to re-align the clock when any edge (falling or rising) within the response is received.</p>
+</div>
+<div class="section" id="fifo-wordsize">
+<h3><span class="section-number">3.2.5. </span>FIFO wordsize<a class="headerlink" href="#fifo-wordsize" title="Permalink to this headline">¶</a></h3>
+<p>The FIFO word size has been aligned with the T-format field size.  Previously the word size was set to 16-bits.  This change simplified extracting the fields from the FIFO.</p>
+</div>
+<div class="section" id="inputxbar-and-outputxbar-usage">
+<h3><span class="section-number">3.2.6. </span>INPUTXBAR and OUTPUTXBAR usage<a class="headerlink" href="#inputxbar-and-outputxbar-usage" title="Permalink to this headline">¶</a></h3>
+<p>CLB_INPUTXBAR and CLB_OUTPUTXBAR were used in favor of device-level INPUTXBAR/OUTPUTXBAR on devices supporting this feature.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tformat_requirements.html" class="btn btn-neutral float-right" title="4. Minimum Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="tformat_steps.html" class="btn btn-neutral float-left" title="2. Getting Started Steps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2022, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Jul 13, 2023.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

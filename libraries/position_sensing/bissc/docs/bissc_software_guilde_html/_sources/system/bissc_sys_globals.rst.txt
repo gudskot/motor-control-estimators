@@ -1,0 +1,28 @@
+.. include:: ../bissc_replacements.rst
+
+.. _lnk-sys-globals:
+
+************************************************************
+System Test Structures and Arrays
+************************************************************
+
+The following variables are used by the system only for testing. Monitor these in the expressions window as shown in :ref:`the System Example. <lnk-sys-example>`
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :language: c
+    :caption: System test structure and array: /boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :start-after: [doc-sys-test-vars-start]
+    :end-before:  [doc-sys-test-vars-end]
+
+************************************************************
+Library Structures and Arrays
+************************************************************
+The following structures and arrays interact with the library. They can be monitored in the expressions window as described in :ref:`the System Example. <lnk-sys-example>`
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :language: c
+    :caption: Global structures and arrays: /boostxl_posmgr/f28p65x/source/pm_bissc_main.c
+    :start-after: [doc-library-globals-start]
+    :end-before: [doc-library-globals-end]
+
+The definitions of these can be found in :ref:`the Library Variables section. <lnk-lib-globals>`

@@ -1,0 +1,14 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+Global Variables
+************************************************************
+
+.. _lnk-lib-globals:
+
+The library uses the following global variables to share receive field information. 
+
+.. doxygengroup:: TFORMAT_API_DATA_STRUCT
+
+
+

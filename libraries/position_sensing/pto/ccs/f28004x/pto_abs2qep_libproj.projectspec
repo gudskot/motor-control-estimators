@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectSpec>
+<!-- For internal development, some source may be "linked" instead of "copied"          -->
+<!-- For linked, add the two following directories to the compiler search options:      -->
+<!--    -I${SOLUTION_LIB_ROOT}/include      -->
+  <project
+        name="pto_abs2qep_libproj_f28004x"
+        device="TMS320F280049C"
+        outputType="staticLibrary"
+        cgtVersion="22.6.0.LTS"
+        outputFormat="ELF"        
+        launchWizard="False"
+        enableSysConfigTool="true"
+        sysConfigBuildOptions="
+            --product ${C2000WARE_ROOT}/.metadata/sdk.json
+            --device F28004x
+            --package F28004x_100PZ
+            --part F28004x_100PZ
+        "
+        compilerBuildOptions=" 
+            -v28
+            --abi=eabi
+            --unified_memory
+            --ramfunc=on            
+            --float_support=fpu32
+            --float_operations_allowed=32
+            --fp_mode=relaxed
+            --tmu_support=tmu0
+            --vcu_support=vcu0
+            --cla_support=cla2
+            --define=CPU1
+            --define=_LAUNCHXL_F280049C
+            --define=_F28004x
+            --diag_warning=225
+            --diag_suppress=10063
+            --display_error_number
+            -I${C2000WARE_DLIB_ROOT}
+            -I${PROJECT_ROOT}/include
+            -I${PROJECT_ROOT}/device
+            -I${CCS_WORKSPACE_DIR}/pto_abs2qep_libproj_f28004x/include
+        "
+        postBuildStep="
+            echo ========= Build of the CLB simulation has moved to the CLB Tool. Click the '?' icon by the _Generate CLB Simulation File_ enable for more details (located in the Global Parameters of the Tile Design SysConfig module) =============
+            ;if ${GENERATE_DIAGRAM} == 1  mkdir &quot;${BuildDirectory}/diagrams&quot;
+            ;if ${GENERATE_DIAGRAM} == 1  ${NODE_TOOL} &quot;${C2000WARE_ROOT}/driverlib/.meta/generate_diagrams.js&quot; &quot;${C2000WARE_ROOT}&quot; &quot;${BuildDirectory}/diagrams&quot; &quot;${BuildDirectory}/syscfg&quot;
+            ;if ${GENERATE_DIAGRAM} == 1  ${NODE_TOOL} &quot;${C2000WARE_ROOT}/utilities/clb_tool/clb_syscfg/dot_file_libraries/clbDotUtility.js&quot;  &quot;${C2000WARE_ROOT}/utilities/clb_tool/clb_syscfg/&quot; &quot;${BuildDirectory}/syscfg&quot; &quot;${BuildDirectory}/syscfg/clb.dot&quot;
+        "
+    >  
+    <configuration 
+        name="RELEASE"    
+        compilerBuildOptions="
+            --opt_level=4
+            --opt_for_speed=5
+        "
+        archiverBuildOptions="${PROJECT_ROOT}/lib/pto_abs2qep_f28004x.lib"
+    />
+    <!-- Set to 0 to skip post-build of Sysconfig diagrams -->
+    <buildVariable name="GENERATE_DIAGRAM" value="1" scope="project" />
+
+    <!-- Device specific path names -->
+    <pathVariable name="C2000WARE_DLIB_ROOT" path="../../../../../c2000ware/driverlib/f28004x/driverlib" scope="project" />
+    <pathVariable name="C2000WARE_DEVICE_SUPPORT_ROOT" path="../../../../../c2000ware/device_support/f28004x" scope="project" />
+    
+    <!-- Standard support path names -->
+    <pathVariable name="SOLUTION_LIB_ROOT" path="../.." scope="project" />
+    <pathVariable name="C2000WARE_ROOT" path="../../../../../c2000ware" scope="project" />
+
+    <!-- Standard support files -->
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT_ROOT/common/include/driverlib.h" targetDirectory="device" />
+    <file action="copy" path="C2000WARE_DEVICE_SUPPORT_ROOT/common/include/device.h" targetDirectory="device" />
+
+    <!-- Solution-specific files -->
+    <!-- ## LinkorCopy: For internal development these can be changed to link -->
+    <file action="copy" path="SOLUTION_LIB_ROOT/lib/pto_abs2qep_f28004x.lib" targetDirectory="lib" />      
+    <file action="copy" path="SOLUTION_LIB_ROOT/include/pto_abs2qep.h" targetDirectory="include" />
+    <file action="copy" path="SOLUTION_LIB_ROOT/source/pto_abs2qep.c" targetDirectory="source" />
+    <file action="copy" path="SOLUTION_LIB_ROOT/source/pto_abs2qep_f28004x.syscfg" targetDirectory="source" />
+    <!-- ## LinkorCopy -->
+  </project>
+</projectSpec>

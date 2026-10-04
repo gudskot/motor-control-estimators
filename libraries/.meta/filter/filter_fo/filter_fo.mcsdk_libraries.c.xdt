@@ -1,0 +1,48 @@
+% var moduleName = "filter_fo"
+% var libraryFolder = "filter"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+
+% for(var i = 0; i < module.$instances.length; i++) {
+% var instance = module.$instances[i];
+
+//
+// FILTER FO Global Variables - filter_fo_`instance.$name`
+//
+FILTER_FO_Obj filter_fo_`instance.$name`_Object;
+FILTER_FO_Handle filter_fo_`instance.$name`_Handle;
+    % }
+
+    % var initFunctions = [];
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+
+void filter_fo_`instance.$name`_init(){
+    filter_fo_`instance.$name`_Handle = FILTER_FO_init(&filter_fo_`instance.$name`_Object, sizeof(filter_fo_`instance.$name`_Object));
+    if (filter_fo_`instance.$name`_Handle  == NULL)
+    {
+        //
+        // An error occured during initialization
+        //
+        ESTOP0;
+    }
+    FILTER_FO_setDenCoeffs(filter_fo_`instance.$name`_Handle, filter_fo_`instance.$name`_a1);
+    FILTER_FO_setNumCoeffs(filter_fo_`instance.$name`_Handle, filter_fo_`instance.$name`_b0, filter_fo_`instance.$name`_b1);
+    FILTER_FO_setInitialConditions(filter_fo_`instance.$name`_Handle, filter_fo_`instance.$name`_x1, filter_fo_`instance.$name`_y1);
+}       
+        % initFunctions.push("filter_fo_" + instance.$name + "_init");
+    % }
+
+void `module.mcsdkLibraryName`_all_init() {
+    
+    //
+    // Initialize the instances
+    //
+    % for (var initFunc of initFunctions) {
+    `initFunc`();
+    % }
+}
+%}
+%

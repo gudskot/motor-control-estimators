@@ -1,0 +1,28 @@
+% var moduleName = "offset"
+% var libraryFolder = "filter"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+#include <offset.h>
+    % if (module.$instances) {
+#define OFFSET_COUNT `module.$instances.length`
+    % }
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+        % if (instance.$ownedBy == null) {
+#define `instance.$name`_OFFSET_VAL `instance.offsetVal`
+%if(instance.enableSetBeta == true)
+%{
+#define `instance.$name`_BETA_RAD `instance.betaRadVal`
+%}
+%if(instance.enableSetInitCond == true)
+%{
+#define `instance.$name`_INIT_COND `instance.initVal`
+%}
+
+extern OFFSET_Handle `instance.$name`_handle;
+void `instance.$name`_init();
+%}
+%}
+%}

@@ -1,0 +1,22 @@
+% var moduleName = "est_lib"
+% var libraryFolder = "observers"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+#include <est.h>
+#include <est_Flux_states.h>
+#include <est_Ls_states.h>
+#include <est_Rr_states.h>
+#include <est_Rs_states.h>
+#include <est_states.h>
+#include <est_Traj_states.h>
+    % if (module.$instances) {
+#define `module.mcsdkLibraryName`_COUNT `module.$instances.length`
+    % }
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+void    `instance.$name`_init();
+    % }
+%}
+%

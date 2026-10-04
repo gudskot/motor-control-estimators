@@ -1,0 +1,32 @@
+.. include:: ./bissc_replacements.rst
+
+************************************************************
+Flowcharts
+************************************************************
+
+.. _lnk-flowcharts:
+
+An overview of the software architecture is shown in :numref:`tidue73_sw_architecture`.  
+
+.. figure:: ./images/tidue73_sw_architecture.svg
+    :align: center
+    :name: tidue73_sw_architecture
+
+    Software Architecture.
+
+
+:numref:`tidue73_sw_cd_flow` shows the software flow of the system example and the processing of control data.  
+
+:numref:`tidue73_doCDtasks` details the states of the control data state machine.
+
+.. figure:: ./images/tidue73_sw_cd_flow.svg
+    :align: center
+    :name: tidue73_sw_cd_flow
+
+    Control Data Flowchart.
+
+.. figure:: ./images/tidue73_doCDtasks.svg
+    :align: center
+    :name: tidue73_doCDtasks
+
+    Control Data State Machine.

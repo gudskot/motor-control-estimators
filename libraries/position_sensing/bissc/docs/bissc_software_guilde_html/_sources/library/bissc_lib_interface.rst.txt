@@ -1,0 +1,28 @@
+.. include:: ../bissc_replacements.rst
+
+************************************************************
+Encoder Interface API
+************************************************************
+
+.. _lnk-lib-top:
+
+This section describes the Encoder Interface Application Programming Interface (API).  Usage of these functions are demonstrated by the system example. 
+
+.. _lnk-lib-init:
+
+Initialization API
+------------------------------------------------------------
+
+The following functions initialize the system.
+
+.. doxygengroup:: BISSC_API_INIT
+   :content-only:
+
+.. _lnk-lib-public-run:
+
+Run-time API
+------------------------------------------------------------
+An example of the runtime flow is shown :ref:`the Library Integration Section. <lnk-runtime-flow>` The following functions are called during run-time.
+
+.. doxygengroup:: BISSC_API_RUN_COMMANDS
+   :content-only:

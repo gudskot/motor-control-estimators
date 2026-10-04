@@ -1,0 +1,31 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+Configuration
+************************************************************
+
+.. _lnk-configuration:
+
+System Example Configuration
+------------------------------------------------------------
+If you wish to change the default configuration of the system example, edit the example's header file.
+
+.. literalinclude:: ../../../../../../solutions/boostxl_posmgr/shared/include/tformat.h
+    :start-after: [doc-sys-config-start]
+    :end-before: [doc-sys-config-end]
+    :language: c
+    :caption: /solutions/boostxl_posmgr/shared/include/tformat.h
+
+Library Configuration
+------------------------------------------------------------
+If you wish to change the default configuration of the library, edit the library's public header file.
+
+.. note:: 
+    * If you change the library configuration then recompile **both** the library **and** the system example. 
+    * CRC generation by the CLB requires CLB type 2 or later. This will use additional CLB resources, but frees C28x bandwidth.
+
+.. literalinclude:: ../../../../../../libraries/position_sensing/tformat/include/pm_tformat_include.h
+    :start-after: [doc-library-config-start]
+    :end-before: [doc-library-config-end]
+    :language: c
+    :caption: /libraries/position_sensing/tformat/include/pm_tformat_include.h

@@ -1,0 +1,140 @@
+.. include:: ../tformat_replacements.rst
+
+Abbreviations and Acronyms
+************************************************************
+
+.. _lnk-glossery:
+
+ABSx
+   ABS0:ABS1:ABS2 is the absolute position data for 1 revolution. 
+
+ABMx
+   ABM0:ABM1:ABM2 is the absolute multi-turn data.
+
+ADF
+   Address data field.  Used in the read/write of EEPROM memory commands.
+   The address has the format shown below.  For further detail, refer to the T-Format specification.
+
+   .. code-block:: text
+
+               bit1                                                bit10
+      idle     start  add0:add1:add2:add3:add4:add5:add6  BUSY     delimiter
+       1        0               Address (LSB first)      status       1
+
+ALMC
+   Encoder error field.  Refer to the T-format spec for details. 
+   
+CF
+   Control field. The 10-bit control field is the 1st field in any command or response frame.
+   The format of the field is shown below.  For specifics, refer to the T-Format specification.
+
+   .. code-block:: text
+
+               bit1                                       bit10
+      idle     start    sink code  cc0:cc1:cc2:cc3:cc4  delimiter
+       1        0        0  1  0     Data ID Code          1
+
+CLB
+   Configurable Logic Block
+
+Command
+   See Request
+
+CRC
+   Cyclic Redundancy Check. The polynomial used is X^8 + 1.  
+   The CRC field is the last field received in a response from the encoder.
+   For EEPROM read/write commands, a CRC the last field in the transmission.  
+
+   .. code-block:: text
+
+               bit1                                       bit10
+      idle     start    rc0:rc1:rc2:rc3:rc4:rc5:rc6:rc7 delimiter
+       1        0               CRC (LSB first)            1
+
+Data ID Code
+   4-bit code plus parity that identifies a specific T-format command.
+
+Delimiter
+   1-bit, always 1, at the end of each field
+
+DFx
+   Data Field within the response. The number of DFs within a response depends on the command sent.
+   ID3 has the most number of data fields (DF0....DF7). 
+   The structure of a single data field is shown below:
+
+   .. code-block:: text
+
+               bit1                                       bit10
+      idle     start    dn0:dn1:dn2:dn3:dn4:dn5:dn6:dn7 delimiter
+       1        0               data (LSB first)            1
+   
+   The meaning of the data depends on the specific command and the specific field as shown below.
+
+   .. code-block:: text
+
+      ID     DF0    DF1    DF2    DF3    DF4    DF5    DF6    DF7 
+       0     ABS0   ABS1   ABS2
+       1     ABM0   ABM1   ABM2
+       2     ENID
+       3     ABS0   ABS1   ABS2   ENID   ABM0   ABM1   ABM2   ALMC
+       7     ABS0   ABS1   ABS2
+       8     ABS0   ABS1   ABS2
+       C     ABS0   ABS1   ABS2
+
+EDF
+   EEPROM data field.  Used in the EEPROM read/write commands.
+
+ENID
+   Encoder ID
+
+Field
+   A T-Format transmission, or received data, can be broken down into 10-bit fields. Each field begins with a start bit, and ends with a delimiter.  The 8-bits between are data.  
+
+Request (or command)
+   A request consists of at least a control field (CF).  
+   For EEPROM read/write requests additional fields for address, data and CRC are also transmitted.
+
+   * EEPROM read request: CF + ADF + CRC
+   * EEPROM write request: CF + ADF + EDF + CRC
+   * Other request: CF
+
+PM
+   Position Manager. Foundation hardware and software on C28x devices for position sensing
+
+PM_tformat or PM_TFORMAT
+   Prefix used for the library functions and #defines
+
+Response
+   The transmission data from the absolute encoder.  
+   The general format of a response is shown below. 
+   The data fields (number and meaning) in the response depend on the specific command transmitted. Refer to the DFx definition.
+    
+    * EEPROM read response: CF + ADF + EDF + CRC
+    * EEPROM write response: CF + ADF + CRC
+    * Other command response:  CF + SF + DF0........DF7 + CRC
+
+Sink Code
+   Fixed pattern of 0,1,0. Immediately after the start bit of a control field (CF)
+
+SPI
+   Serial Peripheral Interface      
+
+SF
+   Status field.  The 10-bit status field is the 2nd field in any response from the encoder. 
+   The format of the field is shown below.  For specifics, refer to the T-Format specification.
+
+   .. code-block:: text
+
+               bit1                                           bit10
+      idle     start      Information      error    alarm   delimiter
+       1        0       dd0:dd1:dd2:dd3   ea0:ea1  ca0:ca1     1
+
+Start
+   1-bit, always 0, at the start of any T-format field.
+
+T-Format
+   For a detailed description of the specification and terminology, refer to the |TFORMAT_SPEC_NAME|_ documentation
+
+
+
+

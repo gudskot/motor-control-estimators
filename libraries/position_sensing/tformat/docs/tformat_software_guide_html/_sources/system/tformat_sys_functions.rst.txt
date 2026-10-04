@@ -1,0 +1,31 @@
+.. include:: ../tformat_replacements.rst
+
+************************************************************
+System-Level Functions
+************************************************************
+
+This section describes functions which act at the system-level.  This includes initialization of the C2000 device, start-up functions and interrupt service routine.  
+
+Many of these functions make calls to the T-Format Library which is described in :ref:`the T-Format Library Documentation <lnk-lib-top>`. 
+
+System Initialization Functions
+------------------------------------------------------------
+
+.. _lnk-sys-init:
+
+The following functions are called to initialize the example system.  
+
+.. doxygengroup:: TFORMAT_SYS_INIT
+    :project: tformat
+    :content-only:
+
+System Run-time Functions
+------------------------------------------------------------
+
+.. _lnk-sys-run:
+
+The following functions are called during run-time.  They perform application specific functions make calls into the solution library.
+
+.. doxygengroup:: TFORMAT_SYS_RUN
+    :project: tformat
+    :content-only:     

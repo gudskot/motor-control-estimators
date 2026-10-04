@@ -1,0 +1,15 @@
+.. include:: ./tformat_replacements.rst
+
+************************************************************
+Flowcharts
+************************************************************
+
+.. _lnk-flowcharts:
+
+:numref:`tformat_flowcharts` shows the software flow of the system example and the processing of a command.  Use these flowcharts as a reference for the rest of the documentation.
+
+.. figure:: ./images/tidue74_tformat_flow.svg
+    :align: center
+    :name: tformat_flowcharts
+
+    T-Format Interface Flowcharts.

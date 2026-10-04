@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1. Configuration &mdash; C2000 BiSS-C Encoder Interface Software Guide</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Build and Run the Example" href="bissc_sys_example.html" />
+    <link rel="prev" title="System Solution" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+   <!---- extra body elements for TI beyond RTD Sphinx Theme --->
+<div class="DocSite-globalNav tiNav">
+    <ul>
+    </ul>
+</div>
+
+<a class="DocSite-nav" href="https://www.ti.com" style="padding-bottom: 85px;">
+  <img class="DocSiteNav-logo"
+    src="../_static/img/ti_logo.png"
+    alt="TI Logo">
+  <div class="DocSiteNav-title"></div>
+</a> 
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> C2000 BiSS-C Encoder Interface Software Guide
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                SDK v5.03.00
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../get_started/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../bissc_flowcharts.html">Flowcharts</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System Solution</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1. Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#system-example-configuration">1.1. System Example Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#library-configuration">1.2. Library Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_example.html">2. Build and Run the Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_globals.html">3. System Test Structures and Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_globals.html#library-structures-and-arrays">4. Library Structures and Arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bissc_sys_functions.html">5. System-Level Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../library/index.html">Encoder Interface Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../additional_info/index.html">Additional Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notice.html">Important Notice</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../disclaimer.html">Disclaimer</a></li>
+</ul>
+
+            
+          
+          <!-- extra nav elements for TI beyond RTD Sphinx Theme --->
+<div id="sideBanner">
+    <br/>
+    <br/><br/><br/>
+</div>
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">C2000 BiSS-C Encoder Interface Software Guide</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">System Solution</a> &raquo;</li>
+        
+      <li><span class="section-number">1. </span>Configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="configuration">
+<h1><span class="section-number">1. </span>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline"></a></h1>
+<div class="section" id="system-example-configuration">
+<span id="lnk-configuration"></span><h2><span class="section-number">1.1. </span>System Example Configuration<a class="headerlink" href="#system-example-configuration" title="Permalink to this headline"></a></h2>
+<p>If you wish to change the default configuration of the system example, edit the example’s header file. The parameters that can be changed are shown below.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-number">Listing 1.1 </span><span class="caption-text">/solutions/boostxl_posmgr/shared/include/bissc.h</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">// Number of multi-turn and single-turn bits.</span>
+<span class="c1">// In an application these may be read from the encoder/sensor itself. In this</span>
+<span class="c1">// demonstration they are hard-coded for simplicity.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+
+<span class="c1">//</span>
+<span class="c1">// Lika EOH36-20-12</span>
+<span class="c1">//</span>
+<span class="cp">#define BISSC_SCD_MT_BITS   12U</span>
+<span class="cp">#define BISSC_SCD_ST_BITS   20U</span>
+<span class="c1">//</span>
+
+<span class="c1">//</span>
+<span class="c1">// icHaus MHM Evaluation board</span>
+<span class="c1">//</span>
+<span class="c1">//#define BISSC_SCD_MT_BITS     16U</span>
+<span class="c1">//#define BISSC_SCD_ST_BITS     12U</span>
+
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Specify the BiSS-C clock rate (MA) in MHz</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+
+<span class="cp">#define BISSC_MA_CLOCK  8.0f </span><span class="c1">// MHz</span>
+
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// For register read/write testing, the address of the bank select register</span>
+<span class="c1">// is used. This is standard on encoders and safe to read/write from.</span>
+<span class="c1">//</span>
+<span class="c1">// The test keeps track of BISSC_READ_COUNT reads in the register_read_data</span>
+<span class="c1">// array.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define BISSC_READ_COUNT            8U</span>
+<span class="cp">#define BISSC_BANK_SELECT           0x40U</span>
+<span class="cp">#define BISSC_CD_BUSY               1U</span>
+<span class="cp">#define BISSC_CD_SETUP_COMPLETE     0U</span>
+<span class="k">extern</span><span class="w"> </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">bisscRegisterReadData</span><span class="p">[</span><span class="n">BISSC_READ_COUNT</span><span class="p">];</span>
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// CRC related declarations</span>
+<span class="c1">//</span>
+<span class="c1">// The leading 1 on the polynomial (poly) is implied by the size</span>
+<span class="c1">// The most common polynomials are:</span>
+<span class="c1">//</span>
+<span class="c1">// Control Data (CD):</span>
+<span class="c1">//            x^4 + x + 1 --&gt; 10011 --&gt; 0x13</span>
+<span class="c1">//                        leading 1 is implied use: Poly = 3, poly bits = 4</span>
+<span class="c1">//</span>
+<span class="c1">// Single Cycle Data(SCD):</span>
+<span class="c1">//            x^6 + x + 1 --&gt; 1000011 --&gt; 0x43</span>
+<span class="c1">//                        leading 1 is implied use: Poly = 3, poly bits = 6</span>
+<span class="c1">//</span>
+<span class="c1">// Specify the CRC starting value. For BiSS-C this is typically 0.</span>
+<span class="c1">//</span>
+<span class="c1">//</span>
+<span class="c1">// Other BiSS polynomials:</span>
+<span class="c1">//</span>
+<span class="c1">// x^5 + x^2 + X^0 = 0x25</span>
+<span class="c1">//                        ---&gt; Poly = 5, poly bits = 5</span>
+<span class="c1">//</span>
+<span class="c1">// x^16 + x^15 + x^12 + x^7 + X^6 + x^4 + x^3 + X^0 = 0x190D9</span>
+<span class="c1">//                        ---&gt; Poly = 0x90D9, poly bits = 16</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+
+<span class="cp">#define BISSC_CD_CRC_POLY_BITS     4U</span>
+<span class="cp">#define BISSC_CD_CRC_POLY          0x03U</span>
+<span class="cp">#define BISSC_CD_CRC_START         0U</span>
+<span class="cp">#define BISSC_CD_CRCTABLE_SIZE     256U</span>
+
+<span class="cp">#define BISSC_SCD_CRC_POLY_BITS    6U</span>
+<span class="cp">#define BISSC_SCD_CRC_POLY         0x03U</span>
+<span class="cp">#define BISSC_SCD_CRC_START        0U</span>
+<span class="cp">#define BISSC_SCD_CRCTABLE_SIZE    256U</span>
+
+<span class="c1">//#define BISSC_SCD_CRC_POLY_BITS    16U</span>
+<span class="c1">//#define BISSC_SCD_CRC_POLY         0x90D9U</span>
+<span class="c1">//#define BISSC_SCD_CRC_START        0U</span>
+<span class="c1">//#define BISSC_SCD_CRCTABLE_SIZE    256U</span>
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Delay time, in micro-seconds, between each transaction</span>
+<span class="c1">// This time does not include the parse of the SCD and CDS.</span>
+<span class="c1">// In a typical application this time would be controlled by a timer interrupt.</span>
+<span class="c1">// In this demonstration, a simple while() loop with a delay is used.</span>
+<span class="c1">//</span>
+<span class="c1">// The value chosen was based on the read access time of one of the</span>
+<span class="c1">// tested encoders. This allows the reads to occur even with the limitations</span>
+<span class="c1">// of the CD state machine implementation. If the state machine is updated</span>
+<span class="c1">// to allow for the encoder to extend the read, or write, cycle this time</span>
+<span class="c1">// can be reduced. Other encoders may not require this much time. Refer</span>
+<span class="c1">// to the encoder specifications.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define BISSC_IDLE_DELAY_US       200ul</span>
+
+<span class="c1">//*****************************************************************************</span>
+<span class="c1">//</span>
+<span class="c1">// Power-on to normal operation delay 1.5 seconds. Refer to the specifications</span>
+<span class="c1">// for a specific encoder.</span>
+<span class="c1">//</span>
+<span class="c1">//*****************************************************************************</span>
+<span class="cp">#define BISSC_POWER_ON_DELAY_US 1500000ul</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="library-configuration">
+<h2><span class="section-number">1.2. </span>Library Configuration<a class="headerlink" href="#library-configuration" title="Permalink to this headline"></a></h2>
+<p>If you wish to change the default configuration of the library, edit the library’s public header file. The parameters that can be changed are shown below.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>If you change the library configuration then recompile <strong>both</strong> the library <strong>and</strong> the system example.</p></li>
+</ul>
+</div>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-number">Listing 1.2 </span><span class="caption-text">/libraries/position_sensing/bissc/include/pm_bissc_include.h</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">// #define BISSC_ENCODER_HAS_CD_INTERFACE</span>
+<span class="c1">//      Some encoders do not support the control-data CD interface.</span>
+<span class="c1">//      0: the code associated with the control-data frames is not executed.</span>
+<span class="c1">//      else: the code associated with control-data frames is executed.</span>
+<span class="c1">//</span>
+<span class="c1">// #define PM_BISSC_SPI  SPIA_BASE, SPIB_BASE, SPIC_BASE, SPID_BASE</span>
+<span class="c1">//      Define which SPI peripheral is used.  This MUST match the instance</span>
+<span class="c1">//      the CLB is clocking and be connected to the RS485 interface logic.</span>
+<span class="c1">//</span>
+<span class="c1">//      Note: The CLB output configuration and SPI configuration may need</span>
+<span class="c1">//      to be modified if this selection is changed.  Refer to the</span>
+<span class="c1">//      design guide for more information.</span>
+<span class="c1">//</span>
+<span class="c1">// #define PM_SPI_FIFO_MAX_LEVEL</span>
+<span class="c1">//      This is the depth of the SPI FIFO. If you know the message returned</span>
+<span class="c1">//      from the encoder will always use fewer levels it can be lowered.</span>
+<span class="c1">//      This parameter is only used when reading the message out of the</span>
+<span class="c1">//      SPI FIFO and can save cycles.</span>
+<span class="c1">//</span>
+<span class="c1">//  #define PM_BISSC_SPI_FIFO_WIDTH</span>
+<span class="c1">//      Word size used by the SPI peripheral. You shouldn&#39;t have to change</span>
+<span class="c1">//      this definition.</span>
+<span class="c1">//</span>
+<span class="cp">#define PM_BISSC_ENCODER_HAS_CD_INTERFACE   1U</span>
+<span class="cp">#define PM_BISSC_SPI_FIFO_WIDTH            12U</span>
+<span class="cp">#define PM_BISSC_SPI_FIFO_MAX_LEVEL        16U</span>
+
+<span class="c1">//</span>
+<span class="c1">// SPI selection specified here and the CLB output</span>
+<span class="c1">// configuration, and the system control setup in the</span>
+<span class="c1">// communications demo must match.  If one is changed,</span>
+<span class="c1">// the other must be changed as well.</span>
+<span class="c1">//</span>
+<span class="cp">#if defined(_F28P65X) || defined(F28P65x_DEVICE)</span>
+<span class="w">    </span><span class="cp">#define PM_BISSC_SPI           SPID_BASE</span>
+<span class="w">    </span><span class="cp">#define PM_BISSC_INT_SPI_RX    INT_SPID_RX</span>
+<span class="w">    </span><span class="cp">#define PM_BISSC_CLK_GEN_BASE  CLB3_BASE</span>
+<span class="w">    </span><span class="cp">#define PM_BISSC_FSM_BASE      CLB4_BASE</span>
+<span class="cp">#else</span>
+<span class="w">    </span><span class="cp">#error Device should match a predefined symbol in the build options.</span>
+<span class="cp">#endif</span>
+
+<span class="c1">//</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bissc_sys_example.html" class="btn btn-neutral float-right" title="2. Build and Run the Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="System Solution" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        <a href="https://www.ti.com/corp/docs/legal/copyright.shtml">2024, Texas Instruments Incorporated</a>, Texas Instruments Incorporated. All rights reserved. <br>
+        <a href="https://www.ti.com/corp/docs/legal/trademark/trademrk.htm">Trademarks</a> | <a href="https://www.ti.com/corp/docs/legal/privacy.shtml">Privacy policy</a> | <a href="https://www.ti.com/corp/docs/legal/termsofuse.shtml">Terms of use</a> | <a href="https://www.ti.com/lsds/ti/legal/termsofsale.page">Terms of sale</a>
+      <span class="lastupdated">
+        Last updated on Sep 06, 2024.
+      </span>
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

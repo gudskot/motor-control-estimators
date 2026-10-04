@@ -1,0 +1,31 @@
+% var moduleName = "rimpulse"
+% var libraryFolder = "utilities"
+% var module = system.modules['/libraries/' + libraryFolder + '/' + moduleName + '.js'];
+%if (module != null)
+%{
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+    % }
+
+    % var initFunctions = [];
+    % for(var i = 0; i < module.$instances.length; i++) {
+        % var instance = module.$instances[i];
+        % let modInst  = instance[moduleName];
+
+void `instance.$name`_init(){
+    
+}       
+        % initFunctions.push(instance.$name+ "_init");
+    % }
+
+void `module.mcsdkLibraryName`_all_init() {
+    
+    //
+    // Initialize the instances
+    //
+    % for (var initFunc of initFunctions) {
+    `initFunc`();
+    % }
+}
+%}
+%
