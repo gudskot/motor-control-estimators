@@ -196,10 +196,11 @@ HAL_MTR_Handle HAL_MTR1_init(void *pMemory, const size_t numBytes)
 
 
     // Assign gateEnableGPIO
-    obj->gateModeGPIO = MTR1_GATE_MODE_GPIO;
-    obj->gateGainGPIO = MTR1_GATE_GAIN_GPIO;
-    obj->gateCalGPIO = MTR1_GATE_CAL_GPIO;
     obj->gateEnableGPIO = MTR1_GATE_EN_GPIO;
+
+    // initialize the DRV8320 interface
+    obj->drv8320Handle = DRV8320_init(&obj->drv8320);
+    HAL_setupGate(handle);
 
 
     obj->motorNum = MTR_1;
@@ -243,8 +244,7 @@ void HAL_MTR_setParams(HAL_MTR_Handle handle, USER_Params *pUserParams)
     // disable the PWM
     HAL_disablePWM(handle);
 
-    // turn on the DRV8323RH if present
-    HAL_enableDRV(handle);
+    // DRV8320 is enabled and configured later in HAL_MTR_setGateDriver()
 
     return;
 } // end of HAL_MTR_setParams() function
@@ -256,9 +256,11 @@ void HAL_setupGate(HAL_MTR_Handle handle)
 {
     HAL_MTR_Obj *obj = (HAL_MTR_Obj *)handle;
 
-    obj->gateModeGPIO = MTR1_GATE_MODE_GPIO;
-    obj->gateGainGPIO = MTR1_GATE_GAIN_GPIO;
     obj->gateEnableGPIO = MTR1_GATE_EN_GPIO;
+
+    DRV8320_setSPIHandle(obj->drv8320Handle, MTR1_DRV_SPI_BASE);
+    DRV8320_setGPIOCSNumber(obj->drv8320Handle, MTR1_DRV_SPI_CS_GPIO);
+    DRV8320_setGPIONumber(obj->drv8320Handle, MTR1_GATE_EN_GPIO);
 
     return;
 } // HAL_setupGate() function
@@ -270,17 +272,29 @@ void HAL_enableDRV(HAL_MTR_Handle handle)
 {
     HAL_MTR_Obj *obj = (HAL_MTR_Obj *)handle;
 
-    // Set EN_GATE to high for enabling the DRV
-    GPIO_writePin(obj->gateEnableGPIO, 1);
-
-    // Set MODE to low for setting 6-PWM mode
-    GPIO_writePin(obj->gateModeGPIO, 0);
-
-    // disable calibrate mode
-    GPIO_writePin(obj->gateCalGPIO, 0);
+    // EN = 1, waits until the FAULT bit clears (with timeout)
+    DRV8320_enable(obj->drv8320Handle);
 
     return;
 } // HAL_enableDRV() function
+
+void HAL_writeDRVData(HAL_MTR_Handle handle, DRV8320_SPIVars_t *drv8320SPIVars)
+{
+    HAL_MTR_Obj *obj = (HAL_MTR_Obj *)handle;
+
+    DRV8320_writeData(obj->drv8320Handle, drv8320SPIVars);
+
+    return;
+} // HAL_writeDRVData() function
+
+void HAL_readDRVData(HAL_MTR_Handle handle, DRV8320_SPIVars_t *drv8320SPIVars)
+{
+    HAL_MTR_Obj *obj = (HAL_MTR_Obj *)handle;
+
+    DRV8320_readData(obj->drv8320Handle, drv8320SPIVars);
+
+    return;
+} // HAL_readDRVData() function
 
 void HAL_updatePWMsPeriod(HAL_MTR_Handle handle,
                           float32_t pwmControl_kHz, uint16_t controlTicksPWM)
@@ -432,8 +446,18 @@ void HAL_setupPWMs(HAL_MTR_Handle handle)
         // setup the PWM-Chopper Control Register (PCCTL)
         EPWM_disableChopper(obj->pwmHandle[cnt]);
 
-        // setup the Trip Zone Select Register (TZSEL)
-        EPWM_disableTripZoneSignals(obj->pwmHandle[cnt], HAL_TZSEL_SIGNALS_ALL);
+        // Trip zone sources (CMPSS + nFAULT) are configured in Board_init();
+        // do NOT disable them here, otherwise OCP and nFAULT stop working.
+
+        // What the OST/CBC events do with the outputs (as in the TI reference HAL):
+        // TZA forces EPWMxA (INHx), TZB forces EPWMxB (INLx). Both low = both
+        // switches of the half-bridge off (DRV8320 6x mode: INHx = INLx = 0).
+        EPWM_setTripZoneAction(obj->pwmHandle[cnt],
+                               EPWM_TZ_ACTION_EVENT_TZA,
+                               EPWM_TZ_ACTION_LOW);
+        EPWM_setTripZoneAction(obj->pwmHandle[cnt],
+                               EPWM_TZ_ACTION_EVENT_TZB,
+                               EPWM_TZ_ACTION_LOW);
     }
 
     // setup the Event Trigger Selection Register (ETSEL)
@@ -543,11 +567,14 @@ void HAL_setMtrCMPSSDACValue(HAL_MTR_Handle handle,
 {
     HAL_MTR_Obj *obj = (HAL_MTR_Obj *)handle;
 
+    // every phase has its own CMPSS with both comparators (+ and - overcurrent)
     CMPSS_setDACValueHigh(obj->cmpssHandle[0], dacValH);
+    CMPSS_setDACValueLow(obj->cmpssHandle[0], dacValL);
 
     CMPSS_setDACValueHigh(obj->cmpssHandle[1], dacValH);
     CMPSS_setDACValueLow(obj->cmpssHandle[1], dacValL);
 
+    CMPSS_setDACValueHigh(obj->cmpssHandle[2], dacValH);
     CMPSS_setDACValueLow(obj->cmpssHandle[2], dacValL);
 
     return;
@@ -579,16 +606,92 @@ void HAL_getPWMPeriod(HAL_MTR_Handle handle, HAL_PWMData_t *pPWMData)
     return;
 }   // end of HAL_getPWMPeriod() function
     
+// DRV8320 register settings
+// TODO: IDRIVE/TDRIVE must match your MOSFETs (Qg) - start from what the
+//       IDRIVE resistor gave on the DRV8323RH board.
+#define DRV_IDRIVEP_HS      DRV8320_ISOUR_HS_0P260_A
+#define DRV_IDRIVEN_HS      DRV8320_ISINK_HS_0P520_A
+#define DRV_IDRIVEP_LS      DRV8320_ISOUR_LS_0P260_A
+#define DRV_IDRIVEN_LS      DRV8320_ISINK_LS_0P520_A
+#define DRV_TDRIVE          DRV8320_TSOUR_4000_NS
+#define DRV_VDS_LVL         DRV8320_VDS_LEVEL_0P750_V
+#define DRV_OCP_DEG         DRV8320_VDSDEG_4_US
+#define DRV_OCP_MODE        DRV8320_LATCHED_SHUTDOWN
+#define DRV_DEAD_TIME       DRV8320_DEADTIME_100_NS
+
+// returns true on FAULT (main writes it into faultMtrNow.bit.gateDriver)
 bool HAL_MTR_setGateDriver(HAL_MTR_Handle handle)
 {
-    bool driverStatus = false;
+    HAL_MTR_Obj *obj = (HAL_MTR_Obj *)handle;
+    DRV8320_SPIVars_t *drv = &obj->drvSPIVars;
+    bool driverFault = false;
 
-    SysCtl_delay(1000U);
+    DRV8320_resetEnableTimeout(obj->drv8320Handle);
+    DRV8320_resetRxTimeout(obj->drv8320Handle);
 
-    // turn on the DRV8323RH if present
+    // EN = 1, then wait for the DRV wake-up time before configuring it
     HAL_enableDRV(handle);
-    SysCtl_delay(1000U);
+    DEVICE_DELAY_US(1000U);
 
-    return(driverStatus);
+    // read all registers -> drvSPIVars
+    DRV8320_setupSPI(obj->drv8320Handle, drv);
+
+    // registers are writable only when LOCK = unlocked
+    drv->Ctrl_Reg_02.CLR_FLT   = true;
+    drv->Ctrl_Reg_02.BRAKE     = false;
+    drv->Ctrl_Reg_02.COAST     = false;
+    drv->Ctrl_Reg_02.PWM_MODE  = DRV8320_PWMMODE_6;
+    drv->Ctrl_Reg_02.OTW_REP   = true;
+    drv->Ctrl_Reg_02.DIS_GDF   = false;
+    drv->Ctrl_Reg_02.DIS_CPUV  = false;
+
+    drv->Ctrl_Reg_03.LOCK       = DRV8320_LOCK_UNLOCK;
+    drv->Ctrl_Reg_03.IDRIVEP_HS = DRV_IDRIVEP_HS;
+    drv->Ctrl_Reg_03.IDRIVEN_HS = DRV_IDRIVEN_HS;
+
+    drv->Ctrl_Reg_04.CBC        = false;
+    drv->Ctrl_Reg_04.TDRIVE     = DRV_TDRIVE;
+    drv->Ctrl_Reg_04.IDRIVEP_LS = DRV_IDRIVEP_LS;
+    drv->Ctrl_Reg_04.IDRIVEN_LS = DRV_IDRIVEN_LS;
+
+    drv->Ctrl_Reg_05.TRETRY    = false;
+    drv->Ctrl_Reg_05.DEAD_TIME = DRV_DEAD_TIME;
+    drv->Ctrl_Reg_05.OCP_MODE  = DRV_OCP_MODE;
+    drv->Ctrl_Reg_05.OCP_DEG   = DRV_OCP_DEG;
+    drv->Ctrl_Reg_05.VDS_LVL   = DRV_VDS_LVL;
+
+    drv->writeCmd = true;
+    HAL_writeDRVData(handle, drv);
+
+    DEVICE_DELAY_US(100U);
+
+    // readback: what the DRV really has, plus status registers
+    drv->readCmd = true;
+    HAL_readDRVData(handle, drv);
+    drv->readCmd = false;
+
+    // CLR_FLT is self-clearing, so it is not compared
+    if((drv->Ctrl_Reg_02.PWM_MODE   != DRV8320_PWMMODE_6) ||
+       (drv->Ctrl_Reg_03.IDRIVEP_HS != DRV_IDRIVEP_HS)    ||
+       (drv->Ctrl_Reg_03.IDRIVEN_HS != DRV_IDRIVEN_HS)    ||
+       (drv->Ctrl_Reg_04.IDRIVEP_LS != DRV_IDRIVEP_LS)    ||
+       (drv->Ctrl_Reg_04.IDRIVEN_LS != DRV_IDRIVEN_LS)    ||
+       (drv->Ctrl_Reg_04.TDRIVE     != DRV_TDRIVE)        ||
+       (drv->Ctrl_Reg_05.VDS_LVL    != DRV_VDS_LVL)       ||
+       (drv->Ctrl_Reg_05.OCP_DEG    != DRV_OCP_DEG)       ||
+       (drv->Ctrl_Reg_05.OCP_MODE   != DRV_OCP_MODE)      ||
+       (drv->Ctrl_Reg_05.DEAD_TIME  != DRV_DEAD_TIME))
+    {
+        driverFault = true;     // SPI does not work or the write was rejected
+    }
+
+    // enableTimeOut only says FAULT was set before CLR_FLT, so it is not
+    // checked here; the status after CLR_FLT is what matters
+    if(drv->Stat_Reg_00.FAULT || obj->drv8320.rxTimeOut)
+    {
+        driverFault = true;
+    }
+
+    return(driverFault);
 }
 

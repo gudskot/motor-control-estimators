@@ -57,17 +57,12 @@ CPU_TIME_Handle  cpuTimeHandle;
 #pragma DATA_SECTION(cpuTime,"sys_data");
 #pragma DATA_SECTION(cpuTimeHandle,"sys_data");
 
-
-
-
-
 // **************************************************************************
 // the functions
 // !!! Please make sure that you had gone through the user guide, and follow the
 // !!! guide to set up the kit and load the right code
 void main(void)
 {
-    
     // Clear memory for system and controller
     // The variables must be assigned to these sector if need to be cleared to zero
     HAL_clearDataRAM((void *)loadStart_est_data, (uint16_t)loadSize_est_data);
@@ -79,7 +74,6 @@ void main(void)
     HAL_clearDataRAM((void *)loadStart_ctrl_data, (uint16_t)loadSize_ctrl_data);
     HAL_clearDataRAM((void *)loadStart_datalog_data, (uint16_t)loadSize_datalog_data);
     HAL_clearDataRAM((void *)loadStart_SFRA_F32_Data, (uint16_t)loadSize_SFRA_F32_Data);
-
 
     systemVars.estType = EST_TYPE_FAST;         // the estimator is only FAST
     motorVars_M1.estimatorType = SLEST_TYPE_FAST_ONLY;
@@ -111,7 +105,7 @@ void main(void)
     // SIGNALSIGHT_init();
 
     // initialize the driver
-    halHandle = HAL_init(&hal, sizeof(hal));   
+    halHandle = HAL_init(&hal, sizeof(hal));
 
     // initialize the interrupt vector table
     HAL_initIntVectorTable(halHandle);
@@ -147,8 +141,6 @@ void main(void)
     // enable the ePWM module time base clock sync signal
     SysCtl_enablePeripheral(SYSCTL_PERIPH_CLK_TBCLKSYNC);
 
-
-
     // initialize the CPU usage module
     cpuTimeHandle = CPU_TIME_init(&cpuTime, sizeof(cpuTime));
     CPU_TIME_reset(cpuTimeHandle);
@@ -157,7 +149,6 @@ void main(void)
                     motorSetVars_M1.controlTicksPWM);
 
     systemVars.flagEnableSystem = true; // TODO Remove this line for AC power input
-
 
     motorVars_M1.flagEnableOffsetCalc = true;
 
@@ -180,7 +171,6 @@ void main(void)
     systemVars.powerRelayWaitTime_ms = POWER_RELAY_WAIT_TIME_ms;
     systemVars.timerBase_1ms = 0;
 
-
     // Waiting for enable system flag to be set
     while(systemVars.flagEnableSystem == false)
     {
@@ -193,7 +183,7 @@ void main(void)
             HAL_clearCPUTimerFlag(halHandle, HAL_CPU_TIMER0);
 
             systemVars.timerBase_1ms++;
-
+ 
             if(systemVars.timerBase_1ms > systemVars.powerRelayWaitTime_ms)
             {
                 systemVars.flagEnableSystem = true;

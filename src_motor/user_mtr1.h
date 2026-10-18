@@ -60,7 +60,7 @@ extern "C"
 
 //! \brief Defines the nominal DC bus voltage, V
 //!
-#define USER_M1_NOMINAL_DC_BUS_VOLTAGE_V         (48)
+#define USER_M1_NOMINAL_DC_BUS_VOLTAGE_V         (12)   // bench supply 12 V (T-Motor U3: 3-4S)
 
 //! \brief Defines the maximum voltage at the AD converter
 #define USER_M1_ADC_FULL_SCALE_VOLTAGE_V         (57.5285)
@@ -69,14 +69,19 @@ extern "C"
 #define USER_M1_VOLTAGE_FILTER_POLE_Hz           (680.4839)     
 
 //! \brief Defines the maximum current at the AD converter
-#define USER_M1_ADC_FULL_SCALE_CURRENT_A         (47.1429)     
+//! BOOSTXL-DRV8320RS + PGA: 3.3 V / (R_shunt 7 mOhm * PGA gain 8 * 0.915 input divider)
+//! If the PGA gain changes, this value and the two SF defines below must change too
+#define USER_M1_ADC_FULL_SCALE_CURRENT_A         (64.4042)
 
-#define USER_M1_SIGN_CURRENT_SF         (1.0f)
+//! \brief Current sign. The shunt sits between PGND and GND, so a positive
+//! motor current gives a NEGATIVE voltage on the sense line -> -1.
+//! MUST be checked at build level 2/3: positive Vd at angle 0 must give Id > 0
+#define USER_M1_SIGN_CURRENT_SF         (-1.0f)
 
 //! \brief ADC current offsets for A, B, and C phases
-#define USER_M1_IA_OFFSET_AD    (2045.4001f)
-#define USER_M1_IB_OFFSET_AD    (2012.8669f)
-#define USER_M1_IC_OFFSET_AD    (2031.5974f)
+#define USER_M1_IA_OFFSET_AD    (2048.0f)
+#define USER_M1_IB_OFFSET_AD    (2048.0f)
+#define USER_M1_IC_OFFSET_AD    (2048.0f)
 
 //! \brief ADC current offset for CMPSS
 #define USER_M1_IS_OFFSET_CMPSS     (uint16_t)((USER_M1_IA_OFFSET_AD + USER_M1_IB_OFFSET_AD + USER_M1_IC_OFFSET_AD) / 3.0f)
@@ -87,10 +92,10 @@ extern "C"
 #define USER_M1_VC_OFFSET_SF    (0.5077f)
 
 //! \brief DC bus over voltage threshold
-#define USER_M1_OVER_VOLTAGE_FAULT_V        (54.5)
+#define USER_M1_OVER_VOLTAGE_FAULT_V        (17.0)   // 4S max 16.8 V; also catches regeneration
 
 //! \brief DC bus over voltage threshold
-#define USER_M1_OVER_VOLTAGE_NORM_V         (52.5)
+#define USER_M1_OVER_VOLTAGE_NORM_V         (16.0)
 
 //! \brief DC bus under voltage threshold
 #define USER_M1_UNDER_VOLTAGE_FAULT_V       (8)
@@ -125,13 +130,14 @@ extern "C"
 
 //------------------------------------------------------------------------------
 //! \brief ADC current offsets checking value for A, B, and C phases
-#define USER_M1_IA_OFFSET_AD_MAX    (2195.4001)
-#define USER_M1_IB_OFFSET_AD_MAX    (2162.8669)
-#define USER_M1_IC_OFFSET_AD_MAX    (2181.5974)
+// +-300 for the first bring-up (bias is calculated, not tuned yet); tighten to +-150 later
+#define USER_M1_IA_OFFSET_AD_MAX    (2348.0)
+#define USER_M1_IB_OFFSET_AD_MAX    (2348.0)
+#define USER_M1_IC_OFFSET_AD_MAX    (2348.0)
 
-#define USER_M1_IA_OFFSET_AD_MIN    (1895.4001)
-#define USER_M1_IB_OFFSET_AD_MIN    (1862.8669)
-#define USER_M1_IC_OFFSET_AD_MIN    (1881.5974)
+#define USER_M1_IA_OFFSET_AD_MIN    (1748.0)
+#define USER_M1_IB_OFFSET_AD_MIN    (1748.0)
+#define USER_M1_IC_OFFSET_AD_MIN    (1748.0)
 
 //! \brief ADC voltage offsets for A, B, and C phases
 #define USER_M1_VA_OFFSET_SF_MAX    (0.557)
@@ -207,12 +213,12 @@ extern "C"
 
 //! \brief Defines the current scale factor for the system
 //!
-#define USER_M1_CURRENT_SF          (0.0115f)
+#define USER_M1_CURRENT_SF          (0.015724f)   // FULL_SCALE_CURRENT / 4096
 
 
 //! \brief Defines the current scale invert factor for the system
 //!
-#define USER_M1_CURRENT_INV_SF      (86.8848f)
+#define USER_M1_CURRENT_INV_SF      (63.5983f)    // 4096 / FULL_SCALE_CURRENT
 
 
 //! \brief Defines the analog voltage filter pole location, rad/s
@@ -253,7 +259,7 @@ extern "C"
 
 //! \brief Defines the R/L excitation frequency, Hz
 //!
-#define USER_M1_R_OVER_L_EXC_FREQ_Hz  (300)
+#define USER_M1_R_OVER_L_EXC_FREQ_Hz  (600)   // was 300: higher frequency gives a bigger voltage (w*L*I) for the 14 mV phase voltage ADC step
 
 
 //! \brief Defines the R/L Kp scale factor, pu
@@ -264,7 +270,7 @@ extern "C"
 
 //! \brief Defines maximum acceleration for the estimation speed profiles, Hz/sec
 //!
-#define USER_M1_MAX_ACCEL_Hzps        (2)
+#define USER_M1_MAX_ACCEL_Hzps        (10)   // was 2: ramp to 150 Hz in about 15 s instead of 75 s
 
 
 //! \brief Defines the controller execution period, usec
@@ -458,17 +464,17 @@ extern "C"
 #define USER_MOTOR1                            Teknic_M2310PLN04K
 
 #define USER_MOTOR1_TYPE                   	(MOTOR_TYPE_PM)
-#define USER_MOTOR1_NUM_POLE_PAIRS         	(4)
+#define USER_MOTOR1_NUM_POLE_PAIRS         	(7)   // 12N14P
 #define USER_MOTOR1_Rr_Ohm                 	(0)
-#define USER_MOTOR1_Rs_Ohm                 	(0.393955578f)
-#define USER_MOTOR1_Ls_d_H                 	(0.000190442806f)
-#define USER_MOTOR1_Ls_q_H                 	(0.000190442806f)
-#define USER_MOTOR1_RATED_FLUX_VpHz        	(0.0399353318f)
-#define USER_MOTOR1_MAGNETIZING_CURRENT_A  	(0)
-#define USER_MOTOR1_RES_EST_CURRENT_A      	(1.5)
-#define USER_MOTOR1_IND_EST_CURRENT_A      	(-1)
-#define USER_MOTOR1_MAX_CURRENT_A          	(6.6)
-#define USER_MOTOR1_FLUX_EXC_FREQ_Hz       	(60)
+#define USER_MOTOR1_Rs_Ohm                 	(0.0367613211f)   // identified by FAST (Motor ID, T-Motor U3 KV700)
+#define USER_MOTOR1_Ls_d_H                 	(0.00000979993092f)   // identified by FAST, phase inductance of the equivalent Y circuit
+#define USER_MOTOR1_Ls_q_H                 	(0.00000979993092f)   // identified by FAST
+#define USER_MOTOR1_RATED_FLUX_VpHz        	(0.00725028152f)   // identified by FAST
+#define USER_MOTOR1_MAGNETIZING_CURRENT_A  	(0)   // induction motors only (TI); PM motors keep 0
+#define USER_MOTOR1_RES_EST_CURRENT_A      	(3.0f)   // MUST be a float: it is divided by the integer ISR frequency (3/15000 = 0 in integer math)
+#define USER_MOTOR1_IND_EST_CURRENT_A      	(-3.0f)   // negative for PM, float on purpose
+#define USER_MOTOR1_MAX_CURRENT_A          	(5.0)   // above the ID currents
+#define USER_MOTOR1_FLUX_EXC_FREQ_Hz       	(150)   // was 60: bigger back-EMF (about 1 V) for the flux measurement
 #define USER_MOTOR1_NUM_ENC_SLOTS          	(1000U)
 #define USER_MOTOR1_INERTIA_Kgm2           	(0.00000706154f)
 
@@ -479,34 +485,34 @@ extern "C"
 #define USER_MOTOR1_Ls_q_COMP_COEF         (0.35f)          // 0.0f~0.5f
 #define USER_MOTOR1_Ls_MIN_NUM_COEF        (0.55f)          // 0.5f~1.0f
 
-#define USER_MOTOR1_RATED_VOLTAGE_V        	(24)
-#define USER_MOTOR1_RATED_SPEED_KRPM       	(3)
+#define USER_MOTOR1_RATED_VOLTAGE_V        	(12)
+#define USER_MOTOR1_RATED_SPEED_KRPM       	(5)
 
 #define USER_MOTOR1_FREQ_MIN_HZ            	(9)
 #define USER_MOTOR1_FREQ_MAX_Hz            	(600)
 
 #define USER_MOTOR1_FREQ_LOW_Hz            	(5)
 #define USER_MOTOR1_FREQ_HIGH_Hz           	(400)
-#define USER_MOTOR1_VOLT_MIN_V             	(1)
-#define USER_MOTOR1_VOLT_MAX_V             	(24)
+#define USER_MOTOR1_VOLT_MIN_V             	(0.1)   // V/f at FREQ_LOW (5 Hz): low Rs motor, 1 V would mean tens of amps
+#define USER_MOTOR1_VOLT_MAX_V             	(3.2)   // V/f at FREQ_HIGH (400 Hz): about flux 0.0071 V/Hz * 400 * 1.1 + 0.1
 
 #define USER_MOTOR1_FORCE_DELTA_A          	(0.05f)
 #define USER_MOTOR1_ALIGN_DELTA_A          	(0.01f)
-#define USER_MOTOR1_FLUX_CURRENT_A         	(0.5f)
-#define USER_MOTOR1_ALIGN_CURRENT_A        	(1.5)
-#define USER_MOTOR1_STARTUP_CURRENT_A      	(3.5)
-#define USER_MOTOR1_TORQUE_CURRENT_A       	(3)
-#define USER_MOTOR1_OVER_CURRENT_A         	(7.5)
+#define USER_MOTOR1_FLUX_CURRENT_A         	(2.0f)   // Motor ID ramp-up/flux current: 0.5 A was too weak, the rotor did not follow (level 3: 2 A was fine)
+#define USER_MOTOR1_ALIGN_CURRENT_A        	(2.0)   // same reason as FLUX_CURRENT_A
+#define USER_MOTOR1_STARTUP_CURRENT_A      	(2.0)   // level 4 startup current
+#define USER_MOTOR1_TORQUE_CURRENT_A       	(2.0)   // first tests: low
+#define USER_MOTOR1_OVER_CURRENT_A         	(7.5)   // hardware OCP
 
 #define USER_MOTOR1_BRAKE_CURRENT_A        	(1)
 #define USER_MOTOR1_BRAKE_TIME_DELAY       	(12000)
 
 #define USER_MOTOR1_SPEED_START_Hz         	(35)
 #define USER_MOTOR1_SPEED_FORCE_Hz         	(30)
-#define USER_MOTOR1_ACCEL_START_Hzps       	(10)
-#define USER_MOTOR1_ACCEL_STOP_Hzps       	    (10)
-#define USER_MOTOR1_ACCEL_RUN_Hzps       	    (20)
-#define USER_MOTOR1_ACCEL_MAX_Hzps         	(20)
+#define USER_MOTOR1_ACCEL_START_Hzps       	(30)
+#define USER_MOTOR1_ACCEL_STOP_Hzps     	(30)
+#define USER_MOTOR1_ACCEL_RUN_Hzps          (50)
+#define USER_MOTOR1_ACCEL_MAX_Hzps         	(50)
 
 #define USER_MOTOR1_SPEED_FS_Hz            	(3)
 
@@ -526,7 +532,7 @@ extern "C"
 #define USER_MOTOR1_KI_ID_SF                   (1)               // 0.1~10.0
 
 // Control initialized default value
-#define USER_MOTOR1_SPEED_SET_Hz               (60)     // Hz
+#define USER_MOTOR1_SPEED_SET_Hz               (40)   // electrical Hz, just above SPEED_START (35); about 340 rpm for 7 pole pairs
 
 
 // for Rs online calibration
@@ -535,7 +541,7 @@ extern "C"
 
 //! \brief Defines the maximum current slope for Id trajectory
 //!
-#define USER_M1_MAX_CURRENT_DELTA_A        (USER_MOTOR1_RES_EST_CURRENT_A / USER_M1_ISR_FREQ_Hz)
+#define USER_M1_MAX_CURRENT_DELTA_A        (((float)USER_MOTOR1_RES_EST_CURRENT_A) / USER_M1_ISR_FREQ_Hz)
 
 
 //! \brief Defines the maximum current slope for Id trajectory during power warp mode

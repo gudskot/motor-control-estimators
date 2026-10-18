@@ -53,12 +53,15 @@ void Board_init()
 	SYNC_init();
 	ASYSCTL_init();
 	ADC_init();
+	DAC_init();
+	PGA_init();
 	CMPSS_init();
 	CPUTIMER_init();
 	EPWM_init();
 	EPWMXBAR_init();
 	GPIO_init();
 	SCI_init();
+	SPI_init();
 	INTERRUPT_init();
 
 	EDIS;
@@ -245,18 +248,11 @@ void PinMux_init()
 	GPIO_setPadConfig(MTR1_EPWM_W_EPWMB_GPIO, GPIO_PIN_TYPE_STD);
 	GPIO_setQualificationMode(MTR1_EPWM_W_EPWMB_GPIO, GPIO_QUAL_SYNC);
 
-	// GPIO29 -> MTR1_GATE_EN_GPIO Pinmux
+	// GPIO28 -> MTR1_GATE_EN_GPIO Pinmux (J1-3)
+	GPIO_setPinConfig(GPIO_28_GPIO28);
+	GPIO_setAnalogMode(28, GPIO_ANALOG_DISABLED);
+	// GPIO29 -> MTR1_PM_nFAULT_GPIO Pinmux (J1-4)
 	GPIO_setPinConfig(GPIO_29_GPIO29);
-	// GPIO22 -> MTR1_GATE_MODE_GPIO Pinmux
-	GPIO_setPinConfig(GPIO_22_GPIO22);
-	// GPIO47 -> MTR1_GATE_GAIN_GPIO Pinmux
-	GPIO_setPinConfig(GPIO_47_GPIO47);
-	// GPIO48 -> MTR1_GATE_CAL_GPIO Pinmux
-	GPIO_setPinConfig(GPIO_48_GPIO48);
-	// B25, D4, E4, GPIO24 -> MTR1_PM_nFAULT_GPIO Pinmux
-	GPIO_setPinConfig(GPIO_24_GPIO24);
-	// AGPIO -> GPIO mode selected
-	GPIO_setAnalogMode(24, GPIO_ANALOG_DISABLED);
 	//
 	// SCIB -> MotorControlWorkbench_transferLayer_SCI Pinmux
 	//
@@ -267,6 +263,27 @@ void PinMux_init()
 	GPIO_setPinConfig(MotorControlWorkbench_transferLayer_SCI_SCITX_PIN_CONFIG);
 	GPIO_setPadConfig(MotorControlWorkbench_transferLayer_SCI_SCITX_GPIO, GPIO_PIN_TYPE_STD | GPIO_PIN_TYPE_PULLUP);
 	GPIO_setQualificationMode(MotorControlWorkbench_transferLayer_SCI_SCITX_GPIO, GPIO_QUAL_ASYNC);
+
+	//
+	// SPI -> DRV8320RS Pinmux
+	//
+	GPIO_setPinConfig(MTR1_DRV_SPI_PICO_PIN_CONFIG);
+	GPIO_setPadConfig(MTR1_DRV_SPI_PICO_GPIO, GPIO_PIN_TYPE_STD);
+	GPIO_setQualificationMode(MTR1_DRV_SPI_PICO_GPIO, GPIO_QUAL_ASYNC);
+
+	GPIO_setPinConfig(MTR1_DRV_SPI_POCI_PIN_CONFIG);
+	// GPIO17 is an AGPIO and was put in analog mode above -> back to digital
+	GPIO_setAnalogMode(MTR1_DRV_SPI_POCI_GPIO, GPIO_ANALOG_DISABLED);
+	GPIO_setPadConfig(MTR1_DRV_SPI_POCI_GPIO, GPIO_PIN_TYPE_STD | GPIO_PIN_TYPE_PULLUP);
+	GPIO_setQualificationMode(MTR1_DRV_SPI_POCI_GPIO, GPIO_QUAL_ASYNC);
+
+	GPIO_setPinConfig(MTR1_DRV_SPI_CLK_PIN_CONFIG);
+	GPIO_setPadConfig(MTR1_DRV_SPI_CLK_GPIO, GPIO_PIN_TYPE_STD);
+	GPIO_setQualificationMode(MTR1_DRV_SPI_CLK_GPIO, GPIO_QUAL_ASYNC);
+
+	GPIO_setPinConfig(MTR1_DRV_SPI_CS_PIN_CONFIG);
+	GPIO_setPadConfig(MTR1_DRV_SPI_CS_GPIO, GPIO_PIN_TYPE_STD | GPIO_PIN_TYPE_PULLUP);
+	GPIO_setQualificationMode(MTR1_DRV_SPI_CS_GPIO, GPIO_QUAL_ASYNC);
 
 
 }
@@ -336,11 +353,11 @@ void MTR1_ADCA_init(){
 	// Configures a start-of-conversion (SOC) in the ADC and its interrupt SOC trigger.
 	// 	  	SOC number		: 0
 	//	  	Trigger			: ADC_TRIGGER_EPWM1_SOCA
-	//	  	Channel			: ADC_CH_ADCIN2
+	//	  	Channel			: ADC_CH_ADCIN11
 	//	 	Sample Window	: 18 SYSCLK cycles
 	//		Interrupt Trigger: ADC_INT_SOC_TRIGGER_NONE
 	//
-	ADC_setupSOC(MTR1_ADCA_BASE, ADC_SOC_NUMBER0, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN2, 18U);
+	ADC_setupSOC(MTR1_ADCA_BASE, ADC_SOC_NUMBER0, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN11, 18U);
 	ADC_setInterruptSOCTrigger(MTR1_ADCA_BASE, ADC_SOC_NUMBER0, ADC_INT_SOC_TRIGGER_NONE);
 	//
 	// Start of Conversion 1 Configuration
@@ -444,11 +461,11 @@ void MTR1_VDC_init(){
 	// Configures a start-of-conversion (SOC) in the ADC and its interrupt SOC trigger.
 	// 	  	SOC number		: 0
 	//	  	Trigger			: ADC_TRIGGER_EPWM1_SOCA
-	//	  	Channel			: ADC_CH_ADCIN3
+	//	  	Channel			: ADC_CH_ADCIN5
 	//	 	Sample Window	: 18 SYSCLK cycles
 	//		Interrupt Trigger: ADC_INT_SOC_TRIGGER_NONE
 	//
-	ADC_setupSOC(MTR1_VDC_BASE, ADC_SOC_NUMBER0, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN3, 18U);
+	ADC_setupSOC(MTR1_VDC_BASE, ADC_SOC_NUMBER0, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN5, 18U);
 	ADC_setInterruptSOCTrigger(MTR1_VDC_BASE, ADC_SOC_NUMBER0, ADC_INT_SOC_TRIGGER_NONE);
 	//
 	// Start of Conversion 1 Configuration
@@ -478,11 +495,11 @@ void MTR1_VDC_init(){
 	// Configures a start-of-conversion (SOC) in the ADC and its interrupt SOC trigger.
 	// 	  	SOC number		: 2
 	//	  	Trigger			: ADC_TRIGGER_EPWM1_SOCA
-	//	  	Channel			: ADC_CH_ADCIN11
+	//	  	Channel			: ADC_CH_ADCIN8
 	//	 	Sample Window	: 26 SYSCLK cycles
 	//		Interrupt Trigger: ADC_INT_SOC_TRIGGER_NONE
 	//
-	ADC_setupSOC(MTR1_VDC_BASE, ADC_SOC_NUMBER2, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN11, 26U);
+	ADC_setupSOC(MTR1_VDC_BASE, ADC_SOC_NUMBER2, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN8, 26U);
 	ADC_setInterruptSOCTrigger(MTR1_VDC_BASE, ADC_SOC_NUMBER2, ADC_INT_SOC_TRIGGER_NONE);
 	//
 	// ADC Interrupt 1 Configuration
@@ -601,11 +618,11 @@ void MTR1_ADCC_init(){
 	// Configures a start-of-conversion (SOC) in the ADC and its interrupt SOC trigger.
 	// 	  	SOC number		: 1
 	//	  	Trigger			: ADC_TRIGGER_EPWM1_SOCA
-	//	  	Channel			: ADC_CH_ADCIN0
+	//	  	Channel			: ADC_CH_ADCIN8
 	//	 	Sample Window	: 26 SYSCLK cycles
 	//		Interrupt Trigger: ADC_INT_SOC_TRIGGER_NONE
 	//
-	ADC_setupSOC(MTR1_ADCC_BASE, ADC_SOC_NUMBER1, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN0, 26U);
+	ADC_setupSOC(MTR1_ADCC_BASE, ADC_SOC_NUMBER1, ADC_TRIGGER_EPWM1_SOCA, ADC_CH_ADCIN8, 26U);
 	ADC_setInterruptSOCTrigger(MTR1_ADCC_BASE, ADC_SOC_NUMBER1, ADC_INT_SOC_TRIGGER_NONE);
 			
 	//
@@ -673,231 +690,77 @@ void ASYSCTL_init(){
 //
 //*****************************************************************************
 void CMPSS_init(){
-	cmpss_CMPSS3_init();
 	cmpss_CMPSS1_init();
+	cmpss_CMPSS2_init();
+	cmpss_CMPSS3_init();
 }
 
-void cmpss_CMPSS3_init(){
-    //
-    // Select the value for CMP3HPMXSEL.
-    //
-    ASysCtl_selectCMPHPMux(ASYSCTL_CMPHPMUX_SELECT_3,3U);
-    //
-    // Select the value for CMP3LPMXSEL.
-    //
-    ASysCtl_selectCMPLPMux(ASYSCTL_CMPLPMUX_SELECT_3,4U);
-    //
-    // Sets the configuration for the high comparator.
-    //
-    CMPSS_configHighComparator(cmpss_CMPSS3_BASE,(CMPSS_INSRC_DAC));
-    //
-    // Sets the configuration for the low comparator.
-    //
-    CMPSS_configLowComparator(cmpss_CMPSS3_BASE,(CMPSS_INSRC_DAC | CMPSS_INV_INVERTED));
-    //
-    // Sets the configuration for the internal comparator DACs.
-    //
-    CMPSS_configDACHigh(cmpss_CMPSS3_BASE,(CMPSS_DACVAL_SYSCLK | CMPSS_DACSRC_SHDW));
-    CMPSS_configDACLow(cmpss_CMPSS3_BASE, CMPSS_DACSRC_SHDW);
-    //
-    // Sets the value of the internal DAC of the high comparator.
-    //
-    CMPSS_setDACValueHigh(cmpss_CMPSS3_BASE,3000U);
-    //
-    // Sets the value of the internal DAC of the low comparator.
-    //
-    CMPSS_setDACValueLow(cmpss_CMPSS3_BASE,250U);
-    //
-    //  Configures the digital filter of the high comparator.
-    //
-    CMPSS_configFilterHigh(cmpss_CMPSS3_BASE, 32U, 32U, 30U);
-    //
-    // Configures the digital filter of the low comparator.
-    //
-    CMPSS_configFilterLow(cmpss_CMPSS3_BASE, 32U, 32U, 30U);
-    //
-    // Initializes the digital filter of the high comparator.
-    //
-    CMPSS_initFilterHigh(cmpss_CMPSS3_BASE);
-    //
-    // Initializes the digital filter of the low comparator.
-    //
-    CMPSS_initFilterLow(cmpss_CMPSS3_BASE);
-    //
-    // Sets the output signal configuration for the high comparator.
-    //
-    CMPSS_configOutputsHigh(cmpss_CMPSS3_BASE,(CMPSS_TRIPOUT_FILTER | CMPSS_TRIP_FILTER));
-    //
-    // Sets the output signal configuration for the low comparator.
-    //
-    CMPSS_configOutputsLow(cmpss_CMPSS3_BASE,(CMPSS_TRIPOUT_FILTER | CMPSS_TRIP_FILTER));
-    //
-    // Sets the comparator hysteresis settings.
-    //
-    CMPSS_setHysteresis(cmpss_CMPSS3_BASE,0U);
-    //
-    // Configures the comparator subsystem's high ramp generator.
-    //
-    CMPSS_configRampHigh(cmpss_CMPSS3_BASE, CMPSS_RAMP_DIR_DOWN, 0U,0U,0U,1U,true);
-    //
-    // Configures the comparator subsystem's low ramp generator.
-    //
-    CMPSS_configRampLow(cmpss_CMPSS3_BASE, CMPSS_RAMP_DIR_DOWN, 0U,0U,0U,1U,true);
-    //
-    // Configures the high comparator's ramp generator clock divider
-    //
-    CMPSS_setRampClockDividerHigh(cmpss_CMPSS3_BASE, CMPSS_RAMP_CLOCK_DIV1);
-    //
-    // Configures the low comparator's ramp generator clock divider
-    //
-    CMPSS_setRampClockDividerLow(cmpss_CMPSS3_BASE, CMPSS_RAMP_CLOCK_DIV1);
-    //
-    // Disables reset of HIGH comparator digital filter output latch on PWMSYNC
-    //
-    CMPSS_disableLatchResetOnPWMSYNCHigh(cmpss_CMPSS3_BASE);
-    //
-    // Disables reset of LOW comparator digital filter output latch on PWMSYNC
-    //
-    CMPSS_disableLatchResetOnPWMSYNCLow(cmpss_CMPSS3_BASE);
-    //
-    // Sets the ePWM module blanking signal that holds trip in reset.
-    //
-    CMPSS_configBlanking(cmpss_CMPSS3_BASE,1U);
-    //
-    // Disables an ePWM blanking signal from holding trip in reset.
-    //
-    CMPSS_disableBlanking(cmpss_CMPSS3_BASE);
-    //
-    // Configures whether or not the digital filter latches are reset by PWMSYNC
-    //
-    CMPSS_configLatchOnPWMSYNC(cmpss_CMPSS3_BASE,false,false);
-    //
-    // Enables the CMPSS module.
-    //
-    CMPSS_enableModule(cmpss_CMPSS3_BASE);
-    //
-    // Delay for CMPSS DAC to power up.
-    //
+// Both comparators of one CMPSS watch the same PGA output.
+// High comparator trips above the high DAC value, low comparator below the low
+// DAC value (inverted). Real thresholds come from calcMotorOverCurrentThreshold();
+// the values below (about +-15 A) are only used until the first update.
+static void MTR1_CMPSS_setup(uint32_t base)
+{
+    CMPSS_configHighComparator(base,(CMPSS_INSRC_DAC));
+    CMPSS_configLowComparator(base,(CMPSS_INSRC_DAC | CMPSS_INV_INVERTED));
+
+    CMPSS_configDACHigh(base,(CMPSS_DACVAL_SYSCLK | CMPSS_DACSRC_SHDW));
+    CMPSS_configDACLow(base, CMPSS_DACSRC_SHDW);
+
+    CMPSS_setDACValueHigh(base,3000U);
+    CMPSS_setDACValueLow(base,1096U);
+
+    CMPSS_configFilterHigh(base, 32U, 32U, 30U);
+    CMPSS_configFilterLow(base, 32U, 32U, 30U);
+    CMPSS_initFilterHigh(base);
+    CMPSS_initFilterLow(base);
+
+    CMPSS_configOutputsHigh(base,(CMPSS_TRIPOUT_FILTER | CMPSS_TRIP_FILTER));
+    CMPSS_configOutputsLow(base,(CMPSS_TRIPOUT_FILTER | CMPSS_TRIP_FILTER));
+
+    CMPSS_setHysteresis(base,0U);
+
+    CMPSS_configRampHigh(base, CMPSS_RAMP_DIR_DOWN, 0U,0U,0U,1U,true);
+    CMPSS_configRampLow(base, CMPSS_RAMP_DIR_DOWN, 0U,0U,0U,1U,true);
+    CMPSS_setRampClockDividerHigh(base, CMPSS_RAMP_CLOCK_DIV1);
+    CMPSS_setRampClockDividerLow(base, CMPSS_RAMP_CLOCK_DIV1);
+
+    CMPSS_disableLatchResetOnPWMSYNCHigh(base);
+    CMPSS_disableLatchResetOnPWMSYNCLow(base);
+
+    CMPSS_configBlanking(base,1U);
+    CMPSS_disableBlanking(base);
+
+    CMPSS_configLatchOnPWMSYNC(base,false,false);
+
+    CMPSS_enableModule(base);
+
+    // delay for the CMPSS DAC to power up
     DEVICE_DELAY_US(500);
-    //
-    // Causes a software reset of the high comparator digital filter output latch.
-    //
-    CMPSS_clearFilterLatchHigh(cmpss_CMPSS3_BASE);
-    //
-    // Causes a software reset of the low comparator digital filter output latch.
-    //
-    CMPSS_clearFilterLatchLow(cmpss_CMPSS3_BASE);
+
+    CMPSS_clearFilterLatchHigh(base);
+    CMPSS_clearFilterLatchLow(base);
 }
+
+// phase W: PGA1_OUT_INT
 void cmpss_CMPSS1_init(){
-    //
-    // Select the value for CMP1HPMXSEL.
-    //
-    ASysCtl_selectCMPHPMux(ASYSCTL_CMPHPMUX_SELECT_1,0U);
-    //
-    // Select the value for CMP1LPMXSEL.
-    //
-    ASysCtl_selectCMPLPMux(ASYSCTL_CMPLPMUX_SELECT_1,0U);
-    //
-    // Sets the configuration for the high comparator.
-    //
-    CMPSS_configHighComparator(cmpss_CMPSS1_BASE,(CMPSS_INSRC_DAC));
-    //
-    // Sets the configuration for the low comparator.
-    //
-    CMPSS_configLowComparator(cmpss_CMPSS1_BASE,(CMPSS_INSRC_DAC | CMPSS_INV_INVERTED));
-    //
-    // Sets the configuration for the internal comparator DACs.
-    //
-    CMPSS_configDACHigh(cmpss_CMPSS1_BASE,(CMPSS_DACVAL_SYSCLK | CMPSS_DACSRC_SHDW));
-    CMPSS_configDACLow(cmpss_CMPSS1_BASE, CMPSS_DACSRC_SHDW);
-    //
-    // Sets the value of the internal DAC of the high comparator.
-    //
-    CMPSS_setDACValueHigh(cmpss_CMPSS1_BASE,3000U);
-    //
-    // Sets the value of the internal DAC of the low comparator.
-    //
-    CMPSS_setDACValueLow(cmpss_CMPSS1_BASE,0U);
-    //
-    //  Configures the digital filter of the high comparator.
-    //
-    CMPSS_configFilterHigh(cmpss_CMPSS1_BASE, 32U, 32U, 30U);
-    //
-    // Configures the digital filter of the low comparator.
-    //
-    CMPSS_configFilterLow(cmpss_CMPSS1_BASE, 32U, 32U, 30U);
-    //
-    // Initializes the digital filter of the high comparator.
-    //
-    CMPSS_initFilterHigh(cmpss_CMPSS1_BASE);
-    //
-    // Initializes the digital filter of the low comparator.
-    //
-    CMPSS_initFilterLow(cmpss_CMPSS1_BASE);
-    //
-    // Sets the output signal configuration for the high comparator.
-    //
-    CMPSS_configOutputsHigh(cmpss_CMPSS1_BASE,(CMPSS_TRIPOUT_FILTER | CMPSS_TRIP_FILTER));
-    //
-    // Sets the output signal configuration for the low comparator.
-    //
-    CMPSS_configOutputsLow(cmpss_CMPSS1_BASE,(CMPSS_TRIPOUT_FILTER | CMPSS_TRIP_FILTER));
-    //
-    // Sets the comparator hysteresis settings.
-    //
-    CMPSS_setHysteresis(cmpss_CMPSS1_BASE,0U);
-    //
-    // Configures the comparator subsystem's high ramp generator.
-    //
-    CMPSS_configRampHigh(cmpss_CMPSS1_BASE, CMPSS_RAMP_DIR_DOWN, 0U,0U,0U,1U,true);
-    //
-    // Configures the comparator subsystem's low ramp generator.
-    //
-    CMPSS_configRampLow(cmpss_CMPSS1_BASE, CMPSS_RAMP_DIR_DOWN, 0U,0U,0U,1U,true);
-    //
-    // Configures the high comparator's ramp generator clock divider
-    //
-    CMPSS_setRampClockDividerHigh(cmpss_CMPSS1_BASE, CMPSS_RAMP_CLOCK_DIV1);
-    //
-    // Configures the low comparator's ramp generator clock divider
-    //
-    CMPSS_setRampClockDividerLow(cmpss_CMPSS1_BASE, CMPSS_RAMP_CLOCK_DIV1);
-    //
-    // Disables reset of HIGH comparator digital filter output latch on PWMSYNC
-    //
-    CMPSS_disableLatchResetOnPWMSYNCHigh(cmpss_CMPSS1_BASE);
-    //
-    // Disables reset of LOW comparator digital filter output latch on PWMSYNC
-    //
-    CMPSS_disableLatchResetOnPWMSYNCLow(cmpss_CMPSS1_BASE);
-    //
-    // Sets the ePWM module blanking signal that holds trip in reset.
-    //
-    CMPSS_configBlanking(cmpss_CMPSS1_BASE,1U);
-    //
-    // Disables an ePWM blanking signal from holding trip in reset.
-    //
-    CMPSS_disableBlanking(cmpss_CMPSS1_BASE);
-    //
-    // Configures whether or not the digital filter latches are reset by PWMSYNC
-    //
-    CMPSS_configLatchOnPWMSYNC(cmpss_CMPSS1_BASE,false,false);
-    //
-    // Enables the CMPSS module.
-    //
-    CMPSS_enableModule(cmpss_CMPSS1_BASE);
-    //
-    // Delay for CMPSS DAC to power up.
-    //
-    DEVICE_DELAY_US(500);
-    //
-    // Causes a software reset of the high comparator digital filter output latch.
-    //
-    CMPSS_clearFilterLatchHigh(cmpss_CMPSS1_BASE);
-    //
-    // Causes a software reset of the low comparator digital filter output latch.
-    //
-    CMPSS_clearFilterLatchLow(cmpss_CMPSS1_BASE);
+    ASysCtl_selectCMPHPMux(ASYSCTL_CMPHPMUX_SELECT_1, MTR1_CMPSS_MUX_PGA_OUT_INT);
+    ASysCtl_selectCMPLPMux(ASYSCTL_CMPLPMUX_SELECT_1, MTR1_CMPSS_MUX_PGA_OUT_INT);
+    MTR1_CMPSS_setup(cmpss_CMPSS1_BASE);
+}
+
+// phase U: PGA3_OUT_INT
+void cmpss_CMPSS2_init(){
+    ASysCtl_selectCMPHPMux(ASYSCTL_CMPHPMUX_SELECT_2, MTR1_CMPSS_MUX_PGA_OUT_INT);
+    ASysCtl_selectCMPLPMux(ASYSCTL_CMPLPMUX_SELECT_2, MTR1_CMPSS_MUX_PGA_OUT_INT);
+    MTR1_CMPSS_setup(cmpss_CMPSS2_BASE);
+}
+
+// phase V: PGA2_OUT_INT
+void cmpss_CMPSS3_init(){
+    ASysCtl_selectCMPHPMux(ASYSCTL_CMPHPMUX_SELECT_3, MTR1_CMPSS_MUX_PGA_OUT_INT);
+    ASysCtl_selectCMPLPMux(ASYSCTL_CMPLPMUX_SELECT_3, MTR1_CMPSS_MUX_PGA_OUT_INT);
+    MTR1_CMPSS_setup(cmpss_CMPSS3_BASE);
 }
 
 //*****************************************************************************
@@ -1150,9 +1013,11 @@ void EPWMXBAR_init(){
 
 void MTR1_IS_TRIP_CMPSS_init(){
 		
-	XBAR_setEPWMMuxConfig(MTR1_IS_TRIP_CMPSS, XBAR_EPWM_MUX00_CMPSS1_CTRIPH);
+	// CTRIPH_OR_L: trip on positive OR negative overcurrent of each phase
+	XBAR_setEPWMMuxConfig(MTR1_IS_TRIP_CMPSS, XBAR_EPWM_MUX00_CMPSS1_CTRIPH_OR_L);
+	XBAR_setEPWMMuxConfig(MTR1_IS_TRIP_CMPSS, XBAR_EPWM_MUX02_CMPSS2_CTRIPH_OR_L);
 	XBAR_setEPWMMuxConfig(MTR1_IS_TRIP_CMPSS, XBAR_EPWM_MUX04_CMPSS3_CTRIPH_OR_L);
-	XBAR_enableEPWMMux(MTR1_IS_TRIP_CMPSS, XBAR_MUX00 | XBAR_MUX04);
+	XBAR_enableEPWMMux(MTR1_IS_TRIP_CMPSS, XBAR_MUX00 | XBAR_MUX02 | XBAR_MUX04);
 }
 
 //*****************************************************************************
@@ -1162,43 +1027,113 @@ void MTR1_IS_TRIP_CMPSS_init(){
 //*****************************************************************************
 void GPIO_init(){
 	MTR1_GATE_EN_GPIO_init();
-	MTR1_GATE_MODE_GPIO_init();
-	MTR1_GATE_GAIN_GPIO_init();
-	MTR1_GATE_CAL_GPIO_init();
 	MTR1_PM_nFAULT_GPIO_init();
 }
 
 void MTR1_GATE_EN_GPIO_init(){
-	GPIO_writePin(MTR1_GATE_EN_GPIO, 1);
+	// DRV8320 stays disabled until HAL_MTR_setGateDriver()
+	GPIO_writePin(MTR1_GATE_EN_GPIO, 0);
 	GPIO_setPadConfig(MTR1_GATE_EN_GPIO, GPIO_PIN_TYPE_STD);
 	GPIO_setQualificationMode(MTR1_GATE_EN_GPIO, GPIO_QUAL_SYNC);
 	GPIO_setDirectionMode(MTR1_GATE_EN_GPIO, GPIO_DIR_MODE_OUT);
 	GPIO_setControllerCore(MTR1_GATE_EN_GPIO, GPIO_CORE_CPU1);
-}
-void MTR1_GATE_MODE_GPIO_init(){
-	GPIO_writePin(MTR1_GATE_MODE_GPIO, 0);
-	GPIO_setPadConfig(MTR1_GATE_MODE_GPIO, GPIO_PIN_TYPE_STD);
-	GPIO_setQualificationMode(MTR1_GATE_MODE_GPIO, GPIO_QUAL_SYNC);
-	GPIO_setDirectionMode(MTR1_GATE_MODE_GPIO, GPIO_DIR_MODE_OUT);
-	GPIO_setControllerCore(MTR1_GATE_MODE_GPIO, GPIO_CORE_CPU1);
-}
-void MTR1_GATE_GAIN_GPIO_init(){
-	GPIO_setPadConfig(MTR1_GATE_GAIN_GPIO, GPIO_PIN_TYPE_STD);
-	GPIO_setQualificationMode(MTR1_GATE_GAIN_GPIO, GPIO_QUAL_SYNC);
-	GPIO_setDirectionMode(MTR1_GATE_GAIN_GPIO, GPIO_DIR_MODE_IN);
-	GPIO_setControllerCore(MTR1_GATE_GAIN_GPIO, GPIO_CORE_CPU1);
-}
-void MTR1_GATE_CAL_GPIO_init(){
-	GPIO_setPadConfig(MTR1_GATE_CAL_GPIO, GPIO_PIN_TYPE_STD);
-	GPIO_setQualificationMode(MTR1_GATE_CAL_GPIO, GPIO_QUAL_SYNC);
-	GPIO_setDirectionMode(MTR1_GATE_CAL_GPIO, GPIO_DIR_MODE_IN);
-	GPIO_setControllerCore(MTR1_GATE_CAL_GPIO, GPIO_CORE_CPU1);
 }
 void MTR1_PM_nFAULT_GPIO_init(){
 	GPIO_setPadConfig(MTR1_PM_nFAULT_GPIO, GPIO_PIN_TYPE_STD);
 	GPIO_setQualificationMode(MTR1_PM_nFAULT_GPIO, GPIO_QUAL_SYNC);
 	GPIO_setDirectionMode(MTR1_PM_nFAULT_GPIO, GPIO_DIR_MODE_IN);
 	GPIO_setControllerCore(MTR1_PM_nFAULT_GPIO, GPIO_CORE_CPU1);
+}
+
+//*****************************************************************************
+//
+// SPI Configurations
+//
+//*****************************************************************************
+void SPI_init(){
+	MTR1_DRV_SPI_init();
+}
+
+void MTR1_DRV_SPI_init(){
+	SPI_disableModule(MTR1_DRV_SPI_BASE);
+
+	// POL0PHA0 in C2000 notation matches DRV8320 timing
+	// (DRV latches SDI on the falling edge, shifts SDO on the rising edge)
+	SPI_setConfig(MTR1_DRV_SPI_BASE, DEVICE_LSPCLK_FREQ, SPI_PROT_POL0PHA0,
+	              SPI_MODE_CONTROLLER, MTR1_DRV_SPI_BITRATE, 16);
+	SPI_disableLoopback(MTR1_DRV_SPI_BASE);
+	SPI_setEmulationMode(MTR1_DRV_SPI_BASE, SPI_EMULATION_FREE_RUN);
+	SPI_enableFIFO(MTR1_DRV_SPI_BASE);
+
+	// gap between words so that nSCS goes high between every 16-bit frame
+	SPI_setTxFifoTransmitDelay(MTR1_DRV_SPI_BASE, 0x18);
+
+	SPI_clearInterruptStatus(MTR1_DRV_SPI_BASE, SPI_INT_TXFF | SPI_INT_RXFF);
+	SPI_enableModule(MTR1_DRV_SPI_BASE);
+}
+
+//*****************************************************************************
+//
+// DAC (bias for the current sense) and PGA Configurations
+//
+//*****************************************************************************
+void DAC_init(){
+	MTR1_BIAS_DAC_init();
+}
+
+void MTR1_BIAS_DAC_init(){
+	DAC_setReferenceVoltage(MTR1_BIAS_DAC_BASE, DAC_REF_ADC_VREFHI);
+	DAC_setGainMode(MTR1_BIAS_DAC_BASE, DAC_GAIN_TWO);
+	DAC_setLoadMode(MTR1_BIAS_DAC_BASE, DAC_LOAD_SYSCLK);
+	DAC_enableOutput(MTR1_BIAS_DAC_BASE);
+	DAC_setShadowValue(MTR1_BIAS_DAC_BASE, MTR1_BIAS_DAC_CODE);
+
+	// delay for the buffered DAC to power up
+	DEVICE_DELAY_US(5000);
+}
+
+// Subtractor mode: Vout = G*Vp - (G-1)*Vm, Vm = shunt ground (J1-2 = PGA3_INM).
+// S6 = 1 grounds PGA1_INM/PGA2_INM on the board, so PGA1 and PGA2 take their
+// minus from PGA3_INM (INM sharing). PGA3 uses its own INM pin.
+static void MTR1_PGA_setup(uint32_t base, bool shareInm)
+{
+    PGA_selectPMUXInput(base, PGA_PMUX_POS);
+    PGA_selectNMUXInput(base, PGA_NMUX_RTAP);
+
+    if(shareInm)
+    {
+        PGA_selectMMUXInput(base, PGA_MMUX_INVERTING_GAIN_NEG_SHARED);
+    }
+    else
+    {
+        PGA_selectMMUXInput(base, PGA_MMUX_INVERTING_GAIN_NEG);
+    }
+
+    PGA_setGain(base, MTR1_PGA_GAIN);
+    PGA_setFilterResistor(base, PGA_LOW_PASS_FILTER_DISABLED);
+    PGA_disableExternalChop(base);
+
+    PGA_enable(base);
+
+    // Both are needed for the ADC to see the PGA output (checked on the bare
+    // LaunchPad: without them the ADC reads garbage, with only OUTENABLE the
+    // output saturates). They drive the PGA output onto its pin, and the pins
+    // of PGA1/PGA2 are the VM (J3-26) and phase C voltage (J3-25) dividers.
+    PGA_enableOutput(base);
+    PGA_enableInternalGainOutput(base);
+}
+
+void PGA_init(){
+	MTR1_PGA_init();
+}
+
+void MTR1_PGA_init(){
+    MTR1_PGA_setup(MTR1_PGA_W_BASE, true);
+    MTR1_PGA_setup(MTR1_PGA_V_BASE, true);
+    MTR1_PGA_setup(MTR1_PGA_U_BASE, false);
+
+    // delay for the PGAs to power up
+    DEVICE_DELAY_US(500);
 }
 
 //*****************************************************************************

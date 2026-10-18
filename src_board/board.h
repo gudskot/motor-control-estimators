@@ -112,23 +112,11 @@ extern "C"
 //
 // GPIO29 - GPIO Settings
 //
-#define MTR1_GATE_EN_GPIO_GPIO_PIN_CONFIG GPIO_29_GPIO29
-//
-// GPIO22 - GPIO Settings
-//
-#define MTR1_GATE_MODE_GPIO_GPIO_PIN_CONFIG GPIO_22_GPIO22
-//
-// GPIO47 - GPIO Settings
-//
-#define MTR1_GATE_GAIN_GPIO_GPIO_PIN_CONFIG GPIO_47_GPIO47
-//
-// GPIO48 - GPIO Settings
-//
-#define MTR1_GATE_CAL_GPIO_GPIO_PIN_CONFIG GPIO_48_GPIO48
+#define MTR1_GATE_EN_GPIO_GPIO_PIN_CONFIG GPIO_28_GPIO28
 //
 // GPIO24 - GPIO Settings
 //
-#define MTR1_PM_nFAULT_GPIO_GPIO_PIN_CONFIG GPIO_24_GPIO24
+#define MTR1_PM_nFAULT_GPIO_GPIO_PIN_CONFIG GPIO_29_GPIO29
 
 //
 // SCIB -> MotorControlWorkbench_transferLayer_SCI Pinmux
@@ -159,7 +147,7 @@ extern "C"
 #define MTR1_IV_ADC_SOC_NUM_RESULT_BASE ADCARESULT_BASE
 #define MTR1_IV_ADC_SOC_NUM_SAMPLE_WINDOW 120
 #define MTR1_IV_ADC_SOC_NUM_TRIGGER_SOURCE ADC_TRIGGER_EPWM1_SOCA
-#define MTR1_IV_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN2
+#define MTR1_IV_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN11   // PGA2_OUT = A11/B10/C0 (pin J3-25), phase V (shunt in J3-28)
 #define MTR1_VU_ADC_SOC_NUM ADC_SOC_NUMBER1
 #define MTR1_VU_ADC_SOC_NUM_FORCE ADC_FORCE_SOC1
 #define MTR1_VU_ADC_SOC_NUM_ADC_BASE ADCA_BASE
@@ -179,7 +167,7 @@ void MTR1_ADCA_init();
 #define MTR1_IU_ADC_SOC_NUM_RESULT_BASE ADCBRESULT_BASE
 #define MTR1_IU_ADC_SOC_NUM_SAMPLE_WINDOW 120
 #define MTR1_IU_ADC_SOC_NUM_TRIGGER_SOURCE ADC_TRIGGER_EPWM1_SOCA
-#define MTR1_IU_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN3
+#define MTR1_IU_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN5    // PGA3_OUT = B5/D15/E15 (pin J7-68), phase U (shunt in J3-29)
 #define MTR1_VV_ADC_SOC_NUM ADC_SOC_NUMBER1
 #define MTR1_VV_ADC_SOC_NUM_FORCE ADC_FORCE_SOC1
 #define MTR1_VV_ADC_SOC_NUM_ADC_BASE ADCB_BASE
@@ -193,7 +181,7 @@ void MTR1_ADCA_init();
 #define MTR1_VDC_ADC_SOC_NUM_RESULT_BASE ADCBRESULT_BASE
 #define MTR1_VDC_ADC_SOC_NUM_SAMPLE_WINDOW 173.33333333333334
 #define MTR1_VDC_ADC_SOC_NUM_TRIGGER_SOURCE ADC_TRIGGER_EPWM1_SOCA
-#define MTR1_VDC_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN11
+#define MTR1_VDC_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN8    // VM sense: J3-26 wired to J7-66 (A4/B8), R24 removed
 #define MTR1_IU_ADC_PPB_NUM ADC_PPB_NUMBER1
 #define MTR1_IU_ADC_PPB_NUM_SOC ADC_SOC_NUMBER0
 void MTR1_VDC_init();
@@ -206,14 +194,14 @@ void MTR1_VDC_init();
 #define MTR1_IW_ADC_SOC_NUM_RESULT_BASE ADCCRESULT_BASE
 #define MTR1_IW_ADC_SOC_NUM_SAMPLE_WINDOW 120
 #define MTR1_IW_ADC_SOC_NUM_TRIGGER_SOURCE ADC_TRIGGER_EPWM1_SOCA
-#define MTR1_IW_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN4
+#define MTR1_IW_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN4    // PGA1_OUT = A14/B14/C4 (pin J3-26), phase W (shunt in J3-27)
 #define MTR1_VW_ADC_SOC_NUM ADC_SOC_NUMBER1
 #define MTR1_VW_ADC_SOC_NUM_FORCE ADC_FORCE_SOC1
 #define MTR1_VW_ADC_SOC_NUM_ADC_BASE ADCC_BASE
 #define MTR1_VW_ADC_SOC_NUM_RESULT_BASE ADCCRESULT_BASE
 #define MTR1_VW_ADC_SOC_NUM_SAMPLE_WINDOW 173.33333333333334
 #define MTR1_VW_ADC_SOC_NUM_TRIGGER_SOURCE ADC_TRIGGER_EPWM1_SOCA
-#define MTR1_VW_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN0
+#define MTR1_VW_ADC_SOC_NUM_CHANNEL ADC_CH_ADCIN8     // phase C voltage: J3-25 wired to J7-67 (B4/C8), R22 removed
 #define MTR1_IW_ADC_PPB_NUM ADC_PPB_NUMBER1
 #define MTR1_IW_ADC_PPB_NUM_SOC ADC_SOC_NUMBER0
 void MTR1_ADCC_init();
@@ -230,14 +218,20 @@ void MTR1_ADCC_init();
 // CMPSS Configurations
 //
 //*****************************************************************************
-#define cmpss_CMPSS3_BASE CMPSS3_BASE
-#define MTR1_CMPSS_U_BASE CMPSS3_BASE    
-#define MTR1_CMPSS_W_BASE CMPSS3_BASE    
-void cmpss_CMPSS3_init();
+// One CMPSS per phase, both comparators (high = +overcurrent, low = -overcurrent)
+// look at the PGA output of that phase (PGAx_OUT_INT = mux value 6):
+//   PGA3 (phase U) -> CMPSS2, PGA2 (phase V) -> CMPSS3, PGA1 (phase W) -> CMPSS1
 #define cmpss_CMPSS1_BASE CMPSS1_BASE
-#define MTR1_CMPSS_V_BASE CMPSS1_BASE    
-#define cmpss_CMPSS1_LOW_COMP_BASE CMPSS1_BASE    
+#define cmpss_CMPSS2_BASE CMPSS2_BASE
+#define cmpss_CMPSS3_BASE CMPSS3_BASE
+#define cmpss_CMPSS1_LOW_COMP_BASE CMPSS1_BASE
+#define MTR1_CMPSS_U_BASE CMPSS2_BASE
+#define MTR1_CMPSS_V_BASE CMPSS3_BASE
+#define MTR1_CMPSS_W_BASE CMPSS1_BASE
+#define MTR1_CMPSS_MUX_PGA_OUT_INT 6U
 void cmpss_CMPSS1_init();
+void cmpss_CMPSS2_init();
+void cmpss_CMPSS3_init();
 
 //*****************************************************************************
 //
@@ -306,22 +300,16 @@ void SYS_RTOS_TIMER_init();
 //*****************************************************************************
 void MTR1_IS_TRIP_CMPSS_init();
 #define MTR1_IS_TRIP_CMPSS XBAR_TRIP7
-#define MTR1_IS_TRIP_CMPSS_ENABLED_MUXES (XBAR_MUX00 | XBAR_MUX04)
+#define MTR1_IS_TRIP_CMPSS_ENABLED_MUXES (XBAR_MUX00 | XBAR_MUX02 | XBAR_MUX04)
 
 //*****************************************************************************
 //
 // GPIO Configurations
 //
 //*****************************************************************************
-#define MTR1_GATE_EN_GPIO 29
+#define MTR1_GATE_EN_GPIO 28     // J1-3
 void MTR1_GATE_EN_GPIO_init();
-#define MTR1_GATE_MODE_GPIO 22
-void MTR1_GATE_MODE_GPIO_init();
-#define MTR1_GATE_GAIN_GPIO 47
-void MTR1_GATE_GAIN_GPIO_init();
-#define MTR1_GATE_CAL_GPIO 48
-void MTR1_GATE_CAL_GPIO_init();
-#define MTR1_PM_nFAULT_GPIO 24
+#define MTR1_PM_nFAULT_GPIO 29   // J1-4
 void MTR1_PM_nFAULT_GPIO_init();
 
 //*****************************************************************************
@@ -329,7 +317,7 @@ void MTR1_PM_nFAULT_GPIO_init();
 // INPUTXBAR Configurations
 //
 //*****************************************************************************
-#define motor1_XBAR_INPUT1_SOURCE 24
+#define motor1_XBAR_INPUT1_SOURCE 29
 #define motor1_XBAR_INPUT1_INPUT XBAR_INPUT1
 void motor1_XBAR_INPUT1_init();
 
@@ -373,6 +361,55 @@ void MotorControlWorkbench_transferLayer_SCI_init();
 
 //*****************************************************************************
 //
+// SPI Configurations -> DRV8320RS
+//
+//*****************************************************************************
+// LAUNCHXL-F28P55X site 1 (J1-J4) + BOOSTXL-DRV8320RS
+#define MTR1_DRV_SPI_BASE               SPIA_BASE
+// LSPCLK is 150 MHz in this project (SCI runs at 4.6875 Mbaud). SPI_setConfig()
+// needs LSPCLK / bitrate <= 128 (7-bit baud register), so 1 MHz does not work.
+// 2 MHz -> divider 75; DRV8320 accepts up to 10 MHz.
+#define MTR1_DRV_SPI_BITRATE            2000000U
+
+#define MTR1_DRV_SPI_PICO_GPIO          8   // J2-15 -> DRV SDI
+#define MTR1_DRV_SPI_PICO_PIN_CONFIG    GPIO_8_SPIA_PICO
+#define MTR1_DRV_SPI_POCI_GPIO          17  // J2-14 <- DRV SDO
+#define MTR1_DRV_SPI_POCI_PIN_CONFIG    GPIO_17_SPIA_POCI
+#define MTR1_DRV_SPI_CLK_GPIO           9   // J1-7  -> DRV SCLK
+#define MTR1_DRV_SPI_CLK_PIN_CONFIG     GPIO_9_SPIA_CLK
+#define MTR1_DRV_SPI_CS_GPIO            57  // J2-19 -> DRV nSCS
+#define MTR1_DRV_SPI_CS_PIN_CONFIG      GPIO_57_SPIA_PTE
+
+void MTR1_DRV_SPI_init();
+
+//*****************************************************************************
+//
+// PGA current sensing + bias DAC (BOOSTXL-DRV8320RS)
+//
+//*****************************************************************************
+// shunt of phase W (J3-27) -> PGA1, phase V (J3-28) -> PGA2, phase U (J3-29) -> PGA3
+#define MTR1_PGA_W_BASE         PGA1_BASE
+#define MTR1_PGA_V_BASE         PGA2_BASE
+#define MTR1_PGA_U_BASE         PGA3_BASE
+
+// differential gain; the first number of "8 or -7" in SysConfig
+#define MTR1_PGA_GAIN           PGA_GAIN_8
+
+// DACA -> J7-70, wire it to J3-30 (BoosterPack bias input).
+// DAC code 2048 = 1.65 V (VREFHI 1.65 V, gain mode 2).
+// BoosterPack schematic: ISEN = 0.915*Vshunt + 0.085*Vdac (27.4k bias, 2.55k signal).
+// Zero current must give 1.65 V at the PGA output: gain * 0.085 * Vdac = 1.65 V
+// -> gain 8: Vdac = 2.426 V -> code 3011. Fine-tune until ADC reads ~2048.
+#define MTR1_BIAS_DAC_BASE      DACA_BASE
+#define MTR1_BIAS_DAC_CODE      3011U
+
+void MTR1_PGA_init();
+void MTR1_BIAS_DAC_init();
+void DAC_init();
+void PGA_init();
+
+//*****************************************************************************
+//
 // SYNC Scheme Configurations
 //
 //*****************************************************************************
@@ -399,6 +436,7 @@ void	GPIO_init();
 void	INPUTXBAR_init();
 void	INTERRUPT_init();
 void	SCI_init();
+void	SPI_init();
 void	SYNC_init();
 void	SYSCTL_init();
 void	PinMux_init();

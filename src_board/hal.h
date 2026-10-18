@@ -576,6 +576,22 @@ extern void HAL_MTR_setParams(HAL_MTR_Handle handle, USER_Params *pUserParams);
 //! \param[in]  handle  The hardware abstraction layer (HAL) handle
 extern void HAL_enableDRV(HAL_MTR_Handle handle);
 
+//! \brief     Sets up the DRV8320 interface (SPI handle, CS and EN GPIOs)
+//! \param[in] handle  The hardware abstraction layer (HAL) handle
+extern void HAL_setupGate(HAL_MTR_Handle handle);
+
+//! \brief     Writes the DRV8320 control registers from drv8320SPIVars
+//! \param[in] handle  The hardware abstraction layer (HAL) handle
+//! \param[in] drv8320SPIVars  The structure with the register values
+extern void HAL_writeDRVData(HAL_MTR_Handle handle,
+                             DRV8320_SPIVars_t *drv8320SPIVars);
+
+//! \brief     Reads all DRV8320 registers into drv8320SPIVars
+//! \param[in] handle  The hardware abstraction layer (HAL) handle
+//! \param[in] drv8320SPIVars  The structure the register values go into
+extern void HAL_readDRVData(HAL_MTR_Handle handle,
+                            DRV8320_SPIVars_t *drv8320SPIVars);
+
 
 
 //! \brief     Sets up the CPU timer for time base
@@ -829,10 +845,12 @@ static inline void HAL_clearMtrFaultStatus(HAL_MTR_Handle handle)
 
     // Clear any comparator digital filter output latch
     CMPSS_clearFilterLatchHigh(obj->cmpssHandle[0]);
+    CMPSS_clearFilterLatchLow(obj->cmpssHandle[0]);
 
     CMPSS_clearFilterLatchHigh(obj->cmpssHandle[1]);
     CMPSS_clearFilterLatchLow(obj->cmpssHandle[1]);
 
+    CMPSS_clearFilterLatchHigh(obj->cmpssHandle[2]);
     CMPSS_clearFilterLatchLow(obj->cmpssHandle[2]);
 
     // Clear any Trip Zone flag

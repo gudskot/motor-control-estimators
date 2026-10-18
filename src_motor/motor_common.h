@@ -131,7 +131,7 @@ extern "C"
 #define MTR_FAULT_OV_BRAKE             M_OVER_VOLTAGE_BIT      
 
 #define MTR_FAULT_ENABLE_OC             M_MODULE_OVER_CURRENT_BIT              \
-                                      + M_OVER_PEAK_CURRENT_BIT
+                                      + M_OVER_PEAK_CURRENT_BIT                 
 
 #define MTR_FAULT_ENABLE_OC_OUV         M_OVER_VOLTAGE_BIT                     \
                                       + M_UNDER_VOLTAGE_BIT                    \
@@ -192,9 +192,9 @@ extern "C"
 #define MTR_FAULT_DISABLE_ALL           0x0000
 
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_2)
-#define MTR1_FAULT_MASK_SET             MTR_FAULT_ENABLE_OC
+#define MTR1_FAULT_MASK_SET             (MTR_FAULT_ENABLE_OC | M_HARDWARE_BITS)
 #else
-#define MTR1_FAULT_MASK_SET             MTR_FAULT_ENABLE_OC_OUV
+#define MTR1_FAULT_MASK_SET             (MTR_FAULT_ENABLE_OC_OUV | M_HARDWARE_BITS)
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_2)
 
 #define MOTOR_CTRL_STATUS_CLR       0x00E0

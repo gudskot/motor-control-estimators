@@ -55,6 +55,7 @@ extern "C"
 
 // modules
 #include "hal_data.h"
+#include "drv8320.h"
 
 // platforms
 
@@ -117,9 +118,9 @@ typedef struct _HAL_MTR_Obj_
 
   uint32_t       gateEnableGPIO;
 
-  uint32_t       gateModeGPIO;
-  uint32_t       gateGainGPIO;
-  uint32_t       gateCalGPIO;
+  DRV8320_Handle    drv8320Handle;  //!< the DRV8320 interface handle
+  DRV8320_Obj       drv8320;        //!< the DRV8320 interface object
+  DRV8320_SPIVars_t drvSPIVars;     //!< DRV8320 register image (watch in debugger)
 
 
   uint32_t       qepHandle;           //!< the QEP handle
