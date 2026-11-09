@@ -239,7 +239,9 @@ void USER_setMotor1Params(userParams_Handle handle, MOTORSETS_Handle motorSetHan
     objUser->RsOnLine_angleDelta_rad = (float32_t)0.0005f;          // unit=rad
     objUser->RsOnLine_pole_rps = MATH_TWO_PI * (float32_t)0.1f;     // 0.1Hz
 
+#ifdef FAST
     objUser->freqNearZeroSpeedLimit_Hz = USER_MOTOR1_FREQ_NEARZEROLIMIT_Hz;
+#endif //!FAST
     return;
 } // end of USER_setParams() function
 

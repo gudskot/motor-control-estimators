@@ -67,9 +67,11 @@ MOTOR_CtrlVars_t motorCtrlVars_M1;
 MOTOR_SetVars_t motorSetVars_M1;
 #pragma DATA_SECTION(motorSetVars_M1, "ctrl_data");  
 
+#ifdef FAST
 //!< the voltage Clarke transform object
 CLARKE_Obj    clarke_V_M1;
 #pragma DATA_SECTION(clarke_V_M1, "foc_data");
+#endif //!FAST
 
 //!< the current Clarke transform object
 CLARKE_Obj    clarke_I_M1;
@@ -110,11 +112,13 @@ SVGEN_Obj     svgen_M1;
 //!< the speed reference trajectory object
 TRAJ_Obj     traj_spd_M1;
 #pragma DATA_SECTION(traj_spd_M1, "foc_data");
+#ifdef FAST
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
 //!< the Angle Generate onject for open loop control
 ANGLE_GEN_Obj    angleGen_M1;
 #pragma DATA_SECTION(angleGen_M1, "foc_data");
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+#endif //!FAST
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control
@@ -140,27 +144,22 @@ void initMotor1Handles(MOTOR_Handle handle)
     obj->motorSetsHandle = &motorSetVars_M1;
     obj->userParamsHandle = &userParams_M1;
 
-
-
-
-
-
+#ifdef FAST
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
     // initialize the angle generate module
     obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+#endif //!FAST
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     // initialize the Vs per Freq module
     obj->VsFreqHandle = VS_FREQ_init(&VsFreq_M1, sizeof(VsFreq_M1));
 #endif // (DMC_BUILDLEVEL == DMC_LEVEL_2)
 
-
-
-
-
+#ifdef FAST
     // initialize the Clarke modules
     obj->clarkeHandle_V = CLARKE_init(&clarke_V_M1, sizeof(clarke_V_M1));
+#endif //!FAST
 
     // initialize the Clarke modules
     obj->clarkeHandle_I = CLARKE_init(&clarke_I_M1, sizeof(clarke_I_M1));
@@ -188,12 +187,10 @@ void initMotor1Handles(MOTOR_Handle handle)
     // initialize the space vector generator module
     obj->svgenHandle = SVGEN_init(&svgen_M1, sizeof(svgen_M1));
 
-
-
-
-
+#ifdef FAST
     // initialize the estimator
     obj->estHandle = EST_initEst(MTR_1);
+#endif //!FAST
 
     return;
 }
@@ -204,6 +201,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
 
+#ifdef FAST
     USER_Params *objUser = (USER_Params *)(handle->userParamsHandle);
 
     // initialize the user parameters
@@ -213,6 +211,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     objSets->motorModel = M1_Teknic_M2310PL;
 
     objSets->voltageFilter_Hz = USER_M1_VOLTAGE_FILTER_POLE_Hz;
+#endif //!FAST
 
     objSets->ctrlPeriod_sec = USER_M1_CTRL_PERIOD_sec;
     objSets->ctrlFreq_Hz = USER_M1_ISR_FREQ_Hz;
@@ -226,7 +225,6 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     obj->operateMode = OPERATE_MODE_SPEED;
 
     objSets->flyingStartTimeDelay = (uint16_t)(objSets->ctrlFreq_Hz * 0.001f);  // 1ms
-    // objSets->alignTimeDelay = (uint16_t)(objSets->ctrlFreq_Hz * USER_M1_ALIGN_TIME_S);
     objSets->alignTimeDelay = (uint16_t)(objSets->ctrlFreq_Hz * 2.0f);
     objSets->forceRunTimeDelay = (uint16_t)(objSets->ctrlFreq_Hz * 1.0f);       // 1.0s
     objSets->startupTimeDelay = (uint16_t)(objSets->ctrlFreq_Hz * 2.0f);        // 2.0s
@@ -251,6 +249,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     objSets->maxPeakCurrent_A = USER_M1_ADC_FULL_SCALE_CURRENT_A * 0.4975f;
     objSets->maxVsMag_pu = USER_M1_MAX_VS_MAG_PU;
 
+#ifdef FAST
     objSets->maxCurrentResEst_A = USER_MOTOR1_RES_EST_CURRENT_A;
     objSets->maxCurrentIndEst_A = USER_MOTOR1_IND_EST_CURRENT_A;
     objSets->fluxExcFreq_Hz = USER_MOTOR1_FLUX_EXC_FREQ_Hz;
@@ -270,6 +269,8 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     objSets->directionPole_rps = USER_M1_DIRECTION_POLE_rps;
     objSets->fluxPole_rps = USER_M1_FLUX_POLE_rps;
     objSets->angleESTDelayed_sf = 0.5f;     // 0.5f
+#endif //!FAST
+
     objSets->anglePLLDelayed_sf = 0.2f;     // 0.2f
 
     objSets->currentInv_sf = USER_M1_CURRENT_INV_SF;
@@ -349,6 +350,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 
     obj->faultMtrMask.all = MTR1_FAULT_MASK_SET;
 
+#ifdef FAST
     if(objUser->flag_bypassMotorId == true)
     {
         // obj->svmMode = SVM_MIN_C;
@@ -358,6 +360,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
         obj->svmMode = SVM_COM_C;
         obj->flagEnableFWC = false;
     }
+#endif //!FAST
 
     obj->flagEnableForceAngle = true;
 
@@ -370,6 +373,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     obj->flagEnableSpeedCtrl = true;
     obj->flagEnableCurrentCtrl = true;
 
+#ifdef FAST
     obj->estState = EST_STATE_IDLE;
     obj->trajState = EST_TRAJ_STATE_IDLE;
 
@@ -379,6 +383,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 
     obj->speedEST_Hz = 0.0f;
     obj->angleEST_rad = 0.0f;
+#endif //!FAST
 
     obj->speedAbs_Hz = 0.0f;
     obj->speedFilter_Hz = 0.0f;
@@ -407,6 +412,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 
     SVGEN_setMode(obj->svgenHandle, SVM_COM_C);
 
+#ifdef FAST
     // for Rs re-calculation
     obj->flagEnableRsRecalc = false;
     obj->flagEnableLsUpdate = false;
@@ -419,6 +425,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     // initialize the angle generate module
     ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+#endif //!FAST
 
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
     obj->Idq_set_A.value[0] = 0.0f;
@@ -519,9 +526,7 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
     TRAJ_setMaxValue(obj->trajHandle_Is, objSets->maxCurrentSet_A);
     TRAJ_setMaxDelta(obj->trajHandle_Is, (objSets->maxCurrentSet_A * 0.001f * objUser->ctrlPeriod_sec));
 
-
-
-
+#ifdef FAST
     // set the default estimator parameters
     EST_setParams(obj->estHandle, obj->userParamsHandle);
     EST_setFlag_enableForceAngle(obj->estHandle, obj->flagEnableForceAngle);
@@ -547,6 +552,7 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
 
     // set the Clarke parameters
     setupClarke_V(obj->clarkeHandle_V, objUser->numVoltageSensors);    
+#endif //!FAST
 
 
 
@@ -572,7 +578,9 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
     // update the coefficient of the controllers gains
     updateControllerSF(handle);
 
+#ifdef FAST
     obj->flagMotorIdentified = EST_isMotorIdentified(obj->estHandle);
+#endif //!FAST
 
     obj->flagEnableTuneController = true;
 
@@ -598,10 +606,12 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
     obj->adcData.offset_I_ad.value[1]  = USER_M1_IB_OFFSET_AD;
     obj->adcData.offset_I_ad.value[2]  = USER_M1_IC_OFFSET_AD;
     
+#ifdef FAST
     // Offsets in phase voltage sensing
     obj->adcData.offset_V_sf.value[0]  = USER_M1_VA_OFFSET_SF;
     obj->adcData.offset_V_sf.value[1]  = USER_M1_VB_OFFSET_SF;
     obj->adcData.offset_V_sf.value[2]  = USER_M1_VC_OFFSET_SF;
+#endif //!FAST
 
     // calculate motor protection value
     calcMotorOverCurrentThreshold(handle);
@@ -614,7 +624,9 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
         float32_t offsetK1 = 0.998001f;  // Offset filter coefficient K1: 0.05/(T+0.05);
         float32_t offsetK2 = 0.001999f;  // Offset filter coefficient K2: T/(T+0.05);
         float32_t invCurrentSf = 1.0f / obj->adcData.current_sf;
+#ifdef FAST
         float32_t invVdcbus;
+#endif //!FAST
 
         uint16_t offsetCnt;
 
@@ -669,6 +681,7 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
                         offsetK1 * obj->adcData.offset_I_ad.value[2] +
                         obj->adcData.I_A.value[2] * offsetK2;
 
+#ifdef FAST
                 invVdcbus = 1.0f / obj->adcData.VdcBus_V;
 
                 // Offsets in phase voltage sensing
@@ -683,6 +696,7 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
                 obj->adcData.offset_V_sf.value[2] =
                          offsetK1 * obj->adcData.offset_V_sf.value[2] +
                          (invVdcbus * obj->adcData.V_V.value[2]) * offsetK2;
+#endif //!FAST
             }
             else if (offsetCnt <= 1000)
             {
@@ -725,6 +739,7 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
         obj->faultMtrNow.bit.currentOffset = 1;
     }
 
+#ifdef FAST
     if( (obj->adcData.offset_V_sf.value[0] > USER_M1_VA_OFFSET_SF_MAX) ||
         (obj->adcData.offset_V_sf.value[0] < USER_M1_VA_OFFSET_SF_MIN) )
     {
@@ -742,6 +757,7 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
     {
         obj->faultMtrNow.bit.voltageOffset = 1;
     }
+#endif //!FAST
 
     if((obj->faultMtrNow.bit.voltageOffset == 0) &&
             (obj->faultMtrNow.bit.currentOffset == 0))
@@ -846,28 +862,33 @@ void runMotor1Control(MOTOR_Handle handle)
     {
     }
 
+#ifdef FAST
     // enable or disable bypassLockRotor flag
     if(objUser->motor_type == MOTOR_TYPE_INDUCTION && (obj->flagMotorIdentified == true))
     {
         EST_setFlag_bypassLockRotor(obj->estHandle,
                                     obj->flagBypassLockRotor);
     }
+#endif //!FAST
 
     if(obj->flagRunIdentAndOnLine == true)      // Start the motor
     {
         if(HAL_getPwmEnableStatus(obj->halMtrHandle) == false)
         {
+#ifdef FAST
             // enable the estimator
             EST_enable(obj->estHandle);
 
             // enable the trajectory generator
             EST_enableTraj(obj->estHandle);
+#endif //!FAST
 
             // enable the PWM
             HAL_enablePWM(obj->halMtrHandle);
         }
-        
+#ifdef FAST
         if(obj->flagMotorIdentified == true)
+#endif //!FAST
         {
             if(obj->speedRef_Hz > 0.0f)
             {
@@ -877,11 +898,13 @@ void runMotor1Control(MOTOR_Handle handle)
             {
                 obj->direction = -1.0f;
             }
+#ifdef FAST
             // enable or disable force angle
             EST_setFlag_enableForceAngle(obj->estHandle, obj->flagEnableForceAngle);
 
             // enable or disable stator resistance (Rs) re-calculation
             EST_setFlag_enableRsRecalc(obj->estHandle, obj->flagEnableRsRecalc);
+#endif //!FAST
 
             // Sets the target speed for the speed trajectory
             TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
@@ -904,6 +927,7 @@ void runMotor1Control(MOTOR_Handle handle)
                     }
                 }
                 
+#ifdef FAST
                 if(obj->flagEnableLsUpdate ==  true)
                 {
                     // Calculate the Ld and Lq which reduce with current
@@ -924,6 +948,7 @@ void runMotor1Control(MOTOR_Handle handle)
                     EST_setLs_d_H(obj->estHandle, objSets->Ls_d_comp_H);
                     EST_setLs_q_H(obj->estHandle, objSets->Ls_q_comp_H);
                 }
+#endif //!FAST
 
                 PI_setMinMax(obj->piHandle_spd, -objSets->maxCurrent_A, objSets->maxCurrent_A);
                 SVGEN_setMode(obj->svgenHandle, obj->svmMode);
@@ -959,6 +984,7 @@ void runMotor1Control(MOTOR_Handle handle)
         resetMotorControl(handle);
     }
 
+#ifdef FAST
     // check the trajectory generator
     if(EST_isTrajError(obj->estHandle) == true)
     {
@@ -1038,7 +1064,7 @@ void runMotor1Control(MOTOR_Handle handle)
             }
         }
     }
-
+#endif //!FAST
 
     if(obj->flagMotorIdentified == true)
     {
@@ -1057,8 +1083,10 @@ void runMotor1Control(MOTOR_Handle handle)
         }
 
     }
+#ifdef FAST
     // run Rs online
     runRsOnLine(handle);
+    #endif //!FAST
     // update the global variables
     updateGlobalVariables(handle);
 
@@ -1094,11 +1122,8 @@ __interrupt void motor1CtrlISR(void)
 //------------------------------------------------------------------------------
 // 180-degree Sinusoidal Sensorless-FOC
 //******************************************************************************
-  
 
-
-
-
+#ifdef FAST
     // sensorless-FOC
     MATH_Vec2 phasor;
 
@@ -1288,15 +1313,15 @@ __interrupt void motor1CtrlISR(void)
     // run the Park transform
     PARK_run(obj->parkHandle_I, &(obj->estInputData.Iab_A),
              (MATH_vec2 *)&(obj->Idq_in_A));
-
+             
+#endif //!FAST
 // End of MOTOR1_FAST
+
 //------------------------------------------------------------------------------
 
 //---------- Common Speed and Current Loop for all observers -------------------
 #if (DMC_BUILDLEVEL >= DMC_LEVEL_4)
     
-
-
     // run the speed controller
     obj->counterSpeed++;
 
@@ -1332,8 +1357,10 @@ __interrupt void motor1CtrlISR(void)
 
     obj->IdqRef_A.value[0] = obj->Idq_out_A.value[0] + obj->IdRated_A + obj->IdInj_A;
 
+#ifdef FAST
     // update Id reference for Rs OnLine
     EST_updateId_ref_A(obj->estHandle, &obj->IdqRef_A.value[0]);
+#endif //!FAST
 
     obj->IdqRef_A.value[1] = obj->Idq_out_A.value[1] + obj->IqInj_A;
 #endif // (DMC_BUILDLEVEL >= DMC_LEVEL_4)
@@ -1368,9 +1395,11 @@ __interrupt void motor1CtrlISR(void)
                       obj->IdqRef_A.value[1], obj->Idq_in_A.value[1],
                       obj->Vdq_ffwd_V.value[1], (float32_t*)&obj->Vdq_out_V.value[1]);
 
+#ifdef FAST
         // set the Id reference value in the estimator
         EST_setId_ref_A(obj->estHandle, obj->IdqRef_A.value[0]);
         EST_setIq_ref_A(obj->estHandle, obj->IdqRef_A.value[1]);
+#endif //!FAST
     }
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
@@ -1387,8 +1416,10 @@ __interrupt void motor1CtrlISR(void)
     IPARK_run(obj->iparkHandle_V,
               &obj->Vdq_out_V, &obj->Vab_out_V);
 
+#ifdef FAST
     // setup the space vector generator (SVGEN) module
     SVGEN_setup(obj->svgenHandle, obj->estOutputData.oneOverDcBus_invV);
+#endif //!FAST
     
     // run the space vector generator (SVGEN) module
     SVGEN_run(obj->svgenHandle,
@@ -1417,14 +1448,6 @@ __interrupt void motor1CtrlISR(void)
     // Collect current and voltage data to calculate the RMS value
     collectRMSData(motorHandle_M1);
 
-
-
-
-
-
-
-
-        
     return;
 } // end of motor1CtrlISR() function
 

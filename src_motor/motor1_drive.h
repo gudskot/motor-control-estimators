@@ -114,11 +114,12 @@ extern TRAJ_Obj     traj_spd_M1;
 extern TRAJ_Obj     traj_Is_M1;
 
 
-
+#ifdef FAST
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
 //!< the Angle Generate onject for open loop control
 extern ANGLE_GEN_Obj    angleGen_M1;
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+#endif //!FAST
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control

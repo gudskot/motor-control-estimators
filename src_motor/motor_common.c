@@ -132,6 +132,7 @@ void restartMotorControl(MOTOR_Handle handle)
 {
     MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
 
+#ifdef FAST
     USER_Params *objUser = (USER_Params *)(handle->userParamsHandle);
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
 
@@ -180,7 +181,7 @@ void restartMotorControl(MOTOR_Handle handle)
     {
         obj->controlStatus = MOTOR_ALIGNMENT;
     }
-
+#endif //!FAST
 
 
     obj->speed_int_Hz = 0.0f;
@@ -213,11 +214,14 @@ void resetMotorControl(MOTOR_Handle handle)
 
     if(obj->flagEnableFlyingStart == false)
     {
+#ifdef FAST
         // disable the estimator
         EST_disable(obj->estHandle);
 
         // disable the trajectory generator
         EST_disableTraj(obj->estHandle);
+#endif //!FAST
+
         TRAJ_setIntValue(obj->trajHandle_spd, 0.0f);
     }
     else
@@ -274,7 +278,7 @@ void runMotorMonitor(MOTOR_Handle handle)
     MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(obj->motorSetsHandle);
 
-
+#ifdef FAST
     if(obj->flagEnableRsOnLine == true)
     {
         if(obj->RsOnlineMode == RSONLINE_CONTINUE)
@@ -302,6 +306,7 @@ void runMotorMonitor(MOTOR_Handle handle)
         obj->flagStartRsOnLine = false;
         obj->RsOnlineTimeCnt = 0;
     }
+#endif //!FAST
 
     if(obj->stopWaitTimeCnt > 0)
     {
@@ -684,7 +689,7 @@ void setupControllers(MOTOR_Handle handle)
 } // end of setupControllers() function
 
 
-
+#ifdef FAST
 void runRsOnLine(MOTOR_Handle handle)
 {
     MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
@@ -720,6 +725,7 @@ void runRsOnLine(MOTOR_Handle handle)
 
     return;
 } // end of runRsOnLine() function
+#endif //!FAST
 
 
 // update motor control variables
@@ -727,6 +733,7 @@ void updateGlobalVariables(MOTOR_Handle handle)
 {
     MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
 
+#ifdef FAST
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
     USER_Params *objUser = (USER_Params *)(handle->userParamsHandle);
 
@@ -774,6 +781,7 @@ void updateGlobalVariables(MOTOR_Handle handle)
     obj->powerMotor_W = EST_computePower_W(obj->estHandle);
 
     // obj->powerReal_W = obj->torque_Nm * obj->speedAbs_Hz * obj->power_sf;
+#endif //!FAST
 
     // Calculate the RMS stator current
     obj->Is_A = sqrtf(obj->Idq_in_A.value[0] * obj->Idq_in_A.value[0] +
@@ -860,6 +868,7 @@ void tuneControllerGains(MOTOR_Handle handle)
 
     if(obj->flagEnableTuneController == true)
     {
+#ifdef FAST
         if(obj->flagMotorIdentified == true)
         {
             if(obj->controlStatus == MOTOR_CTRL_RUN)
@@ -906,6 +915,7 @@ void tuneControllerGains(MOTOR_Handle handle)
 
             }
         }
+#endif //!FAST
     }
 
     return;
@@ -955,6 +965,7 @@ void updateControllerSF(MOTOR_Handle handle)
 }   // End of updateControllerSF()
 
 
+#ifdef FAST
 //! \brief  update the coefficient of the controllers gains
 void updateFASTParameters(MOTOR_Handle handle)
 {
@@ -978,6 +989,7 @@ void updateFASTParameters(MOTOR_Handle handle)
 
     return;
 }
+#endif //!FAST
 
 //
 //-- end of this file ----------------------------------------------------------

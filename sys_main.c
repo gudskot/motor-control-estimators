@@ -75,11 +75,13 @@ void main(void)
     HAL_clearDataRAM((void *)loadStart_datalog_data, (uint16_t)loadSize_datalog_data);
     HAL_clearDataRAM((void *)loadStart_SFRA_F32_Data, (uint16_t)loadSize_SFRA_F32_Data);
 
+#ifdef FAST
     systemVars.estType = EST_TYPE_FAST;         // the estimator is only FAST
     motorVars_M1.estimatorType = SLEST_TYPE_FAST_ONLY;
     motorVars_M1.estimatorMode = ESTIMATOR_MODE_FAST;
 
     systemVars.estLibVersion = EST_getFASTVersion();   // gets FAST version 
+#endif //!FAST
 
     systemVars.currentSenseType = CURSEN_TYPE_THREE_SHUNT;
     motorVars_M1.currentSenType = LSC_TYPE_THREE_SHUNT;

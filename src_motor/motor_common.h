@@ -387,8 +387,10 @@ typedef struct _MOTOR_SetVars_t_
     uint16_t unbalanceTimeSet;
     uint16_t lostPhaseTimeSet;
 
+#ifdef FAST
     uint16_t RsOnlineWaitTimeSet;
     uint16_t RsOnlineWorkTimeSet;
+#endif //!FAST
 
     uint16_t startupTimeDelay;          // P-138
     uint16_t stopWaitTimeSet;
@@ -413,8 +415,10 @@ typedef struct _MOTOR_SetVars_t_
 
     float32_t Ls_min_H;                 // P-46
 
+#ifdef FAST
     float32_t Ls_d_Icomp_coef;          // P-44
     float32_t Ls_q_Icomp_coef;          // P-45
+#endif //!FAST
 
     float32_t Gain_speed_high_Hz;       // P-75
     float32_t Gain_speed_low_Hz;        // P-76
@@ -512,6 +516,7 @@ typedef struct _MOTOR_SetVars_t_
     MOTOR_Type_e  motor_type;           // P-14 the motor type
     uint16_t  numPolePairs;             // P-15 the number of pole pairs for the motor
 
+#ifdef FAST
     float32_t maxCurrentResEst_A;       // P-22 the maximum current value for resistance estimation, A
     float32_t maxCurrentIndEst_A;       // P-23 the maximum current value for inductance estimation, A
     float32_t fluxExcFreq_Hz;           // P-24 the flux excitation frequency, Hz
@@ -525,6 +530,7 @@ typedef struct _MOTOR_SetVars_t_
 
     float32_t RsOnLine_Rdelta_Ohm;      // P-31
     float32_t RsOnLine_Adelta_rad;      // P-32
+#endif //!FAST
 
     float32_t voltageFilter_Hz;         // P-33 the analog voltage filter pole location, Hz
     float32_t voltageScale_V;           // P-34 the maximum voltage at the AD converter
@@ -716,6 +722,7 @@ typedef struct _MOTOR_Vars_t_
     bool flagStartRsOnLine;
     bool flagStartFWC;
 
+#ifdef FAST
     bool flagEnableFilterIs;        // defined(MOTOR1_FILTERIS)
     bool flagEnableFilterVs;        // defined(MOTOR1_FILTERVS)
 
@@ -728,6 +735,7 @@ typedef struct _MOTOR_Vars_t_
 
     EST_State_e estState;
     EST_Traj_State_e trajState;
+#endif //!FAST
 
     FAULT_MTR_REG_t faultMtrNow;
     FAULT_MTR_REG_t faultMtrUse;
@@ -957,6 +965,7 @@ typedef struct _MOTOR_Vars_t_
 
     HAL_MTR_Handle halMtrHandle;
 
+#ifdef FAST
     // the rotor angle compensation value
     float32_t angleESTCOMP_rad;
 
@@ -975,6 +984,8 @@ typedef struct _MOTOR_Vars_t_
 
     // the handle for the voltage Clarke transform
     CLARKE_Handle clarkeHandle_V;
+#endif //!FAST
+
      // the handle for the current Clarke transform
     CLARKE_Handle clarkeHandle_I;
 
@@ -1007,11 +1018,13 @@ typedef struct _MOTOR_Vars_t_
     TRAJ_Handle  trajHandle_Is;
 
 
-
+#ifdef FAST
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
     //!< the handles for Angle Generate for open loop control
     ANGLE_GEN_Handle angleGenHandle;
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+#endif //!FAST
+
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     //!< the handles for Vs per Freq for open loop control
     VS_FREQ_Handle VsFreqHandle;
@@ -1061,6 +1074,7 @@ static inline void updateControllers(MOTOR_Handle handle)
     MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
 
+#ifdef FAST
     if((obj->controlStatus == MOTOR_CTRL_RUN) && (obj->flagMotorIdentified == true))
     {
         // update the Id controller
@@ -1073,6 +1087,7 @@ static inline void updateControllers(MOTOR_Handle handle)
         PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
 
     }
+#endif //!FAST
 }
 
 //! \brief  Get the controllers Parameters
@@ -1126,11 +1141,13 @@ extern void updateControllerSF(MOTOR_Handle handle);
 //! \brief  update the ESMO parameters
 extern void updateESMOParameters(MOTOR_Handle handle);
 
+#ifdef FAST
 //! \brief  update the FAST parameters
 extern void updateFASTParameters(MOTOR_Handle handle);
 
 //! \brief  Sets up the current controllers
 extern void setupCurrentControllers(MOTOR_Handle handle);
+#endif //!FAST
 
 //! \brief  Sets up the controllers
 extern void setupControllers(MOTOR_Handle handle);
@@ -1144,8 +1161,10 @@ extern void calculateRMSData(MOTOR_Handle handle);
 //! \brief run motor monitor in main loop timer
 extern void runMotorMonitor(MOTOR_Handle handle);
 
+#ifdef FAST
 //! \brief Rs online calibration
 extern void runRsOnLine(MOTOR_Handle handle);
+#endif //!FAST
 
 //! \brief      Updates the global motor variables
 //! \param[in]  estHandle   The estimator (EST) handle
