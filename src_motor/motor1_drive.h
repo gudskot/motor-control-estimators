@@ -119,12 +119,23 @@ extern TRAJ_Obj     traj_Is_M1;
 //!< the Angle Generate onject for open loop control
 extern ANGLE_GEN_Obj    angleGen_M1;
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#endif //!FAST
+#elif eSMO
+//!< the Angle Generate onject for open loop control
+extern ANGLE_GEN_Obj    angleGen_M1;
+#endif //!FAST && eSMO
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control
 extern VS_FREQ_Obj    VsFreq_M1;
 #endif // (DMC_BUILDLEVEL == DMC_LEVEL_2)
+
+#ifdef eSMO
+//!< the speedfr object
+extern SPDFR_Obj spdfr_M1;
+
+//!< the esmo object
+extern ESMO_Obj esmo_M1;
+#endif //!eSMO
 
 // *****************************************************************************
 // the function prototypes

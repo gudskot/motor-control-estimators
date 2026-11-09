@@ -118,7 +118,11 @@ TRAJ_Obj     traj_spd_M1;
 ANGLE_GEN_Obj    angleGen_M1;
 #pragma DATA_SECTION(angleGen_M1, "foc_data");
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#endif //!FAST
+#elif eSMO
+//!< the Angle Generate onject for open loop control
+ANGLE_GEN_Obj    angleGen_M1;
+#pragma DATA_SECTION(angleGen_M1, "foc_data");
+#endif //!FAST && eSMO
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control
@@ -126,9 +130,15 @@ VS_FREQ_Obj    VsFreq_M1;
 #pragma DATA_SECTION(VsFreq_M1, "foc_data");
 #endif // (DMC_BUILDLEVEL == DMC_LEVEL_2)
 
+#ifdef eSMO
+//!< the speedfr object
+SPDFR_Obj spdfr_M1;
+#pragma DATA_SECTION(spdfr_M1, "foc_data");
 
-
-
+//!< the esmo object
+ESMO_Obj   esmo_M1;
+#pragma DATA_SECTION(esmo_M1, "foc_data");
+#endif //!eSMO
 
 
 // the control handles for motor 1
@@ -149,7 +159,10 @@ void initMotor1Handles(MOTOR_Handle handle)
     // initialize the angle generate module
     obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#endif //!FAST
+#elif eSMO
+    // initialize the angle generate module
+    obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
+#endif //!FAST && eSMO
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     // initialize the Vs per Freq module
@@ -159,7 +172,13 @@ void initMotor1Handles(MOTOR_Handle handle)
 #ifdef FAST
     // initialize the Clarke modules
     obj->clarkeHandle_V = CLARKE_init(&clarke_V_M1, sizeof(clarke_V_M1));
-#endif //!FAST
+#elif eSMO
+    // initialize the esmo
+    obj->esmoHandle = ESMO_init(&esmo_M1, sizeof(esmo_M1));
+
+    // initialize the spdfr
+    obj->spdfrHandle = SPDFR_init(&spdfr_M1, sizeof(spdfr_M1));
+#endif //!FAST && eSMO
 
     // initialize the Clarke modules
     obj->clarkeHandle_I = CLARKE_init(&clarke_I_M1, sizeof(clarke_I_M1));
@@ -309,7 +328,18 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 
     objSets->overModulation = USER_M1_MAX_VS_MAG_PU;
 
-
+#ifdef eSMO
+    objSets->esmo_FAST_fsw_Hz = USER_MOTOR1_FREQ_HIGH_Hz;
+    objSets->esmo_KslideMax = USER_MOTOR1_KSLIDE_MAX;
+    objSets->esmo_KslideMin = USER_MOTOR1_KSLIDE_MIN;
+    objSets->esmo_LpfFc_Hz = USER_MOTOR1_SPEED_LPF_FC_Hz;
+    objSets->esmo_filterFc_sf = USER_MOTOR1_BEMF_KSLF_FC_SF;
+    objSets->esmo_E0 = USER_MOTOR1_BEMF_THRESHOLD;
+    objSets->esmo_PLL_KpMax = USER_MOTOR1_PLL_KP_MAX;
+    objSets->esmo_PLL_KpMin = USER_MOTOR1_PLL_KP_MIN;
+    objSets->esmo_PLL_KpSF = USER_MOTOR1_PLL_KP_SF;
+    objSets->esmo_PLL_Ki = USER_MOTOR1_PLL_KI;
+#endif //!eSMO
     
     objSets->restartWaitTimeSet = USER_M1_RESTART_WAIT_TIME_SET;
     objSets->stopWaitTimeSet = USER_M1_STOP_WAIT_TIME_SET;
@@ -360,7 +390,10 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
         obj->svmMode = SVM_COM_C;
         obj->flagEnableFWC = false;
     }
-#endif //!FAST
+#elif eSMO
+    obj->svmMode = SVM_COM_C;
+    obj->flagEnableFWC = false;
+#endif //!FAST && eSMO
 
     obj->flagEnableForceAngle = true;
 
@@ -383,7 +416,11 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 
     obj->speedEST_Hz = 0.0f;
     obj->angleEST_rad = 0.0f;
-#endif //!FAST
+#elif eSMO
+    obj->estimatorMode = ESTIMATOR_MODE_ESMO;
+
+    obj->flagEnableAlignment = true;
+#endif //!FAST && eSMO
 
     obj->speedAbs_Hz = 0.0f;
     obj->speedFilter_Hz = 0.0f;
@@ -393,6 +430,10 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     obj->angleFOC_rad = 0.0f;
     obj->angleGen_rad = 0.0f;
 
+#ifdef eSMO
+    obj->speedPLL_Hz = 0.0f;
+    obj->anglePLL_rad = 0.0f;
+#endif //!eSMO
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_1)
     // output PWM teste
@@ -425,7 +466,10 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     // initialize the angle generate module
     ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#endif //!FAST
+#elif eSMO
+    // initialize the angle generate module
+    ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
+#endif //!FAST && eSMO
 
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
     obj->Idq_set_A.value[0] = 0.0f;
@@ -441,10 +485,6 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
                         USER_MOTOR1_FREQ_LOW_Hz, USER_MOTOR1_FREQ_HIGH_Hz,
                         USER_MOTOR1_VOLT_MIN_V, USER_MOTOR1_VOLT_MAX_V);    
 #endif // (DMC_BUILDLEVEL == DMC_LEVEL_2)
-    
-
-    
-
     
     // setup the coefficient of the controllers gains
     setupControllerSF(handle);
@@ -474,7 +514,6 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
                             ( 1.0f / 1000.0f/ 1000.0f);
                             
     objSets->maxAccel_Hzps = objSets->accelRun_Hzps;
-//    objSets->alignTimeDelay = (uint16_t)(objUser->ctrlFreq_Hz * USER_M1_ALIGN_TIME_S);
     objSets->alignTimeDelay = (uint16_t)(objSets->ctrlFreq_Hz * 0.1f);
 
     objSets->currentInv_sf = (4096.0f / objSets->currentScale_A);
@@ -551,10 +590,31 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
     }
 
     // set the Clarke parameters
-    setupClarke_V(obj->clarkeHandle_V, objUser->numVoltageSensors);    
-#endif //!FAST
+    setupClarke_V(obj->clarkeHandle_V, objUser->numVoltageSensors); 
+#elif eSMO
+    // set parameters for ESMO controller
+    ESMO_setKslideParams(obj->esmoHandle,
+            USER_MOTOR1_KSLIDE_MAX, USER_MOTOR1_KSLIDE_MIN);
 
+    ESMO_setPLLParams(obj->esmoHandle, USER_MOTOR1_PLL_KP_MAX,
+            USER_MOTOR1_PLL_KP_MIN, USER_MOTOR1_PLL_KP_SF);
 
+    ESMO_setPLLKi(obj->esmoHandle, USER_MOTOR1_PLL_KI);   // Optional
+
+    ESMO_setBEMFThreshold(obj->esmoHandle, USER_MOTOR1_BEMF_THRESHOLD);
+    ESMO_setOffsetCoef(obj->esmoHandle, USER_MOTOR1_THETA_OFFSET_SF);
+    ESMO_setBEMFKslfFreq(obj->esmoHandle, USER_MOTOR1_BEMF_KSLF_FC_SF);
+    ESMO_setSpeedFilterFreq(obj->esmoHandle, USER_MOTOR1_SPEED_LPF_FC_Hz);
+
+    // set the ESMO controller parameters
+    ESMO_setParams(obj->esmoHandle, obj->userParamsHandle);
+
+    // set the spdfr parameters
+    SPDFR_setParams(obj->spdfrHandle, obj->userParamsHandle);
+
+    obj->anglePLLDelayed_sf = objSets->anglePLLDelayed_sf * MATH_TWO_PI * objSets->ctrlPeriod_sec;
+    obj->frswPos_sf = 0.6f;
+#endif //!FAST && eSMO
 
     #define DEADBAND_usec 1.100f
     #define NOISE_WINDOW_usec 1.55f
@@ -564,13 +624,6 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
                         NOISE_WINDOW_usec,
                         ADC_SAMPLE_usec);        
     HAL_getPWMPeriod(obj->halMtrHandle, &(obj->pwmData));
-
-
-
-
-
-    
-
 
     // setup the controllers, speed, d/q-axis current pid regulator
     setupControllers(handle);
@@ -649,8 +702,6 @@ void runMotor1OffsetsCalculation(MOTOR_Handle handle)
         
         // write the PWM compare values
         HAL_writePWMData(obj->halMtrHandle, &obj->pwmData);
-
-
 
         // enable the PWM
         HAL_enablePWM(obj->halMtrHandle);
@@ -898,16 +949,27 @@ void runMotor1Control(MOTOR_Handle handle)
             {
                 obj->direction = -1.0f;
             }
+
 #ifdef FAST
             // enable or disable force angle
             EST_setFlag_enableForceAngle(obj->estHandle, obj->flagEnableForceAngle);
 
             // enable or disable stator resistance (Rs) re-calculation
             EST_setFlag_enableRsRecalc(obj->estHandle, obj->flagEnableRsRecalc);
-#endif //!FAST
 
             // Sets the target speed for the speed trajectory
             TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
+#elif eSMO
+            // Sets the target speed for the speed trajectory
+            if(obj->controlStatus >= MOTOR_CL_RUNNING)
+            {
+                TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
+            }
+            else
+            {
+                TRAJ_setTargetValue(obj->trajHandle_spd,(objSets->speedForce_Hz * obj->direction));
+            }
+#endif //!FAST && eSMO
 
             if((fabsf(obj->speed_Hz) > objSets->speedStart_Hz) ||
                     (obj->controlStatus == MOTOR_CTRL_RUN))
@@ -1064,7 +1126,9 @@ void runMotor1Control(MOTOR_Handle handle)
             }
         }
     }
-#endif //!FAST
+#elif eSMO
+    obj->flagMotorIdentified = true;
+#endif //!FAST && eSMO
 
     if(obj->flagMotorIdentified == true)
     {
@@ -1090,6 +1154,13 @@ void runMotor1Control(MOTOR_Handle handle)
     // update the global variables
     updateGlobalVariables(handle);
 
+#ifdef eSMO
+    if(obj->controlStatus >= MOTOR_CTRL_RUN)
+    {
+        ESMO_updateFilterParams(obj->esmoHandle);
+        ESMO_updatePLLParams(obj->esmoHandle);
+    }
+#endif //!eSMO
 
     return;
 }   // end of the runMOTOR1Control() function
@@ -1122,7 +1193,6 @@ __interrupt void motor1CtrlISR(void)
 //------------------------------------------------------------------------------
 // 180-degree Sinusoidal Sensorless-FOC
 //******************************************************************************
-
 #ifdef FAST
     // sensorless-FOC
     MATH_Vec2 phasor;
@@ -1314,9 +1384,230 @@ __interrupt void motor1CtrlISR(void)
     PARK_run(obj->parkHandle_I, &(obj->estInputData.Iab_A),
              (MATH_vec2 *)&(obj->Idq_in_A));
              
-#endif //!FAST
 // End of MOTOR1_FAST
+//------------------------------------------------------------------------------
+#elif eSMO
+    // sensorless-FOC
+    MATH_Vec2 phasor;
 
+    ANGLE_GEN_run(obj->angleGenHandle, obj->speed_int_Hz);
+    obj->angleGen_rad = ANGLE_GEN_getAngle(obj->angleGenHandle);
+
+    // run Clarke transform on current
+    CLARKE_run_threeInput(obj->clarkeHandle_I,
+                          &obj->adcData.I_A, &obj->Iab_A);
+
+    if(obj->flagRunIdentAndOnLine == true)
+    {
+        // run a trajectory for speed reference,
+        // so the reference changes with a ramp instead of a step
+        TRAJ_run(obj->trajHandle_spd);
+        obj->enableCurrentCtrl = obj->flagEnableCurrentCtrl;
+        obj->enableSpeedCtrl = obj->flagEnableSpeedCtrl;
+
+    }
+    else
+    {
+        obj->enableSpeedCtrl = false;
+        obj->enableCurrentCtrl = false;
+    }
+
+    obj->speed_int_Hz = TRAJ_getIntValue(obj->trajHandle_spd);
+    obj->oneOverDcBus_invV = 1.0f / obj->adcData.VdcBus_V;
+
+    // run the eSMO
+    //  ESMO_setSpeedRef(obj->esmoHandle, obj->speed_Hz);
+    ESMO_setSpeedRef(obj->esmoHandle, obj->speed_int_Hz);
+    ESMO_run(obj->esmoHandle, obj->adcData.VdcBus_V,
+                    &(obj->pwmData.Vabc_pu), &(obj->Iab_A));
+
+    obj->anglePLLComp_rad = obj->speedPLL_Hz * obj->anglePLLDelayed_sf;
+    obj->anglePLL_rad = MATH_incrAngle(ESMO_getAnglePLL(obj->esmoHandle), obj->anglePLLComp_rad);
+    obj->angleSMO_rad = ESMO_getAngleElec(obj->esmoHandle);
+
+    SPDFR_run(obj->spdfrHandle, obj->anglePLL_rad);
+    obj->speedPLL_Hz = SPDFR_getSpeedHz(obj->spdfrHandle);
+    obj->speed_Hz = obj->speedPLL_Hz;
+
+    obj->speedFilter_Hz = obj->speedFilter_Hz *0.875f + obj->speed_Hz * 0.125f;
+    obj->speedAbs_Hz = fabsf(obj->speedFilter_Hz);
+
+    obj->stateRunTimeCnt++;
+
+    if(obj->controlStatus >= MOTOR_CL_RUNNING)
+    {
+        obj->angleFOC_rad = obj->anglePLL_rad;
+
+        ESMO_updateKslide(obj->esmoHandle);
+    }
+    else if(obj->controlStatus == MOTOR_OL_END_ANGLE)
+    {
+        float32_t theta_delta_sin = __sin(obj->angleOLDelta_rad);
+        float32_t theta_step = (obj->angleOLStep_deg * MATH_TWO_PI)/(360.0f * objSets->ctrlFreq_Hz);
+
+        if (theta_delta_sin > 0) {
+            obj->angleOLDelta_rad = obj->angleOLDelta_rad - theta_step;
+        } else {
+            obj->angleOLDelta_rad = obj->angleOLDelta_rad + theta_step;
+        }
+        obj->angleFOC_rad = MATH_incrAngle(obj->anglePLL_rad, obj->angleOLDelta_rad);
+        obj->enableSpeedCtrl = true;
+        obj->Idq_out_A.value[0] = 0.0f;
+
+        obj->iqTarget_OLEnd_A = obj->iqTarget_CLStart_A;
+
+        if(obj->speed_int_Hz > 0.0f)
+        {
+            obj->IsRef_A = obj->iqTarget_OLEnd_A;
+            obj->Idq_out_A.value[1] = obj->iqTarget_OLEnd_A;
+        }
+        else
+        {
+            obj->IsRef_A = -obj->iqTarget_OLEnd_A;
+            obj->Idq_out_A.value[1] = -obj->iqTarget_OLEnd_A;
+        }
+
+        if(fabsf(theta_delta_sin) < __sin(theta_step * 5.0))
+        {
+            obj->stateRunTimeCnt = 0;
+            obj->controlStatus = MOTOR_CL_RUNNING;
+
+           ESMO_setAnglePu(obj->esmoHandle, obj->angleFOC_rad);
+
+            // Pre-load integrators with current voltage output for bumpless transfer
+            PI_setUi(obj->piHandle_spd, obj->Idq_out_A.value[1]);
+        }    
+    }
+    else if(obj->controlStatus == MOTOR_OL_END_IQ)
+    {
+        obj->angleFOC_rad = obj->angleGen_rad;
+        obj->enableSpeedCtrl = true;
+
+        obj->Idq_out_A.value[0] = 0.0f;
+
+        float32_t iq_step = obj->iqTarget_CLStartStep_sfps / objSets->ctrlFreq_Hz;
+        obj->iqTarget_CLStart_sf = obj->iqTarget_CLStart_sf - iq_step;
+
+        if(obj->speed_int_Hz > 0.0f)
+        {
+            obj->IsRef_A = obj->iqTarget_CLStart_sf * objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = obj->iqTarget_CLStart_sf * objSets->startCurrent_A;
+        }
+        else
+        {
+            obj->IsRef_A = obj->iqTarget_CLStart_sf * -objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = obj->iqTarget_CLStart_sf * -objSets->startCurrent_A;
+        }
+
+        if (fabsf(obj->speed_Hz - objSets->speedForce_Hz) > obj->spdThresh_OLEnd_Hz)
+        {
+            obj->stateRunTimeCnt = 0;
+            obj->controlStatus = MOTOR_OL_END_ANGLE;
+
+            obj->angleOLDelta_rad = MATH_incrAngle(obj->angleGen_rad, -obj->anglePLL_rad);
+            obj->iqTarget_CLStart_A = obj->iqTarget_CLStart_sf * objSets->startCurrent_A * (objSets->speedForce_Hz / obj->speed_Hz);
+        }    
+    }
+    else if(obj->controlStatus == MOTOR_OL_START)
+    {
+        obj->angleFOC_rad = obj->angleGen_rad;
+        obj->enableSpeedCtrl = false;
+
+        obj->Idq_out_A.value[0] = 0.0f;
+
+        if(obj->speed_int_Hz > 0.0f)
+        {
+            obj->IsRef_A = objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = objSets->startCurrent_A;
+        }
+        else
+        {
+            obj->IsRef_A = -objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = -objSets->startCurrent_A;
+        }
+
+        if(fabsf(obj->speed_int_Hz) >= objSets->speedForce_Hz)
+        {
+            TRAJ_setIntValue(obj->trajHandle_spd, obj->speed_int_Hz);
+
+            if(obj->stateRunTimeCnt > objSets->forceRunTimeDelay)
+            {
+                obj->controlStatus = MOTOR_OL_END_IQ;
+                obj->stateRunTimeCnt = 0;
+
+                obj->iqTarget_CLStart_sf = 1.0f;
+
+            }
+        }
+    }
+    else if(obj->controlStatus == MOTOR_ALIGNMENT)
+    {
+        obj->angleFOC_rad = 0.0f;
+        obj->enableSpeedCtrl = false;
+
+        obj->IsRef_A = 0.0f;
+        obj->Idq_out_A.value[0] = objSets->alignCurrent_A;
+        obj->Idq_out_A.value[1] = 0.0f;
+
+        TRAJ_setIntValue(obj->trajHandle_spd, 0.0f);
+        ESMO_setAnglePu(obj->esmoHandle, obj->angleFOC_rad);
+        ANGLE_GEN_setAngle(obj->angleGenHandle, obj->angleFOC_rad);
+
+        if((obj->stateRunTimeCnt > objSets->alignTimeDelay) ||
+                 (obj->flagEnableAlignment == false))
+        {
+            obj->controlStatus = MOTOR_OL_START;
+            obj->stateRunTimeCnt = 0;
+
+            obj->Idq_out_A.value[0] = objSets->fluxCurrent_A;
+
+            PI_setUi(obj->piHandle_spd, 0.0);
+        }
+    }
+    else if(obj->controlStatus == MOTOR_SEEK_POS)
+    {
+        obj->enableSpeedCtrl = false;
+
+        obj->IsRef_A = 0.0f;
+        obj->Idq_out_A.value[0] = 0.0f;
+        obj->Idq_out_A.value[1] = 0.0f;
+
+        if(obj->stateRunTimeCnt > objSets->flyingStartTimeDelay)
+        {
+            obj->stateRunTimeCnt = 0;
+
+            if(obj->speedAbs_Hz > objSets->speedFlyingStart_Hz)
+            {
+                obj->speed_int_Hz = obj->speedFilter_Hz;
+                TRAJ_setIntValue(obj->trajHandle_spd, obj->speedFilter_Hz);
+                PI_setUi(obj->piHandle_spd, 0.0f);
+
+                obj->controlStatus = MOTOR_CL_RUNNING;
+            }
+            else
+            {
+                obj->angleFOC_rad = 0.0f;
+                obj->controlStatus = MOTOR_ALIGNMENT;
+            }
+        }
+    }
+
+#if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+    obj->angleFOC_rad = obj->angleGen_rad;
+#endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+
+    // compute the sin/cos phasor
+    phasor.value[0] = __cos(obj->angleFOC_rad);
+    phasor.value[1] = __sin(obj->angleFOC_rad);
+
+    // set the phasor in the Park transform
+    PARK_setPhasor(obj->parkHandle_I, &phasor);
+
+    // run the Park transform
+    PARK_run(obj->parkHandle_I, &(obj->Iab_A), (MATH_vec2 *)&(obj->Idq_in_A));
+
+// End of MOTOR1_ESMO
+#endif //!FAST && eSMO
 //------------------------------------------------------------------------------
 
 //---------- Common Speed and Current Loop for all observers -------------------
