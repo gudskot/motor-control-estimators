@@ -71,6 +71,10 @@ extern "C"
 #include "vs_freq.h"
 #include "angle_gen.h"
 
+#ifdef eSMO
+#include "esmo.h"
+#include "speedfr.h"
+#endif //!eSMO
 
 
 #include "user.h"
@@ -218,7 +222,8 @@ extern "C"
 
 typedef enum
 {
-    ESTIMATOR_MODE_FAST  = 0              //!< FAST estimator
+    ESTIMATOR_MODE_FAST  = 0,             //!< FAST estimator
+    ESTIMATOR_MODE_ESMO  = 1              //!< ESMO estimator
 } ESTIMATOR_Mode_e;
 
 //
@@ -1023,7 +1028,27 @@ typedef struct _MOTOR_Vars_t_
     //!< the handles for Angle Generate for open loop control
     ANGLE_GEN_Handle angleGenHandle;
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#endif //!FAST
+#elif eSMO
+    // the rotor angle from SMO modules
+    float32_t angleSMO_rad;
+
+    // the rotor angle delay compensation value
+    float32_t anglePLLComp_rad;
+
+    // the rotor angle from PLL modules
+    float32_t anglePLL_rad;
+
+    // the speed from PLL module
+    float32_t speedPLL_Hz;
+
+    //!< the handle for the speedfr object
+    SPDFR_Handle spdfrHandle;
+
+    //!< the handle for the esmo object
+    ESMO_Handle esmoHandle;
+    //!< the handles for Angle Generate for open loop control
+    ANGLE_GEN_Handle angleGenHandle;
+#endif //!FAST && eSMO
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     //!< the handles for Vs per Freq for open loop control
@@ -1087,7 +1112,20 @@ static inline void updateControllers(MOTOR_Handle handle)
         PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
 
     }
-#endif //!FAST
+#elif eSMO
+    if(obj->controlStatus == MOTOR_CTRL_RUN)
+    {
+        // update the Id controller
+        PI_setGains(obj->piHandle_Id, objSets->Kp_Id, objSets->Ki_Id);
+
+        // update the Iq controller
+        PI_setGains(obj->piHandle_Iq, objSets->Kp_Iq, objSets->Ki_Iq);
+
+        // update the speed controller
+        PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
+
+    }
+#endif //!FAST && eSMO
 }
 
 //! \brief  Get the controllers Parameters

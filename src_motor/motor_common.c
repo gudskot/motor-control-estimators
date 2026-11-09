@@ -181,7 +181,13 @@ void restartMotorControl(MOTOR_Handle handle)
     {
         obj->controlStatus = MOTOR_ALIGNMENT;
     }
-#endif //!FAST
+#elif eSMO
+    obj->controlStatus = MOTOR_ALIGNMENT;
+
+    ESMO_resetParams(obj->esmoHandle);
+
+    ESMO_resetPLL(obj->esmoHandle);
+#endif //!FAST && ESMO
 
 
     obj->speed_int_Hz = 0.0f;
@@ -684,6 +690,14 @@ void setupControllers(MOTOR_Handle handle)
     // copy the Id, Iq and speed controller parameters to motorVars
     getControllers(handle);
 
+#ifdef eSMO
+    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
+
+    objSets->Rs_Ohm = objUser->motor_Rs_Ohm;
+    objSets->Ls_d_H = objUser->motor_Ls_d_H;
+    objSets->Ls_q_H = objUser->motor_Ls_q_H;
+    objSets->flux_VpHz = objUser->motor_ratedFlux_Wb * MATH_TWO_PI;
+#endif //!eSMO
 
     return;
 } // end of setupControllers() function
@@ -781,7 +795,15 @@ void updateGlobalVariables(MOTOR_Handle handle)
     obj->powerMotor_W = EST_computePower_W(obj->estHandle);
 
     // obj->powerReal_W = obj->torque_Nm * obj->speedAbs_Hz * obj->power_sf;
-#endif //!FAST
+#elif eSMO
+    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(obj->motorSetsHandle);
+
+    obj->Rs_Ohm = objSets->Rs_Ohm;
+    obj->Ls_d_H = objSets->Ls_d_H;
+    obj->Ls_q_H = objSets->Ls_q_H;
+    obj->flux_VpHz = objSets->flux_VpHz;
+    obj->flux_Wb   = obj->flux_VpHz * MATH_ONE_OVER_TWO_PI;
+#endif //!FAST && eSMO
 
     // Calculate the RMS stator current
     obj->Is_A = sqrtf(obj->Idq_in_A.value[0] * obj->Idq_in_A.value[0] +
@@ -915,7 +937,50 @@ void tuneControllerGains(MOTOR_Handle handle)
 
             }
         }
-#endif //!FAST
+#elif eSMO
+        if(obj->controlStatus == MOTOR_CTRL_RUN)
+        {
+            if(obj->speedAbs_Hz < objSets->Gain_speed_low_Hz)
+            {
+                objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_low_sf;
+                objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_low_sf;
+            }
+            else if(obj->speedAbs_Hz > objSets->Gain_speed_high_Hz)
+            {
+                objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_high_sf;
+                objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_high_sf;
+            }
+            else
+            {
+                Kp_spd_mid_sf = objSets->Kp_spd_low_sf +
+                        (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Kp_spd_slope_sf;
+                Ki_spd_mid_sf = objSets->Ki_spd_low_sf +
+                        (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Ki_spd_slope_sf;
+
+                objSets->Kp_spd = objSets->Kp_spd_set * Kp_spd_mid_sf;
+                objSets->Ki_spd = objSets->Ki_spd_set * Ki_spd_mid_sf;
+            }
+
+            objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
+            objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
+
+            objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
+            objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
+
+        }
+        else if(obj->controlStatus <= MOTOR_CL_RUNNING)
+        {
+            objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_start_sf;
+            objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_start_sf;
+
+            objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
+            objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
+
+            objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
+            objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
+
+        }
+#endif //!FAST && eSMO
     }
 
     return;
@@ -989,7 +1054,30 @@ void updateFASTParameters(MOTOR_Handle handle)
 
     return;
 }
-#endif //!FAST
+#elif eSMO
+//! \brief  update the coefficient of the controllers gains
+void updateESMOParameters(MOTOR_Handle handle)
+{
+    MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
+    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
+
+    // set parameters for ESMO controller
+    ESMO_setKslideParams(obj->esmoHandle,
+                         objSets->esmo_KslideMax, objSets->esmo_KslideMin);
+
+    ESMO_setPLLParams(obj->esmoHandle, objSets->esmo_PLL_KpMax,
+                      objSets->esmo_PLL_KpMin, objSets->esmo_PLL_KpSF);
+
+    ESMO_setPLLKi(obj->esmoHandle, objSets->esmo_PLL_Ki);
+
+    ESMO_setBEMFThreshold(obj->esmoHandle, objSets->esmo_E0);
+    ESMO_setBEMFKslfFreq(obj->esmoHandle, objSets->esmo_filterFc_sf);
+    ESMO_setSpeedFilterFreq(obj->esmoHandle, objSets->esmo_LpfFc_Hz);
+    obj->anglePLLDelayed_sf = objSets->anglePLLDelayed_sf * MATH_TWO_PI * objSets->ctrlPeriod_sec;
+
+    return;
+}
+#endif //!FAST && eSMO
 
 //
 //-- end of this file ----------------------------------------------------------
