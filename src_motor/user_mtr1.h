@@ -516,7 +516,21 @@ extern "C"
 
 #define USER_MOTOR1_SPEED_FS_Hz            	(3)
 
+#ifdef eSMO
+#define USER_MOTOR1_KSLIDE_MAX             	(0.5)
+#define USER_MOTOR1_KSLIDE_MIN             	(0.1)
 
+#define USER_MOTOR1_PLL_KP_MAX             	(10)
+#define USER_MOTOR1_PLL_KP_MIN             	(1.5)
+#define USER_MOTOR1_PLL_KP_SF              	(5)
+#define USER_MOTOR1_PLL_KI                  (0.0000028125)
+
+#define USER_MOTOR1_BEMF_THRESHOLD         	(0.5)
+#define USER_MOTOR1_BEMF_KSLF_FC_SF        	(2)
+#define USER_MOTOR1_BEMF_KSLF_FC_Hz        	(1)
+#define USER_MOTOR1_THETA_OFFSET_SF        	(1)
+#define USER_MOTOR1_SPEED_LPF_FC_Hz        	(200)
+#endif //!eSMO
 
 #define USER_MOTOR1_GAIN_SPEED_LOW_Hz          (60)       // 10%~50% of the rated speed
 #define USER_MOTOR1_GAIN_SPEED_HIGH_Hz         (150)      // 50%~100% of the rated speed

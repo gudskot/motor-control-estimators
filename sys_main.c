@@ -81,7 +81,11 @@ void main(void)
     motorVars_M1.estimatorMode = ESTIMATOR_MODE_FAST;
 
     systemVars.estLibVersion = EST_getFASTVersion();   // gets FAST version 
-#endif //!FAST
+#elif eSMO
+    systemVars.estType = EST_TYPE_ESMO;         // the estimator is only ESMO
+    // motorVars_M1.estimatorType = SLEST_TYPE_ESMO_ONLY;
+    motorVars_M1.estimatorMode = ESTIMATOR_MODE_ESMO;
+#endif //!FAST && eSMO
 
     systemVars.currentSenseType = CURSEN_TYPE_THREE_SHUNT;
     motorVars_M1.currentSenType = LSC_TYPE_THREE_SHUNT;
@@ -227,7 +231,11 @@ void main(void)
                 case 3:
                     // Tune the gains of the controllers
                     tuneControllerGains(motorHandle_M1);
+#ifdef FAST
                     updateFASTParameters(motorHandle_M1);
+#elif eSMO
+                    updateESMOParameters(motorHandle_M1);
+#endif //!FAST && eSMO
                     break;
                 case 4:     // calculate motor protection value
                     calcMotorOverCurrentThreshold(motorHandle_M1);
