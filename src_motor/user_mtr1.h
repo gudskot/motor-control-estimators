@@ -168,7 +168,7 @@ extern "C"
 
 //! \brief Defines the number of ISR clock ticks per speed controller clock tick
 //!
-#define USER_M1_NUM_ISR_TICKS_PER_SPEED_TICK        (10)
+#define USER_M1_NUM_ISR_TICKS_PER_SPEED_TICK        (20)
 
 
 //! \brief Defines the number of current sensors
@@ -183,23 +183,23 @@ extern "C"
 
 //! \brief Defines the Pulse Width Modulation (PWM) frequency, kHz
 //!
-#define USER_PWM_FREQ_kHz                         (15)
-#define USER_M1_PWM_FREQ_kHz        (15)
+#define USER_PWM_FREQ_kHz                         (30)
+#define USER_M1_PWM_FREQ_kHz        (30)
 #define USER_M1_PWM_TBPRD_NUM       (uint16_t)(USER_SYSTEM_FREQ_MHz * 1000.0 / USER_M1_PWM_FREQ_kHz / 2.0)
 
 //! \brief Defines the Pulse Width Modulation (PWM) period, usec
 //!
-#define USER_M1_PWM_PERIOD_usec     (66.66666667)
+#define USER_M1_PWM_PERIOD_usec     (33.33333333)
 
 
 //! \brief Defines the Interrupt Service Routine (ISR) frequency, Hz
 //!
-#define USER_M1_ISR_FREQ_Hz         (15000)
+#define USER_M1_ISR_FREQ_Hz         (30000)
 
 
 //! \brief Defines the Interrupt Service Routine (ISR) period, usec
 //!
-#define USER_M1_ISR_PERIOD_usec     (66.66666667)
+#define USER_M1_ISR_PERIOD_usec     (33.33333333)
 
 
 //! \brief Defines the direct voltage (Vd) scale factor
@@ -275,12 +275,12 @@ extern "C"
 
 //! \brief Defines the controller execution period, usec
 //!
-#define USER_M1_CTRL_PERIOD_usec      (66.66666667f)
+#define USER_M1_CTRL_PERIOD_usec      (33.33333333f)
 
 
 //! \brief Defines the controller execution period, sec
 //!
-#define USER_M1_CTRL_PERIOD_sec       (0.00006667f)
+#define USER_M1_CTRL_PERIOD_sec       (3.3333333e-5f)
 
 
 //! \brief Defines the IdRated delta to use during estimation
