@@ -1710,6 +1710,9 @@ __interrupt void motor1CtrlISR(void)
 #ifdef FAST
     // setup the space vector generator (SVGEN) module
     SVGEN_setup(obj->svgenHandle, obj->estOutputData.oneOverDcBus_invV);
+#elif eSMO
+    // setup the space vector generator (SVGEN) module
+    SVGEN_setup(obj->svgenHandle, obj->oneOverDcBus_invV);
 #endif //!FAST
     
     // run the space vector generator (SVGEN) module
