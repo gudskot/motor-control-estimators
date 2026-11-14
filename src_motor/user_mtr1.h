@@ -532,6 +532,23 @@ extern "C"
 #define USER_MOTOR1_SPEED_LPF_FC_Hz        	(200)
 #endif //!eSMO
 
+#ifdef LUEN
+//! \brief Luenberger observer bandwidth, rad/s
+//! Must be above the max electrical speed (600 Hz = 3770 rad/s), otherwise the
+//! poles drift with speed. Upper limit 0.3/Ts = 9000 rad/s (clamped in LUEN_setBandwidth)
+#define USER_MOTOR1_LUEN_OBS_BW_rps         (6000.0f)
+
+//! \brief Luenberger observer damping
+#define USER_MOTOR1_LUEN_OBS_ZETA           (0.7f)
+
+//! \brief PLL, the same values as eSMO (the PLL becomes a common module later)
+#define USER_MOTOR1_LUEN_PLL_KP_MAX         (6.75f)
+#define USER_MOTOR1_LUEN_PLL_KP_MIN         (0.75f)
+#define USER_MOTOR1_LUEN_PLL_KP_SF          (5.0f)
+#define USER_MOTOR1_LUEN_PLL_KI             (0.0000028125f)
+#define USER_MOTOR1_LUEN_SPEED_LPF_FC_Hz    (200.0f)
+#endif //!LUEN
+
 #define USER_MOTOR1_GAIN_SPEED_LOW_Hz          (60)       // 10%~50% of the rated speed
 #define USER_MOTOR1_GAIN_SPEED_HIGH_Hz         (150)      // 50%~100% of the rated speed
 #define USER_MOTOR1_KP_SPD_START_SF            (1.5)         // 0.1~100.0

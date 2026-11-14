@@ -85,7 +85,11 @@ void main(void)
     systemVars.estType = EST_TYPE_ESMO;         // the estimator is only ESMO
     // motorVars_M1.estimatorType = SLEST_TYPE_ESMO_ONLY;
     motorVars_M1.estimatorMode = ESTIMATOR_MODE_ESMO;
-#endif //!FAST && eSMO
+#elif LUEN
+    systemVars.estType = EST_TYPE_LUEN;         // the estimator is only LUEN
+    motorVars_M1.estimatorType = SLEST_TYPE_LUEN_ONLY;
+    motorVars_M1.estimatorMode = ESTIMATOR_MODE_ESMO;
+#endif //!FAST && eSMO && LUEN
 
     systemVars.currentSenseType = CURSEN_TYPE_THREE_SHUNT;
     motorVars_M1.currentSenType = LSC_TYPE_THREE_SHUNT;
@@ -235,7 +239,9 @@ void main(void)
                     updateFASTParameters(motorHandle_M1);
 #elif eSMO
                     updateESMOParameters(motorHandle_M1);
-#endif //!FAST && eSMO
+#elif LUEN
+                    updateLUENParameters(motorHandle_M1);
+#endif //!FAST && eSMO && LUEN
                     break;
                 case 4:     // calculate motor protection value
                     calcMotorOverCurrentThreshold(motorHandle_M1);

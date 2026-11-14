@@ -76,6 +76,10 @@ extern "C"
 #include "speedfr.h"
 #endif //!eSMO
 
+#ifdef LUEN
+#include "luenberger.h"
+#include "speedfr.h"
+#endif
 
 #include "user.h"
 #include "src_board/hal.h"
@@ -223,7 +227,8 @@ extern "C"
 typedef enum
 {
     ESTIMATOR_MODE_FAST  = 0,             //!< FAST estimator
-    ESTIMATOR_MODE_ESMO  = 1              //!< ESMO estimator
+    ESTIMATOR_MODE_ESMO  = 1,             //!< ESMO estimator
+    ESTIMATOR_MODE_LUEN  = 2              //!< LUEN estimator
 } ESTIMATOR_Mode_e;
 
 //
@@ -243,7 +248,8 @@ typedef enum
     EST_TYPE_FAST_RESL     = 9,     //!< the estimator is FAST and RESOLVER
     EST_TYPE_FAST_PSCOS    = 10,    //!< the estimator is FAST and SIN/COS
     EST_TYPE_ESMO_ENC      = 11,    //!< the estimator is ESMO and ENC
-    EST_TYPE_ISBLDC        = 12     //!< the estimator is only ISBLDC
+    EST_TYPE_ISBLDC        = 12,    //!< the estimator is only ISBLDC
+    EST_TYPE_LUEN          = 13     //!< the estimator is only LUEN
 } EST_Type_e;
 
 typedef enum
@@ -306,11 +312,11 @@ typedef struct _CONTROL_TYPES_BITS_
     SVM_Mode_e              svmMode:2;          // 4~5
     Braking_Mode_e          brakingMode:2;      // 6~7
     Operation_Mode_e        operationMode:3;    // 8~10
-    ESTIMATOR_Mode_e        estimatorMode:1;    // 11
-    FlyingStart_Mode_e      flyingStartMode:1;  // 12
-    RsOnline_Mode_e         RsOnlineMode:1;     // 13
-    CurrentSense_Dir_e      currentSenDir:1;    // 14
-    Startup_Mode_e          startupMode:1;      // 15
+    ESTIMATOR_Mode_e        estimatorMode:2;    // 11~12
+    FlyingStart_Mode_e      flyingStartMode:1;  // 13
+    RsOnline_Mode_e         RsOnlineMode:1;     // 14
+    CurrentSense_Dir_e      currentSenDir:1;    // 15
+    Startup_Mode_e          startupMode:1;      // 16
 } CONTROL_TYPES_BITS;
 
 typedef union _CONTROL_TYPES_t_
@@ -569,6 +575,7 @@ typedef struct _MOTOR_SetVars_t_
     float32_t Kp_pow_sf;                // P-85
     float32_t Ki_pow_sf;                // P-86
 
+    //TODO: comment out in eSMO commit
     float32_t esmo_FAST_fsw_Hz;         // P-89 esmp<->fast switching frequency
     float32_t esmo_KslideMax;           // P-90 sliding control gain, maximum value
     float32_t esmo_KslideMin;           // P-91 sliding control gain, minimum value
@@ -579,6 +586,17 @@ typedef struct _MOTOR_SetVars_t_
     float32_t esmo_PLL_KpMin;           // P-96 minimum proportional loop gain
     float32_t esmo_PLL_KpSF;            // P-97 proportional gain coefficient
     float32_t esmo_PLL_Ki;              // P-98 integral gain
+
+#ifdef LUEN
+    float32_t luen_obsBW_rps;           // observer bandwidth, rad/s
+    float32_t luen_obsZeta;             // observer damping
+    float32_t luen_PLL_KpMax;
+    float32_t luen_PLL_KpMin;
+    float32_t luen_PLL_KpSF;
+    float32_t luen_PLL_Ki;
+    float32_t luen_LpfFc_Hz;            // PLL speed filter cut-off, Hz
+#endif //!LUEN
+
     float32_t anglePLLDelayed_sf;       // P-99
 
     FAULT_MTR_REG_t faultMtrMask;       // P-130
@@ -1048,7 +1066,25 @@ typedef struct _MOTOR_Vars_t_
     ESMO_Handle esmoHandle;
     //!< the handles for Angle Generate for open loop control
     ANGLE_GEN_Handle angleGenHandle;
-#endif //!FAST && eSMO
+#elif LUEN
+    //!< PLL angle with delay compensation
+    float32_t anglePLLComp_rad;
+
+    //!< the rotor angle from PLL modules
+    float32_t anglePLL_rad;
+
+    //!< the speed from PLL module
+    float32_t speedPLL_Hz;
+
+    //!< the handle for the speedfr object
+    SPDFR_Handle spdfrHandle;
+
+    //!< the handle for the luen object
+    LUEN_Handle luenHandle;
+
+    //!< the handles for Angle Generate for open loop control
+    ANGLE_GEN_Handle angleGenHandle;
+#endif //!FAST && eSMO && LUEN
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     //!< the handles for Vs per Freq for open loop control
@@ -1125,7 +1161,20 @@ static inline void updateControllers(MOTOR_Handle handle)
         PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
 
     }
-#endif //!FAST && eSMO
+#elif LUEN
+    if(obj->controlStatus == MOTOR_CTRL_RUN)
+    {
+        // update the Id controller
+        PI_setGains(obj->piHandle_Id, objSets->Kp_Id, objSets->Ki_Id);
+
+        // update the Iq controller
+        PI_setGains(obj->piHandle_Iq, objSets->Kp_Iq, objSets->Ki_Iq);
+
+        // update the speed controller
+        PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
+
+    }
+#endif //!FAST && eSMO && LUEN
 }
 
 //! \brief  Get the controllers Parameters
@@ -1176,8 +1225,14 @@ extern void setupControllerSF(MOTOR_Handle handle);
 //! \brief  update the coefficient of the controllers gains
 extern void updateControllerSF(MOTOR_Handle handle);
 
+//TODO: comment out in eSMO commit
 //! \brief  update the ESMO parameters
 extern void updateESMOParameters(MOTOR_Handle handle);
+
+#ifdef LUEN
+//! \brief  update the LUEN parameters
+extern void updateLUENParameters(MOTOR_Handle handle);
+#endif //!LUEN
 
 #ifdef FAST
 //! \brief  update the FAST parameters

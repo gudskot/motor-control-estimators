@@ -187,7 +187,11 @@ void restartMotorControl(MOTOR_Handle handle)
     ESMO_resetParams(obj->esmoHandle);
 
     ESMO_resetPLL(obj->esmoHandle);
-#endif //!FAST && ESMO
+#elif LUEN
+    obj->controlStatus = MOTOR_ALIGNMENT;
+
+    LUEN_resetParams(obj->luenHandle);
+#endif //!FAST && ESMO && LUEN
 
 
     obj->speed_int_Hz = 0.0f;
@@ -697,7 +701,14 @@ void setupControllers(MOTOR_Handle handle)
     objSets->Ls_d_H = objUser->motor_Ls_d_H;
     objSets->Ls_q_H = objUser->motor_Ls_q_H;
     objSets->flux_VpHz = objUser->motor_ratedFlux_Wb * MATH_TWO_PI;
-#endif //!eSMO
+#elif LUEN
+    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
+
+    objSets->Rs_Ohm = objUser->motor_Rs_Ohm;
+    objSets->Ls_d_H = objUser->motor_Ls_d_H;
+    objSets->Ls_q_H = objUser->motor_Ls_q_H;
+    objSets->flux_VpHz = objUser->motor_ratedFlux_Wb * MATH_TWO_PI;
+#endif //!eSMO && LUEN
 
     return;
 } // end of setupControllers() function
@@ -803,7 +814,15 @@ void updateGlobalVariables(MOTOR_Handle handle)
     obj->Ls_q_H = objSets->Ls_q_H;
     obj->flux_VpHz = objSets->flux_VpHz;
     obj->flux_Wb   = obj->flux_VpHz * MATH_ONE_OVER_TWO_PI;
-#endif //!FAST && eSMO
+#elif LUEN
+    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(obj->motorSetsHandle);
+
+    obj->Rs_Ohm = objSets->Rs_Ohm;
+    obj->Ls_d_H = objSets->Ls_d_H;
+    obj->Ls_q_H = objSets->Ls_q_H;
+    obj->flux_VpHz = objSets->flux_VpHz;
+    obj->flux_Wb   = obj->flux_VpHz * MATH_ONE_OVER_TWO_PI;
+#endif //!FAST && eSMO && LUEN
 
     // Calculate the RMS stator current
     obj->Is_A = sqrtf(obj->Idq_in_A.value[0] * obj->Idq_in_A.value[0] +
@@ -980,7 +999,50 @@ void tuneControllerGains(MOTOR_Handle handle)
             objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
 
         }
-#endif //!FAST && eSMO
+#elif LUEN
+        if(obj->controlStatus == MOTOR_CTRL_RUN)
+            {
+                if(obj->speedAbs_Hz < objSets->Gain_speed_low_Hz)
+                {
+                    objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_low_sf;
+                    objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_low_sf;
+                }
+                else if(obj->speedAbs_Hz > objSets->Gain_speed_high_Hz)
+                {
+                    objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_high_sf;
+                    objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_high_sf;
+                }
+                else
+                {
+                    Kp_spd_mid_sf = objSets->Kp_spd_low_sf +
+                            (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Kp_spd_slope_sf;
+                    Ki_spd_mid_sf = objSets->Ki_spd_low_sf +
+                            (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Ki_spd_slope_sf;
+
+                    objSets->Kp_spd = objSets->Kp_spd_set * Kp_spd_mid_sf;
+                    objSets->Ki_spd = objSets->Ki_spd_set * Ki_spd_mid_sf;
+                }
+
+                objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
+                objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
+
+                objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
+                objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
+
+            }
+            else if(obj->controlStatus <= MOTOR_CL_RUNNING)
+            {
+                objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_start_sf;
+                objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_start_sf;
+
+                objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
+                objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
+
+                objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
+                objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
+
+            }   
+#endif //!FAST && eSMO && LUEN
     }
 
     return;
@@ -1077,7 +1139,27 @@ void updateESMOParameters(MOTOR_Handle handle)
 
     return;
 }
-#endif //!FAST && eSMO
+#elif LUEN
+//! \brief  update the coefficient of the controllers gains
+void updateLUENParameters(MOTOR_Handle handle)
+{
+    MOTOR_Vars_t *obj = (MOTOR_Vars_t *)handle;
+    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
+
+    LUEN_setBandwidth(obj->luenHandle, obj->userParamsHandle,
+                      objSets->luen_obsBW_rps, objSets->luen_obsZeta);
+
+    LUEN_setPLLParams(obj->luenHandle, objSets->luen_PLL_KpMax,
+                      objSets->luen_PLL_KpMin, objSets->luen_PLL_KpSF);
+
+    LUEN_setPLLKi(obj->luenHandle, objSets->luen_PLL_Ki);
+
+    LUEN_setSpeedFilterFreq(obj->luenHandle, objSets->luen_LpfFc_Hz);
+    obj->anglePLLDelayed_sf = objSets->anglePLLDelayed_sf * MATH_TWO_PI * objSets->ctrlPeriod_sec;
+
+    return;
+}
+#endif //!FAST && eSMO && LUEN
 
 //
 //-- end of this file ----------------------------------------------------------

@@ -122,7 +122,10 @@ extern ANGLE_GEN_Obj    angleGen_M1;
 #elif eSMO
 //!< the Angle Generate onject for open loop control
 extern ANGLE_GEN_Obj    angleGen_M1;
-#endif //!FAST && eSMO
+#elif LUEN
+//!< the Angle Generate onject for open loop control
+extern ANGLE_GEN_Obj    angleGen_M1;
+#endif //!FAST && eSMO && LUEN
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control
@@ -136,6 +139,14 @@ extern SPDFR_Obj spdfr_M1;
 //!< the esmo object
 extern ESMO_Obj esmo_M1;
 #endif //!eSMO
+
+#ifdef LUEN
+//!< the speedfr object
+extern SPDFR_Obj spdfr_M1;
+
+//!< the luen object
+extern LUEN_Obj luen_M1;
+#endif //!LUEN
 
 // *****************************************************************************
 // the function prototypes
