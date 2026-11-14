@@ -94,7 +94,7 @@ extern "C"
 // All estimators implemented 1.0.0 
 //
 #define MAJOR 0
-#define MINOR 1
+#define MINOR 2
 #define PATCH 0
 
 //
