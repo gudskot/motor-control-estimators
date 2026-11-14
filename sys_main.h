@@ -83,6 +83,21 @@ extern "C"
 #define POWER_RELAY_ON_VOLTAGE_V    (0.20f * USER_M1_ADC_FULL_SCALE_VOLTAGE_V)        // 100V
 
 //
+// Project versions:
+// FAST 0.1.0
+// ESMO 0.2.0
+// LUEN 0.3.0
+// ORTEGA 0.4.0
+//
+// Tune estimators 0.5 -> 0.9
+//
+// All estimators implemented 1.0.0 
+//
+#define MAJOR 0
+#define MINOR 1
+#define PATCH 0
+
+//
 //! \brief typedefs for the fault
 //
 typedef struct _FAULT_SYS_BITS_
