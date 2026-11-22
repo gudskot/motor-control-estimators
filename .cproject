@@ -133,27 +133,6 @@
                             </tool>
                         </toolChain>
                     </folderInfo>
-                    <folderInfo id="com.ti.ccstudio.buildDefinitions.C2000.Default.1561302184.libraries" name="libraries" resourcePath="libraries">
-                        <toolChain id="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.DebugToolchain.1409525010" name="TI Build Tools" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.DebugToolchain" unusedChildren="">
-                            <option id="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.1180701223.1607026698" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.1180701223"/>
-                            <option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.406819061.2091502468" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.406819061"/>
-                            <targetPlatform id="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.targetPlatformDebug" name="Platform" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.targetPlatformDebug"/>
-                            <tool id="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.compilerDebug.1298074518" name="C2000 Compiler" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.compilerDebug.1948432009">
-                                <option id="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.DEFINE.1082477409" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.DEFINE" valueType="definedSymbols">
-                                    <listOptionValue value="${COM_TI_C2000WARE_SYMBOLS}"/>
-                                    <listOptionValue value="_FLASH"/>
-                                    <listOptionValue value="_FULL_FAST_LIB"/>
-                                    <listOptionValue value="FAST_N"/>
-                                    <listOptionValue value="eSMO_N"/>
-                                    <listOptionValue value="LUEN_N"/>
-                                    <listOptionValue value="ORTEGA"/>
-                                </option>
-                            </tool>
-                            <tool id="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.linkerDebug.1297916994" name="C2000 Linker" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.exe.linkerDebug.1171881056"/>
-                            <tool id="com.ti.ccstudio.buildDefinitions.C2000_22.6.hex.493631533" name="C2000 Hex Utility" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.hex.221842509"/>
-                            <tool id="com.ti.ccstudio.buildDefinitions.sysConfig.306630106" name="SysConfig" superClass="com.ti.ccstudio.buildDefinitions.sysConfig.320804531"/>
-                        </toolChain>
-                    </folderInfo>
                     <sourceEntries>
                         <entry excluding="src_device/driverlib|libraries/observers/est_lib/source/user.c|libraries/observers/est_lib/fast_full_lib_eabi.lib|libraries/observers/est_lib/fast_full_lib_coff.lib|libraries/observers/est_lib/fast_f64_full_lib.lib|libraries/observers/est_lib/fast_f64_full_lib_eabi.lib|libraries/observers/est_lib/fast_f64_full_lib_coff.lib|libraries/observers/est_lib/fast_full_s32_fpu_coff.lib|libraries/observers/est_lib/fast_full_s32_fpu_eabi.lib|libraries/observers/est_lib/fast_full_s32_fpu.lib|libraries/observers/est_lib/fast_pmsm_lib_coff.lib|libraries/observers/est_lib/fast_pmsm_lib_eabi.lib|libraries/observers/est_lib/fast_pmsm_lib.lib|libraries/observers/est_lib/fast_simple_lib_coff.lib|libraries/observers/est_lib/fast_simple_lib_eabi.lib|libraries/observers/est_lib/fast_simple_lib.lib|libraries/observers/slip|libraries/vibration_data|libraries/utilities/queue|libraries/utilities/diagnostic|libraries/utilities/datalog|libraries/titune|libraries/sfra|libraries/position_sensing|libraries/observers/mpid/lib|libraries/observers/fast|libraries/observers/est|libraries/fcl|libraries/control/pid|libraries/control/ctrl" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
                     </sourceEntries>
