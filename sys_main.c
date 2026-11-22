@@ -83,7 +83,7 @@ void main(void)
     systemVars.estLibVersion = EST_getFASTVersion();   // gets FAST version 
 #elif eSMO
     systemVars.estType = EST_TYPE_ESMO;         // the estimator is only ESMO
-    // motorVars_M1.estimatorType = SLEST_TYPE_ESMO_ONLY;
+    motorVars_M1.estimatorType = SLEST_TYPE_ESMO_ONLY;
     motorVars_M1.estimatorMode = ESTIMATOR_MODE_ESMO;
 #elif LUEN
     systemVars.estType = EST_TYPE_LUEN;         // the estimator is only LUEN

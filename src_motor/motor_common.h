@@ -581,7 +581,7 @@ typedef struct _MOTOR_SetVars_t_
     float32_t Kp_pow_sf;                // P-85
     float32_t Ki_pow_sf;                // P-86
 
-    //TODO: comment out in eSMO commit
+#ifdef eSMO
     float32_t esmo_FAST_fsw_Hz;         // P-89 esmp<->fast switching frequency
     float32_t esmo_KslideMax;           // P-90 sliding control gain, maximum value
     float32_t esmo_KslideMin;           // P-91 sliding control gain, minimum value
@@ -592,6 +592,7 @@ typedef struct _MOTOR_SetVars_t_
     float32_t esmo_PLL_KpMin;           // P-96 minimum proportional loop gain
     float32_t esmo_PLL_KpSF;            // P-97 proportional gain coefficient
     float32_t esmo_PLL_Ki;              // P-98 integral gain
+#endif //!eSMO
 
 #ifdef LUEN
     float32_t luen_obsBW_rps;           // observer bandwidth, rad/s
@@ -1268,9 +1269,10 @@ extern void setupControllerSF(MOTOR_Handle handle);
 //! \brief  update the coefficient of the controllers gains
 extern void updateControllerSF(MOTOR_Handle handle);
 
-//TODO: comment out in eSMO commit
+#ifdef eSMO
 //! \brief  update the ESMO parameters
 extern void updateESMOParameters(MOTOR_Handle handle);
+#endif //!eSMO
 
 #ifdef LUEN
 //! \brief  update the LUEN parameters
