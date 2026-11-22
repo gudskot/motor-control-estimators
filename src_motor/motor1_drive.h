@@ -144,9 +144,6 @@ extern ESMO_Obj esmo_M1;
 #endif //!eSMO
 
 #ifdef LUEN
-//!< the speedfr object
-extern SPDFR_Obj spdfr_M1;
-
 //!< the luen object
 extern LUEN_Obj luen_M1;
 #endif //!LUEN

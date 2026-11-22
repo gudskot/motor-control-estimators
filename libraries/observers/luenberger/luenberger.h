@@ -4,6 +4,8 @@
 * 09.11.2026
 *
 * Luenberger back-EMF observer + PLL (SPM motor, Ld = Lq)
+* The FOC angle is atan2 of the estimated back-EMF (thetaRaw_rad), the PLL gives the speed
+* (also used inside the rotating EMF model). The PLL angle is kept for logging
 *
 */
 
@@ -61,10 +63,11 @@ typedef struct _LUEN_Obj_
     float32_t Eq_mag;
 
     float32_t thetaErr;
-    float32_t thetaErrSF;     // 1/(2*pi), as in ESMO
+    float32_t thetaErrSF;     // 1/(2*pi)
     float32_t theta;          // PLL angle, pu of a turn
-    float32_t thetaDelta;     // angle increment factor, set in setParams as in ESMO
+    float32_t thetaDelta;     // angle increment factor, set in setParams
     float32_t thetaEst;       // PLL angle, rad, [-pi, pi]
+    float32_t thetaRaw_rad;   // rotor angle from atan2 of the back-EMF, rad, [-pi, pi], used by the FOC
 
     float32_t speedEst;
     float32_t speedFlt;
@@ -74,7 +77,7 @@ typedef struct _LUEN_Obj_
     float32_t pll_Umin;
     float32_t pll_ui;
     float32_t pll_Kp;
-    float32_t pll_KpMax;      // PLL Kp schedule, same as ESMO: Kp = KpMin + KpSF * |speedRef|
+    float32_t pll_KpMax;      // PLL Kp schedule: Kp = KpMin + KpSF * |speedRef|
     float32_t pll_KpMin;
     float32_t pll_KpSF;
     float32_t pll_Ki;
@@ -221,6 +224,14 @@ static inline float32_t LUEN_getAnglePLL(LUEN_Handle handle)
     return(obj->thetaEst);
 }
 
+//! \brief     Rotor angle from atan2 of the estimated back-EMF, rad, no PLL in the path
+static inline float32_t LUEN_getAngleRaw(LUEN_Handle handle)
+{
+    LUEN_Obj *obj = (LUEN_Obj *)handle;
+
+    return(obj->thetaRaw_rad);
+}
+
 //! \brief     Runs the LUEN observer
 //! \param[in] Vdcbus      The dc bus voltage
 //! \param[in] pVabc_pu    The pointer to the modulation functions (PU)
@@ -260,6 +271,17 @@ static inline void LUEN_run(LUEN_Handle handle,
 
     obj->Ealpha = Ea - wTs * Eb + obj->K2 * obj->IalphaError;
     obj->Ebeta  = Eb + wTs * Ea + obj->K2 * obj->IbetaError;
+
+    // e = w*psi*[-sin(theta), cos(theta)]: the EMF leads the rotor flux by 90 deg and changes
+    // sign with the rotation direction, the direction is taken from the PLL speed
+    if(obj->speedFlt >= 0.0f)
+    {
+        obj->thetaRaw_rad = __atan2(-obj->Ealpha, obj->Ebeta);
+    }
+    else
+    {
+        obj->thetaRaw_rad = __atan2(obj->Ealpha, -obj->Ebeta);
+    }
 
     float32_t pllSine   = __sinpuf32(obj->theta);
     float32_t pllCosine = __cospuf32(obj->theta);

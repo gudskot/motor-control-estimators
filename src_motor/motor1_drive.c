@@ -147,10 +147,6 @@ SPDFR_Obj spdfr_M1;
 ESMO_Obj   esmo_M1;
 #pragma DATA_SECTION(esmo_M1, "foc_data");
 #elif LUEN
-//!< the speedfr object
-SPDFR_Obj spdfr_M1;
-#pragma DATA_SECTION(spdfr_M1, "foc_data");
-
 //!< the luenberger object
 LUEN_Obj   luen_M1;
 #pragma DATA_SECTION(luen_M1, "foc_data");
@@ -207,9 +203,6 @@ void initMotor1Handles(MOTOR_Handle handle)
 #elif LUEN
     // initialize the luenberger observer
     obj->luenHandle = LUEN_init(&luen_M1, sizeof(luen_M1));
-
-    // initialize the spdfr
-    obj->spdfrHandle = SPDFR_init(&spdfr_M1, sizeof(spdfr_M1));
 #elif ORTEGA
     // initialize the ortega observer
     obj->ortegaHandle = ORTEGA_init(&ortega_M1, sizeof(ortega_M1));
@@ -704,9 +697,6 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
     // the observer gains need Ts from LUEN_setParams
     LUEN_setBandwidth(obj->luenHandle, obj->userParamsHandle,
             objSets->luen_obsBW_rps, objSets->luen_obsZeta);
-
-    // set the spdfr parameters
-    SPDFR_setParams(obj->spdfrHandle, obj->userParamsHandle);
 
     obj->anglePLLDelayed_sf = objSets->anglePLLDelayed_sf * MATH_TWO_PI * objSets->ctrlPeriod_sec;
     obj->frswPos_sf = 0.6f;
@@ -1788,11 +1778,14 @@ __interrupt void motor1CtrlISR(void)
     LUEN_run(obj->luenHandle, obj->adcData.VdcBus_V,
                     &(obj->pwmData.Vabc_pu), &(obj->Iab_A));
 
-    obj->anglePLLComp_rad = obj->speedPLL_Hz * obj->anglePLLDelayed_sf;
-    obj->anglePLL_rad = MATH_incrAngle(LUEN_getAnglePLL(obj->luenHandle), obj->anglePLLComp_rad);
+    // speed: from the PLL (it also drives the rotating EMF model inside LUEN)
+    obj->speedPLL_Hz = LUEN_getSpeedPLL_Hz(obj->luenHandle);
 
-    SPDFR_run(obj->spdfrHandle, obj->anglePLL_rad);
-    obj->speedPLL_Hz = SPDFR_getSpeedHz(obj->spdfrHandle);
+    // angle: atan2 of the estimated back-EMF, no PLL in the angle path.
+    // anglePLL_rad keeps its name so the start-up state machine below is unchanged;
+    // the delay compensation is the same as in the other builds
+    obj->anglePLLComp_rad = obj->speedPLL_Hz * obj->anglePLLDelayed_sf;
+    obj->anglePLL_rad = MATH_incrAngle(LUEN_getAngleRaw(obj->luenHandle), obj->anglePLLComp_rad);
     obj->speed_Hz = obj->speedPLL_Hz;
 
     obj->speedFilter_Hz = obj->speedFilter_Hz *0.875f + obj->speed_Hz * 0.125f;

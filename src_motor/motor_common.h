@@ -78,7 +78,6 @@ extern "C"
 
 #ifdef LUEN
 #include "luenberger.h"
-#include "speedfr.h"
 #endif
 
 #ifdef ORTEGA
@@ -1091,9 +1090,6 @@ typedef struct _MOTOR_Vars_t_
 
     //!< the speed from PLL module
     float32_t speedPLL_Hz;
-
-    //!< the handle for the speedfr object
-    SPDFR_Handle spdfrHandle;
 
     //!< the handle for the luen object
     LUEN_Handle luenHandle;
