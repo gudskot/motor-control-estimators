@@ -252,7 +252,8 @@ typedef enum
 typedef enum
 {
     SLEST_TYPE_FAST_ONLY     = 0,    //!< the estimator is only FAST
-    SLEST_TYPE_LUEN_ONLY     = 2     //!< the estimator is only LUEN
+    SLEST_TYPE_LUEN_ONLY     = 2,    //!< the estimator is only LUEN
+    SLEST_TYPE_ORTEGA_ONLY   = 3     //!< the estimator is only ORTEGA
 } Estimator_Type_e;
 #endif
 

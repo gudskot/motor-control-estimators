@@ -81,6 +81,10 @@ extern "C"
 #include "speedfr.h"
 #endif
 
+#ifdef ORTEGA
+#include "ortega.h"
+#endif //!ORTEGA
+
 #include "user.h"
 #include "src_board/hal.h"
 
@@ -228,7 +232,8 @@ typedef enum
 {
     ESTIMATOR_MODE_FAST  = 0,             //!< FAST estimator
     ESTIMATOR_MODE_ESMO  = 1,             //!< ESMO estimator
-    ESTIMATOR_MODE_LUEN  = 2              //!< LUEN estimator
+    ESTIMATOR_MODE_LUEN  = 2,             //!< LUEN estimator
+    ESTIMATOR_MODE_ORTEGA = 3             //!< ORTEGA estimator
 } ESTIMATOR_Mode_e;
 
 //
@@ -249,7 +254,8 @@ typedef enum
     EST_TYPE_FAST_PSCOS    = 10,    //!< the estimator is FAST and SIN/COS
     EST_TYPE_ESMO_ENC      = 11,    //!< the estimator is ESMO and ENC
     EST_TYPE_ISBLDC        = 12,    //!< the estimator is only ISBLDC
-    EST_TYPE_LUEN          = 13     //!< the estimator is only LUEN
+    EST_TYPE_LUEN          = 13,    //!< the estimator is only LUEN
+    EST_TYPE_ORTEGA        = 14     //!< the estimator is only ORTEGA
 } EST_Type_e;
 
 typedef enum
@@ -596,6 +602,15 @@ typedef struct _MOTOR_SetVars_t_
     float32_t luen_PLL_Ki;
     float32_t luen_LpfFc_Hz;            // PLL speed filter cut-off, Hz
 #endif //!LUEN
+
+#ifdef ORTEGA
+    float32_t ortega_gammaN_rps;        // observer gain Gamma = gamma * psi^2, rad/s
+    float32_t ortega_PLL_KpMax;
+    float32_t ortega_PLL_KpMin;
+    float32_t ortega_PLL_KpSF;
+    float32_t ortega_PLL_Ki;
+    float32_t ortega_LpfFc_Hz;            // PLL speed filter cut-off, Hz
+#endif //!ORTEGA
 
     float32_t anglePLLDelayed_sf;       // P-99
 
@@ -1084,7 +1099,22 @@ typedef struct _MOTOR_Vars_t_
 
     //!< the handles for Angle Generate for open loop control
     ANGLE_GEN_Handle angleGenHandle;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    //!< PLL angle with delay compensation
+    float32_t anglePLLComp_rad;
+
+    //!< the rotor angle from PLL modules
+    float32_t anglePLL_rad;
+
+    //!< the speed from PLL module
+    float32_t speedPLL_Hz;
+
+    //!< the handle for the ortega object
+    ORTEGA_Handle ortegaHandle;
+
+    //!< the handles for Angle Generate for open loop control
+    ANGLE_GEN_Handle angleGenHandle;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     //!< the handles for Vs per Freq for open loop control
@@ -1174,7 +1204,20 @@ static inline void updateControllers(MOTOR_Handle handle)
         PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
 
     }
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    if(obj->controlStatus == MOTOR_CTRL_RUN)
+    {
+        // update the Id controller
+        PI_setGains(obj->piHandle_Id, objSets->Kp_Id, objSets->Ki_Id);
+
+        // update the Iq controller
+        PI_setGains(obj->piHandle_Iq, objSets->Kp_Iq, objSets->Ki_Iq);
+
+        // update the speed controller
+        PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
+
+    }
+#endif //!FAST && eSMO && LUEN && ORTEGA
 }
 
 //! \brief  Get the controllers Parameters
@@ -1233,6 +1276,11 @@ extern void updateESMOParameters(MOTOR_Handle handle);
 //! \brief  update the LUEN parameters
 extern void updateLUENParameters(MOTOR_Handle handle);
 #endif //!LUEN
+
+#ifdef ORTEGA
+//! \brief  update the ORTEGA parameters
+extern void updateORTEGAParameters(MOTOR_Handle handle);
+#endif //!ORTEGA
 
 #ifdef FAST
 //! \brief  update the FAST parameters

@@ -549,6 +549,21 @@ extern "C"
 #define USER_MOTOR1_LUEN_SPEED_LPF_FC_Hz    (200.0f)
 #endif //!LUEN
 
+#ifdef ORTEGA
+//! \brief Ortega observer gain, Gamma = gamma * psi^2, rad/s
+//! Linearised error dynamics: s^2 + Gamma*s + w^2 (w = electrical speed, rad/s).
+//! Gamma = 2*w gives critical damping, w > Gamma/4 removes the spurious equilibria,
+//! angle error from Rs/psi/dead-time errors grows with Gamma/w. Clamped to 0.15/Ts = 4500
+#define USER_MOTOR1_ORTEGA_GAMMA_rps        (500.0f)
+
+//! \brief PLL, the same values as LUEN/eSMO (the PLL becomes a common module later)
+#define USER_MOTOR1_ORTEGA_PLL_KP_MAX       (6.75f)
+#define USER_MOTOR1_ORTEGA_PLL_KP_MIN       (0.75f)
+#define USER_MOTOR1_ORTEGA_PLL_KP_SF        (5.0f)
+#define USER_MOTOR1_ORTEGA_PLL_KI           (0.0000028125f)
+#define USER_MOTOR1_ORTEGA_SPEED_LPF_FC_Hz  (200.0f)
+#endif //!ORTEGA
+
 #define USER_MOTOR1_GAIN_SPEED_LOW_Hz          (60)       // 10%~50% of the rated speed
 #define USER_MOTOR1_GAIN_SPEED_HIGH_Hz         (150)      // 50%~100% of the rated speed
 #define USER_MOTOR1_KP_SPD_START_SF            (1.5)         // 0.1~100.0

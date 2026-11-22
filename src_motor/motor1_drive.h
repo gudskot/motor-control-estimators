@@ -125,7 +125,10 @@ extern ANGLE_GEN_Obj    angleGen_M1;
 #elif LUEN
 //!< the Angle Generate onject for open loop control
 extern ANGLE_GEN_Obj    angleGen_M1;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+//!< the Angle Generate onject for open loop control
+extern ANGLE_GEN_Obj    angleGen_M1;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control
@@ -147,6 +150,11 @@ extern SPDFR_Obj spdfr_M1;
 //!< the luen object
 extern LUEN_Obj luen_M1;
 #endif //!LUEN
+
+#ifdef ORTEGA
+//!< the ortega object
+extern ORTEGA_Obj ortega_M1;
+#endif //!ORTEGA
 
 // *****************************************************************************
 // the function prototypes

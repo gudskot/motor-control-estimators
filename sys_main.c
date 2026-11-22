@@ -89,7 +89,11 @@ void main(void)
     systemVars.estType = EST_TYPE_LUEN;         // the estimator is only LUEN
     motorVars_M1.estimatorType = SLEST_TYPE_LUEN_ONLY;
     motorVars_M1.estimatorMode = ESTIMATOR_MODE_ESMO;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    systemVars.estType = EST_TYPE_ORTEGA;         // the estimator is only ORTEGA
+    motorVars_M1.estimatorType = SLEST_TYPE_ORTEGA_ONLY;
+    motorVars_M1.estimatorMode = ESTIMATOR_MODE_ORTEGA;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
     systemVars.currentSenseType = CURSEN_TYPE_THREE_SHUNT;
     motorVars_M1.currentSenType = LSC_TYPE_THREE_SHUNT;
@@ -241,7 +245,9 @@ void main(void)
                     updateESMOParameters(motorHandle_M1);
 #elif LUEN
                     updateLUENParameters(motorHandle_M1);
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+                    updateORTEGAParameters(motorHandle_M1);
+#endif //!FAST && eSMO && LUEN && ORTEGA
                     break;
                 case 4:     // calculate motor protection value
                     calcMotorOverCurrentThreshold(motorHandle_M1);

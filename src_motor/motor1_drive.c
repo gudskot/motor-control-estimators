@@ -126,7 +126,11 @@ ANGLE_GEN_Obj    angleGen_M1;
 //!< the Angle Generate onject for open loop control
 ANGLE_GEN_Obj    angleGen_M1;
 #pragma DATA_SECTION(angleGen_M1, "foc_data");
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+//!< the Angle Generate onject for open loop control
+ANGLE_GEN_Obj    angleGen_M1;
+#pragma DATA_SECTION(angleGen_M1, "foc_data");
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
 //!< the Vs per Freq object for open loop control
@@ -150,7 +154,11 @@ SPDFR_Obj spdfr_M1;
 //!< the luenberger object
 LUEN_Obj   luen_M1;
 #pragma DATA_SECTION(luen_M1, "foc_data");
-#endif //!eSMO && LUEN
+#elif ORTEGA
+//!< the ortega object
+ORTEGA_Obj   ortega_M1;
+#pragma DATA_SECTION(ortega_M1, "foc_data");
+#endif //!eSMO && LUEN && ORTEGA
 
 
 // the control handles for motor 1
@@ -177,7 +185,10 @@ void initMotor1Handles(MOTOR_Handle handle)
 #elif LUEN
     // initialize the angle generate module
     obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    // initialize the angle generate module
+    obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_2)
     // initialize the Vs per Freq module
@@ -199,7 +210,10 @@ void initMotor1Handles(MOTOR_Handle handle)
 
     // initialize the spdfr
     obj->spdfrHandle = SPDFR_init(&spdfr_M1, sizeof(spdfr_M1));
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    // initialize the ortega observer
+    obj->ortegaHandle = ORTEGA_init(&ortega_M1, sizeof(ortega_M1));
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
     // initialize the Clarke modules
     obj->clarkeHandle_I = CLARKE_init(&clarke_I_M1, sizeof(clarke_I_M1));
@@ -368,7 +382,14 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     objSets->luen_PLL_KpSF = USER_MOTOR1_LUEN_PLL_KP_SF;
     objSets->luen_PLL_Ki = USER_MOTOR1_LUEN_PLL_KI;
     objSets->luen_LpfFc_Hz = USER_MOTOR1_LUEN_SPEED_LPF_FC_Hz;
-#endif //!eSMO && LUEN
+#elif ORTEGA
+    objSets->ortega_gammaN_rps = USER_MOTOR1_ORTEGA_GAMMA_rps;
+    objSets->ortega_PLL_KpMax = USER_MOTOR1_ORTEGA_PLL_KP_MAX;
+    objSets->ortega_PLL_KpMin = USER_MOTOR1_ORTEGA_PLL_KP_MIN;
+    objSets->ortega_PLL_KpSF = USER_MOTOR1_ORTEGA_PLL_KP_SF;
+    objSets->ortega_PLL_Ki = USER_MOTOR1_ORTEGA_PLL_KI;
+    objSets->ortega_LpfFc_Hz = USER_MOTOR1_ORTEGA_SPEED_LPF_FC_Hz;
+#endif //!eSMO && LUEN && ORTEGA
     
     objSets->restartWaitTimeSet = USER_M1_RESTART_WAIT_TIME_SET;
     objSets->stopWaitTimeSet = USER_M1_STOP_WAIT_TIME_SET;
@@ -425,7 +446,10 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 #elif LUEN
     obj->svmMode = SVM_COM_C;
     obj->flagEnableFWC = false;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    obj->svmMode = SVM_COM_C;
+    obj->flagEnableFWC = false;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
     obj->flagEnableForceAngle = true;
 
@@ -456,7 +480,11 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     obj->estimatorMode = ESTIMATOR_MODE_LUEN;
 
     obj->flagEnableAlignment = true;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    obj->estimatorMode = ESTIMATOR_MODE_ORTEGA;
+
+    obj->flagEnableAlignment = true;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
     obj->speedAbs_Hz = 0.0f;
     obj->speedFilter_Hz = 0.0f;
@@ -472,7 +500,10 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 #elif LUEN
     obj->speedPLL_Hz = 0.0f;
     obj->anglePLL_rad = 0.0f;
-#endif //!eSMO && LUEN
+#elif ORTEGA
+    obj->speedPLL_Hz = 0.0f;
+    obj->anglePLL_rad = 0.0f;
+#endif //!eSMO && LUEN && ORTEGA
 
 #if (DMC_BUILDLEVEL == DMC_LEVEL_1)
     // output PWM teste
@@ -511,7 +542,10 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
 #elif LUEN
     // initialize the angle generate module
     ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    // initialize the angle generate module
+    ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
 #if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
     obj->Idq_set_A.value[0] = 0.0f;
@@ -676,7 +710,23 @@ void resetMotor1CtrlParameters(MOTOR_Handle handle)     // size=0x13b->0xd2
 
     obj->anglePLLDelayed_sf = objSets->anglePLLDelayed_sf * MATH_TWO_PI * objSets->ctrlPeriod_sec;
     obj->frswPos_sf = 0.6f;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    ORTEGA_setPLLParams(obj->ortegaHandle, objSets->ortega_PLL_KpMax,
+            objSets->ortega_PLL_KpMin, objSets->ortega_PLL_KpSF);
+
+    ORTEGA_setPLLKi(obj->ortegaHandle, objSets->ortega_PLL_Ki);
+
+    ORTEGA_setSpeedFilterFreq(obj->ortegaHandle, objSets->ortega_LpfFc_Hz);
+
+    // gamma = Gamma / psi^2 is recomputed in setParams, when psi and Ts are known
+    ORTEGA_setGain(obj->ortegaHandle, objSets->ortega_gammaN_rps);
+
+    // set the ORTEGA controller parameters
+    ORTEGA_setParams(obj->ortegaHandle, obj->userParamsHandle);
+
+    obj->anglePLLDelayed_sf = objSets->anglePLLDelayed_sf * MATH_TWO_PI * objSets->ctrlPeriod_sec;
+    obj->frswPos_sf = 0.6f;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
     #define DEADBAND_usec 1.100f
     #define NOISE_WINDOW_usec 1.55f
@@ -1041,7 +1091,17 @@ void runMotor1Control(MOTOR_Handle handle)
             {
                 TRAJ_setTargetValue(obj->trajHandle_spd,(objSets->speedForce_Hz * obj->direction));
             }
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+            // Sets the target speed for the speed trajectory
+            if(obj->controlStatus >= MOTOR_CL_RUNNING)
+            {
+                TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
+            }
+            else
+            {
+                TRAJ_setTargetValue(obj->trajHandle_spd,(objSets->speedForce_Hz * obj->direction));
+            }
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
             if((fabsf(obj->speed_Hz) > objSets->speedStart_Hz) ||
                     (obj->controlStatus == MOTOR_CTRL_RUN))
@@ -1202,7 +1262,9 @@ void runMotor1Control(MOTOR_Handle handle)
     obj->flagMotorIdentified = true;
 #elif LUEN
     obj->flagMotorIdentified = true;
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    obj->flagMotorIdentified = true;
+#endif //!FAST && eSMO && LUEN && ORTEGA
 
     if(obj->flagMotorIdentified == true)
     {
@@ -1239,7 +1301,12 @@ void runMotor1Control(MOTOR_Handle handle)
     {
         LUEN_updatePLLParams(obj->luenHandle);
     }
-#endif //!eSMO && LUEN
+#elif ORTEGA
+    if(obj->controlStatus >= MOTOR_CTRL_RUN)
+    {
+        ORTEGA_updatePLLParams(obj->ortegaHandle);
+    }
+#endif //!eSMO && LUEN && ORTEGA
 
     return;
 }   // end of the runMOTOR1Control() function
@@ -1904,7 +1971,226 @@ __interrupt void motor1CtrlISR(void)
     PARK_run(obj->parkHandle_I, &(obj->Iab_A), (MATH_vec2 *)&(obj->Idq_in_A));
 
 // End of MOTOR1_LUEN
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    // sensorless-FOC
+    MATH_Vec2 phasor;
+
+    ANGLE_GEN_run(obj->angleGenHandle, obj->speed_int_Hz);
+    obj->angleGen_rad = ANGLE_GEN_getAngle(obj->angleGenHandle);
+
+    // run Clarke transform on current
+    CLARKE_run_threeInput(obj->clarkeHandle_I,
+                          &obj->adcData.I_A, &obj->Iab_A);
+
+    if(obj->flagRunIdentAndOnLine == true)
+    {
+        // run a trajectory for speed reference,
+        // so the reference changes with a ramp instead of a step
+        TRAJ_run(obj->trajHandle_spd);
+        obj->enableCurrentCtrl = obj->flagEnableCurrentCtrl;
+        obj->enableSpeedCtrl = obj->flagEnableSpeedCtrl;
+
+    }
+    else
+    {
+        obj->enableSpeedCtrl = false;
+        obj->enableCurrentCtrl = false;
+    }
+
+    obj->speed_int_Hz = TRAJ_getIntValue(obj->trajHandle_spd);
+    obj->oneOverDcBus_invV = 1.0f / obj->adcData.VdcBus_V;
+
+    // run the Ortega observer
+    ORTEGA_setSpeedRef(obj->ortegaHandle, obj->speed_int_Hz);
+    ORTEGA_run(obj->ortegaHandle, obj->adcData.VdcBus_V,
+                    &(obj->pwmData.Vabc_pu), &(obj->Iab_A));
+
+    // speed: PLL used as a PI tracking estimator
+    obj->speedPLL_Hz = ORTEGA_getSpeedPLL_Hz(obj->ortegaHandle);
+
+    // angle: atan2 of the estimated magnet flux, no PLL in the angle path
+    obj->anglePLLComp_rad = obj->speedPLL_Hz * obj->anglePLLDelayed_sf;
+    obj->anglePLL_rad = MATH_incrAngle(ORTEGA_getAngleRaw(obj->ortegaHandle), obj->anglePLLComp_rad);
+    obj->speed_Hz = obj->speedPLL_Hz;
+
+    obj->speedFilter_Hz = obj->speedFilter_Hz *0.875f + obj->speed_Hz * 0.125f;
+    obj->speedAbs_Hz = fabsf(obj->speedFilter_Hz);
+
+    obj->stateRunTimeCnt++;
+
+    if(obj->controlStatus >= MOTOR_CL_RUNNING)
+    {
+        obj->angleFOC_rad = obj->anglePLL_rad;
+    }
+    else if(obj->controlStatus == MOTOR_OL_END_ANGLE)
+    {
+        float32_t theta_delta_sin = __sin(obj->angleOLDelta_rad);
+        float32_t theta_step = (obj->angleOLStep_deg * MATH_TWO_PI)/(360.0f * objSets->ctrlFreq_Hz);
+
+        if (theta_delta_sin > 0) {
+            obj->angleOLDelta_rad = obj->angleOLDelta_rad - theta_step;
+        } else {
+            obj->angleOLDelta_rad = obj->angleOLDelta_rad + theta_step;
+        }
+        obj->angleFOC_rad = MATH_incrAngle(obj->anglePLL_rad, obj->angleOLDelta_rad);
+        obj->enableSpeedCtrl = true;
+        obj->Idq_out_A.value[0] = 0.0f;
+
+        obj->iqTarget_OLEnd_A = obj->iqTarget_CLStart_A;
+
+        if(obj->speed_int_Hz > 0.0f)
+        {
+            obj->IsRef_A = obj->iqTarget_OLEnd_A;
+            obj->Idq_out_A.value[1] = obj->iqTarget_OLEnd_A;
+        }
+        else
+        {
+            obj->IsRef_A = -obj->iqTarget_OLEnd_A;
+            obj->Idq_out_A.value[1] = -obj->iqTarget_OLEnd_A;
+        }
+
+        if(fabsf(theta_delta_sin) < __sin(theta_step * 5.0))
+        {
+            obj->stateRunTimeCnt = 0;
+            obj->controlStatus = MOTOR_CL_RUNNING;
+
+            ORTEGA_setAnglePu(obj->ortegaHandle, obj->angleFOC_rad);    
+
+            // Pre-load integrators with current voltage output for bumpless transfer
+            PI_setUi(obj->piHandle_spd, obj->Idq_out_A.value[1]);
+        }    
+    }
+    else if(obj->controlStatus == MOTOR_OL_END_IQ)
+    {
+        obj->angleFOC_rad = obj->angleGen_rad;
+        obj->enableSpeedCtrl = true;
+
+        obj->Idq_out_A.value[0] = 0.0f;
+
+        float32_t iq_step = obj->iqTarget_CLStartStep_sfps / objSets->ctrlFreq_Hz;
+        obj->iqTarget_CLStart_sf = obj->iqTarget_CLStart_sf - iq_step;
+
+        if(obj->speed_int_Hz > 0.0f)
+        {
+            obj->IsRef_A = obj->iqTarget_CLStart_sf * objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = obj->iqTarget_CLStart_sf * objSets->startCurrent_A;
+        }
+        else
+        {
+            obj->IsRef_A = obj->iqTarget_CLStart_sf * -objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = obj->iqTarget_CLStart_sf * -objSets->startCurrent_A;
+        }
+
+        if (fabsf(obj->speed_Hz - objSets->speedForce_Hz) > obj->spdThresh_OLEnd_Hz)
+        {
+            obj->stateRunTimeCnt = 0;
+            obj->controlStatus = MOTOR_OL_END_ANGLE;
+
+            obj->angleOLDelta_rad = MATH_incrAngle(obj->angleGen_rad, -obj->anglePLL_rad);
+            obj->iqTarget_CLStart_A = obj->iqTarget_CLStart_sf * objSets->startCurrent_A * (objSets->speedForce_Hz / obj->speed_Hz);
+        }    
+    }
+    else if(obj->controlStatus == MOTOR_OL_START)
+    {
+        obj->angleFOC_rad = obj->angleGen_rad;
+        obj->enableSpeedCtrl = false;
+
+        obj->Idq_out_A.value[0] = 0.0f;
+
+        if(obj->speed_int_Hz > 0.0f)
+        {
+            obj->IsRef_A = objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = objSets->startCurrent_A;
+        }
+        else
+        {
+            obj->IsRef_A = -objSets->startCurrent_A;
+            obj->Idq_out_A.value[1] = -objSets->startCurrent_A;
+        }
+
+        if(fabsf(obj->speed_int_Hz) >= objSets->speedForce_Hz)
+        {
+            TRAJ_setIntValue(obj->trajHandle_spd, obj->speed_int_Hz);
+
+            if(obj->stateRunTimeCnt > objSets->forceRunTimeDelay)
+            {
+                obj->controlStatus = MOTOR_OL_END_IQ;
+                obj->stateRunTimeCnt = 0;
+
+                obj->iqTarget_CLStart_sf = 1.0f;
+
+            }
+        }
+    }
+    else if(obj->controlStatus == MOTOR_ALIGNMENT)
+    {
+        obj->angleFOC_rad = 0.0f;
+        obj->enableSpeedCtrl = false;
+
+        obj->IsRef_A = 0.0f;
+        obj->Idq_out_A.value[0] = objSets->alignCurrent_A;
+        obj->Idq_out_A.value[1] = 0.0f;
+
+        TRAJ_setIntValue(obj->trajHandle_spd, 0.0f);
+        ORTEGA_setAnglePu(obj->ortegaHandle, obj->angleFOC_rad);
+        ORTEGA_setFluxAngle(obj->ortegaHandle, obj->angleFOC_rad);
+        ANGLE_GEN_setAngle(obj->angleGenHandle, obj->angleFOC_rad);
+
+        if((obj->stateRunTimeCnt > objSets->alignTimeDelay) ||
+                 (obj->flagEnableAlignment == false))
+        {
+            obj->controlStatus = MOTOR_OL_START;
+            obj->stateRunTimeCnt = 0;
+
+            obj->Idq_out_A.value[0] = objSets->fluxCurrent_A;
+
+            PI_setUi(obj->piHandle_spd, 0.0);
+        }
+    }
+    else if(obj->controlStatus == MOTOR_SEEK_POS)
+    {
+        obj->enableSpeedCtrl = false;
+
+        obj->IsRef_A = 0.0f;
+        obj->Idq_out_A.value[0] = 0.0f;
+        obj->Idq_out_A.value[1] = 0.0f;
+
+        if(obj->stateRunTimeCnt > objSets->flyingStartTimeDelay)
+        {
+            obj->stateRunTimeCnt = 0;
+
+            if(obj->speedAbs_Hz > objSets->speedFlyingStart_Hz)
+            {
+                obj->speed_int_Hz = obj->speedFilter_Hz;
+                TRAJ_setIntValue(obj->trajHandle_spd, obj->speedFilter_Hz);
+                PI_setUi(obj->piHandle_spd, 0.0f);
+
+                obj->controlStatus = MOTOR_CL_RUNNING;
+            }
+            else
+            {
+                obj->angleFOC_rad = 0.0f;
+                obj->controlStatus = MOTOR_ALIGNMENT;
+            }
+        }
+    }
+
+#if (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+    obj->angleFOC_rad = obj->angleGen_rad;
+#endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
+
+    // compute the sin/cos phasor
+    phasor.value[0] = __cos(obj->angleFOC_rad);
+    phasor.value[1] = __sin(obj->angleFOC_rad);
+
+    // set the phasor in the Park transform
+    PARK_setPhasor(obj->parkHandle_I, &phasor);
+
+    // run the Park transform
+    PARK_run(obj->parkHandle_I, &(obj->Iab_A), (MATH_vec2 *)&(obj->Idq_in_A));
+
+// End of MOTOR1_ORTEGA
+#endif //!FAST && eSMO && LUEN && ORTEGA
 //------------------------------------------------------------------------------
 
 //---------- Common Speed and Current Loop for all observers -------------------
@@ -2013,7 +2299,10 @@ __interrupt void motor1CtrlISR(void)
 #elif LUEN
     // setup the space vector generator (SVGEN) module
     SVGEN_setup(obj->svgenHandle, obj->oneOverDcBus_invV);
-#endif //!FAST && eSMO && LUEN
+#elif ORTEGA
+    // setup the space vector generator (SVGEN) module
+    SVGEN_setup(obj->svgenHandle, obj->oneOverDcBus_invV);
+#endif //!FAST && eSMO && LUEN && ORTEGA
     
     // run the space vector generator (SVGEN) module
     SVGEN_run(obj->svgenHandle,
