@@ -1175,33 +1175,7 @@ static inline void updateControllers(MOTOR_Handle handle)
         PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
 
     }
-#elif eSMO
-    if(obj->controlStatus == MOTOR_CTRL_RUN)
-    {
-        // update the Id controller
-        PI_setGains(obj->piHandle_Id, objSets->Kp_Id, objSets->Ki_Id);
-
-        // update the Iq controller
-        PI_setGains(obj->piHandle_Iq, objSets->Kp_Iq, objSets->Ki_Iq);
-
-        // update the speed controller
-        PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
-
-    }
-#elif LUEN
-    if(obj->controlStatus == MOTOR_CTRL_RUN)
-    {
-        // update the Id controller
-        PI_setGains(obj->piHandle_Id, objSets->Kp_Id, objSets->Ki_Id);
-
-        // update the Iq controller
-        PI_setGains(obj->piHandle_Iq, objSets->Kp_Iq, objSets->Ki_Iq);
-
-        // update the speed controller
-        PI_setGains(obj->piHandle_spd, objSets->Kp_spd, objSets->Ki_spd);
-
-    }
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     if(obj->controlStatus == MOTOR_CTRL_RUN)
     {
         // update the Id controller

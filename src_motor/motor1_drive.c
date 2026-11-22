@@ -118,15 +118,7 @@ TRAJ_Obj     traj_spd_M1;
 ANGLE_GEN_Obj    angleGen_M1;
 #pragma DATA_SECTION(angleGen_M1, "foc_data");
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#elif eSMO
-//!< the Angle Generate onject for open loop control
-ANGLE_GEN_Obj    angleGen_M1;
-#pragma DATA_SECTION(angleGen_M1, "foc_data");
-#elif LUEN
-//!< the Angle Generate onject for open loop control
-ANGLE_GEN_Obj    angleGen_M1;
-#pragma DATA_SECTION(angleGen_M1, "foc_data");
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
 //!< the Angle Generate onject for open loop control
 ANGLE_GEN_Obj    angleGen_M1;
 #pragma DATA_SECTION(angleGen_M1, "foc_data");
@@ -175,13 +167,7 @@ void initMotor1Handles(MOTOR_Handle handle)
     // initialize the angle generate module
     obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#elif eSMO
-    // initialize the angle generate module
-    obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
-#elif LUEN
-    // initialize the angle generate module
-    obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     // initialize the angle generate module
     obj->angleGenHandle = ANGLE_GEN_init(&angleGen_M1, sizeof(angleGen_M1));
 #endif //!FAST && eSMO && LUEN && ORTEGA
@@ -433,13 +419,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
         obj->svmMode = SVM_COM_C;
         obj->flagEnableFWC = false;
     }
-#elif eSMO
-    obj->svmMode = SVM_COM_C;
-    obj->flagEnableFWC = false;
-#elif LUEN
-    obj->svmMode = SVM_COM_C;
-    obj->flagEnableFWC = false;
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     obj->svmMode = SVM_COM_C;
     obj->flagEnableFWC = false;
 #endif //!FAST && eSMO && LUEN && ORTEGA
@@ -487,13 +467,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     obj->angleFOC_rad = 0.0f;
     obj->angleGen_rad = 0.0f;
 
-#ifdef eSMO
-    obj->speedPLL_Hz = 0.0f;
-    obj->anglePLL_rad = 0.0f;
-#elif LUEN
-    obj->speedPLL_Hz = 0.0f;
-    obj->anglePLL_rad = 0.0f;
-#elif ORTEGA
+#if defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     obj->speedPLL_Hz = 0.0f;
     obj->anglePLL_rad = 0.0f;
 #endif //!eSMO && LUEN && ORTEGA
@@ -529,13 +503,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     // initialize the angle generate module
     ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#elif eSMO
-    // initialize the angle generate module
-    ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
-#elif LUEN
-    // initialize the angle generate module
-    ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     // initialize the angle generate module
     ANGLE_GEN_setParams(obj->angleGenHandle, objSets->ctrlPeriod_sec);
 #endif //!FAST && eSMO && LUEN && ORTEGA
@@ -1061,27 +1029,7 @@ void runMotor1Control(MOTOR_Handle handle)
 
             // Sets the target speed for the speed trajectory
             TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
-#elif eSMO
-            // Sets the target speed for the speed trajectory
-            if(obj->controlStatus >= MOTOR_CL_RUNNING)
-            {
-                TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
-            }
-            else
-            {
-                TRAJ_setTargetValue(obj->trajHandle_spd,(objSets->speedForce_Hz * obj->direction));
-            }
-#elif LUEN
-            // Sets the target speed for the speed trajectory
-            if(obj->controlStatus >= MOTOR_CL_RUNNING)
-            {
-                TRAJ_setTargetValue(obj->trajHandle_spd, obj->speedRef_Hz);
-            }
-            else
-            {
-                TRAJ_setTargetValue(obj->trajHandle_spd,(objSets->speedForce_Hz * obj->direction));
-            }
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
             // Sets the target speed for the speed trajectory
             if(obj->controlStatus >= MOTOR_CL_RUNNING)
             {
@@ -1248,11 +1196,7 @@ void runMotor1Control(MOTOR_Handle handle)
             }
         }
     }
-#elif eSMO
-    obj->flagMotorIdentified = true;
-#elif LUEN
-    obj->flagMotorIdentified = true;
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     obj->flagMotorIdentified = true;
 #endif //!FAST && eSMO && LUEN && ORTEGA
 
@@ -2286,13 +2230,7 @@ __interrupt void motor1CtrlISR(void)
 #ifdef FAST
     // setup the space vector generator (SVGEN) module
     SVGEN_setup(obj->svgenHandle, obj->estOutputData.oneOverDcBus_invV);
-#elif eSMO
-    // setup the space vector generator (SVGEN) module
-    SVGEN_setup(obj->svgenHandle, obj->oneOverDcBus_invV);
-#elif LUEN
-    // setup the space vector generator (SVGEN) module
-    SVGEN_setup(obj->svgenHandle, obj->oneOverDcBus_invV);
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     // setup the space vector generator (SVGEN) module
     SVGEN_setup(obj->svgenHandle, obj->oneOverDcBus_invV);
 #endif //!FAST && eSMO && LUEN && ORTEGA

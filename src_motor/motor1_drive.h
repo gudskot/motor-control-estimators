@@ -119,13 +119,7 @@ extern TRAJ_Obj     traj_Is_M1;
 //!< the Angle Generate onject for open loop control
 extern ANGLE_GEN_Obj    angleGen_M1;
 #endif // (DMC_BUILDLEVEL <= DMC_LEVEL_3)
-#elif eSMO
-//!< the Angle Generate onject for open loop control
-extern ANGLE_GEN_Obj    angleGen_M1;
-#elif LUEN
-//!< the Angle Generate onject for open loop control
-extern ANGLE_GEN_Obj    angleGen_M1;
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
 //!< the Angle Generate onject for open loop control
 extern ANGLE_GEN_Obj    angleGen_M1;
 #endif //!FAST && eSMO && LUEN && ORTEGA

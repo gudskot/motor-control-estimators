@@ -698,21 +698,7 @@ void setupControllers(MOTOR_Handle handle)
     // copy the Id, Iq and speed controller parameters to motorVars
     getControllers(handle);
 
-#ifdef eSMO
-    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
-
-    objSets->Rs_Ohm = objUser->motor_Rs_Ohm;
-    objSets->Ls_d_H = objUser->motor_Ls_d_H;
-    objSets->Ls_q_H = objUser->motor_Ls_q_H;
-    objSets->flux_VpHz = objUser->motor_ratedFlux_Wb * MATH_TWO_PI;
-#elif LUEN
-    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
-
-    objSets->Rs_Ohm = objUser->motor_Rs_Ohm;
-    objSets->Ls_d_H = objUser->motor_Ls_d_H;
-    objSets->Ls_q_H = objUser->motor_Ls_q_H;
-    objSets->flux_VpHz = objUser->motor_ratedFlux_Wb * MATH_TWO_PI;
-#elif ORTEGA
+#if defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(handle->motorSetsHandle);
 
     objSets->Rs_Ohm = objUser->motor_Rs_Ohm;
@@ -817,23 +803,7 @@ void updateGlobalVariables(MOTOR_Handle handle)
     obj->powerMotor_W = EST_computePower_W(obj->estHandle);
 
     // obj->powerReal_W = obj->torque_Nm * obj->speedAbs_Hz * obj->power_sf;
-#elif eSMO
-    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(obj->motorSetsHandle);
-
-    obj->Rs_Ohm = objSets->Rs_Ohm;
-    obj->Ls_d_H = objSets->Ls_d_H;
-    obj->Ls_q_H = objSets->Ls_q_H;
-    obj->flux_VpHz = objSets->flux_VpHz;
-    obj->flux_Wb   = obj->flux_VpHz * MATH_ONE_OVER_TWO_PI;
-#elif LUEN
-    MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(obj->motorSetsHandle);
-
-    obj->Rs_Ohm = objSets->Rs_Ohm;
-    obj->Ls_d_H = objSets->Ls_d_H;
-    obj->Ls_q_H = objSets->Ls_q_H;
-    obj->flux_VpHz = objSets->flux_VpHz;
-    obj->flux_Wb   = obj->flux_VpHz * MATH_ONE_OVER_TWO_PI;
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
     MOTOR_SetVars_t *objSets = (MOTOR_SetVars_t *)(obj->motorSetsHandle);
 
     obj->Rs_Ohm = objSets->Rs_Ohm;
@@ -975,93 +945,7 @@ void tuneControllerGains(MOTOR_Handle handle)
 
             }
         }
-#elif eSMO
-        if(obj->controlStatus == MOTOR_CTRL_RUN)
-        {
-            if(obj->speedAbs_Hz < objSets->Gain_speed_low_Hz)
-            {
-                objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_low_sf;
-                objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_low_sf;
-            }
-            else if(obj->speedAbs_Hz > objSets->Gain_speed_high_Hz)
-            {
-                objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_high_sf;
-                objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_high_sf;
-            }
-            else
-            {
-                Kp_spd_mid_sf = objSets->Kp_spd_low_sf +
-                        (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Kp_spd_slope_sf;
-                Ki_spd_mid_sf = objSets->Ki_spd_low_sf +
-                        (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Ki_spd_slope_sf;
-
-                objSets->Kp_spd = objSets->Kp_spd_set * Kp_spd_mid_sf;
-                objSets->Ki_spd = objSets->Ki_spd_set * Ki_spd_mid_sf;
-            }
-
-            objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
-            objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
-
-            objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
-            objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
-
-        }
-        else if(obj->controlStatus <= MOTOR_CL_RUNNING)
-        {
-            objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_start_sf;
-            objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_start_sf;
-
-            objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
-            objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
-
-            objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
-            objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
-
-        }
-#elif LUEN
-        if(obj->controlStatus == MOTOR_CTRL_RUN)
-            {
-                if(obj->speedAbs_Hz < objSets->Gain_speed_low_Hz)
-                {
-                    objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_low_sf;
-                    objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_low_sf;
-                }
-                else if(obj->speedAbs_Hz > objSets->Gain_speed_high_Hz)
-                {
-                    objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_high_sf;
-                    objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_high_sf;
-                }
-                else
-                {
-                    Kp_spd_mid_sf = objSets->Kp_spd_low_sf +
-                            (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Kp_spd_slope_sf;
-                    Ki_spd_mid_sf = objSets->Ki_spd_low_sf +
-                            (obj->speedAbs_Hz - objSets->Gain_speed_low_Hz) * objSets->Ki_spd_slope_sf;
-
-                    objSets->Kp_spd = objSets->Kp_spd_set * Kp_spd_mid_sf;
-                    objSets->Ki_spd = objSets->Ki_spd_set * Ki_spd_mid_sf;
-                }
-
-                objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
-                objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
-
-                objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
-                objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
-
-            }
-            else if(obj->controlStatus <= MOTOR_CL_RUNNING)
-            {
-                objSets->Kp_spd = objSets->Kp_spd_set * objSets->Kp_spd_start_sf;
-                objSets->Ki_spd = objSets->Ki_spd_set * objSets->Ki_spd_start_sf;
-
-                objSets->Kp_Id = objSets->Kp_Id_set * objSets->Kp_Id_sf;
-                objSets->Ki_Id = objSets->Ki_Id_set * objSets->Ki_Id_sf;
-
-                objSets->Kp_Iq = objSets->Kp_Iq_set * objSets->Kp_Iq_sf;
-                objSets->Ki_Iq = objSets->Ki_Iq_set * objSets->Ki_Iq_sf;
-
-            }   
-#elif ORTEGA
+#elif defined(eSMO) || defined(LUEN) || defined(ORTEGA)
         if(obj->controlStatus == MOTOR_CTRL_RUN)
             {
                 if(obj->speedAbs_Hz < objSets->Gain_speed_low_Hz)
