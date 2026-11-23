@@ -241,7 +241,7 @@ void initMotor1CtrlParameters(MOTOR_Handle handle)
     USER_setParams_priv(obj->userParamsHandle);
 
     objSets->estFreq_Hz = USER_M1_ISR_FREQ_Hz;
-    objSets->motorModel = M1_Teknic_M2310PL;
+    objSets->motorModel = M15_TMOTOR_U3_KV700;
 
     objSets->voltageFilter_Hz = USER_M1_VOLTAGE_FILTER_POLE_Hz;
 #endif //!FAST

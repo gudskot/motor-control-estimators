@@ -461,7 +461,7 @@ extern "C"
 //==============================================================================
 // Motor defines
 
-#define USER_MOTOR1                            Teknic_M2310PLN04K
+#define USER_MOTOR1                         TMOTOR_U3_KV700
 
 #define USER_MOTOR1_TYPE                   	(MOTOR_TYPE_PM)
 #define USER_MOTOR1_NUM_POLE_PAIRS         	(7)   // 12N14P

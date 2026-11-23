@@ -294,6 +294,7 @@ typedef enum
     M12_IDTEST_MOTOR03   = 11,      //
     M13_IDTEST_MOTOR04   = 12,      //
     M14_IDTEST_MOTOR05   = 13,      //
+    M15_TMOTOR_U3_KV700  = 14,      //
     MOTOR_MAX_NUM        = 4
 }MOTOR_Model_e;
 

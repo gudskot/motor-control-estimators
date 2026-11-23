@@ -154,6 +154,7 @@ extern "C"
 #define my_pm_motor_1               301
 #define my_aci_motor_2              302
 #define RL_simulation               305
+#define TMOTOR_U3_KV700             306
 
 // **************************************************************************
 // the globals
