@@ -95,7 +95,7 @@ extern "C"
 //
 #define MAJOR 0
 #define MINOR 5
-#define PATCH 2
+#define PATCH 3
 
 //
 //! \brief typedefs for the fault
