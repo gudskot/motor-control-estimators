@@ -541,7 +541,7 @@ extern "C"
 //! \brief Luenberger observer damping
 #define USER_MOTOR1_LUEN_OBS_ZETA           (0.7f)
 
-//! \brief PLL, the same values as eSMO (the PLL becomes a common module later)
+//! \brief PLL, the same values as eSMO/ORTEGA (the PLL becomes a common module later)
 #define USER_MOTOR1_LUEN_PLL_KP_MAX         (6.75f)
 #define USER_MOTOR1_LUEN_PLL_KP_MIN         (0.75f)
 #define USER_MOTOR1_LUEN_PLL_KP_SF          (5.0f)

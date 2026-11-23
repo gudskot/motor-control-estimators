@@ -226,7 +226,8 @@ void main(void)
 
             switch(systemVars.timerBase_1ms)
             {
-                case 1:     // motor 1 protection check
+                case 1:     
+                    // motor 1 protection check
                     runMotorMonitor(motorHandle_M1);
                     break;
                 case 2:
@@ -249,10 +250,12 @@ void main(void)
                     updateORTEGAParameters(motorHandle_M1);
 #endif //!FAST && eSMO && LUEN && ORTEGA
                     break;
-                case 4:     // calculate motor protection value
+                case 4:     
+                    // calculate motor protection value
                     calcMotorOverCurrentThreshold(motorHandle_M1);
                     break;
-                case 5:     // system control
+                case 5:     
+                    // system control
                     systemVars.timerBase_1ms = 0;
                     systemVars.timerCnt_5ms++;
                     break;

@@ -1220,7 +1220,7 @@ void runMotor1Control(MOTOR_Handle handle)
 #ifdef FAST
     // run Rs online
     runRsOnLine(handle);
-    #endif //!FAST
+#endif //!FAST
     // update the global variables
     updateGlobalVariables(handle);
 
