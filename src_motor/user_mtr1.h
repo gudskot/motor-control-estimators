@@ -525,10 +525,24 @@ extern "C"
 #define USER_MOTOR1_PLL_KP_SF              	(5)
 #define USER_MOTOR1_PLL_KI                  (0.0000028125)
 
+#ifdef eSMO_SLIDE
+//! \brief Boundary layer E0 of sat(err, E0), pu of current (base 64.4 A) -> about 0.13 A
+#define USER_MOTOR1_BEMF_THRESHOLD         	(0.002)
+
+//! \brief Sliding condition k*(1+l) > |e|, l = 1 in TI eSMO, |e| = w*psi.
+//! Margin 2 -> k = w*psi. TI uses Z = Kslide*sat(err, E0), so Kslide = k / E0
+#define USER_MOTOR1_KSLIDE_MARGIN          	(2.0f)
+#define USER_MOTOR1_KSLIDE_SPEED_MIN_Hz    	(30.0f)
+#define USER_MOTOR1_KSLIDE_SF               (USER_MOTOR1_KSLIDE_MARGIN * 0.5f * USER_MOTOR1_RATED_FLUX_VpHz \
+                                            / (4096.0f * USER_M1_VOLTAGE_SF) / USER_MOTOR1_BEMF_THRESHOLD)
+#else
 #define USER_MOTOR1_BEMF_THRESHOLD         	(0.5)
+#endif //!eSMO_SLIDE
+
+//! \brief LPF phase compensation arctan(w/wc) in TI units: 2*pi*fmax*Ts
+#define USER_MOTOR1_THETA_OFFSET_SF        	(6.283185307f * USER_MOTOR1_FREQ_MAX_Hz * USER_M1_CTRL_PERIOD_sec)
 #define USER_MOTOR1_BEMF_KSLF_FC_SF        	(1)
 #define USER_MOTOR1_BEMF_KSLF_FC_Hz        	(1)
-#define USER_MOTOR1_THETA_OFFSET_SF        	(1)
 #define USER_MOTOR1_SPEED_LPF_FC_Hz        	(200)
 #endif //!eSMO
 

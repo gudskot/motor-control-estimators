@@ -1496,6 +1496,12 @@ __interrupt void motor1CtrlISR(void)
     obj->oneOverDcBus_invV = 1.0f / obj->adcData.VdcBus_V;
 
     // run the eSMO
+#ifdef eSMO_SLIDE
+    // sliding gain follows the speed: k = w*psi
+    float32_t fKslide_Hz = fmaxf(fabsf(obj->speed_int_Hz), USER_MOTOR1_KSLIDE_SPEED_MIN_Hz);
+    ESMO_setKslide(obj->esmoHandle, USER_MOTOR1_KSLIDE_SF * fKslide_Hz);
+#endif //!eSMO_SLIDE
+
     //  ESMO_setSpeedRef(obj->esmoHandle, obj->speed_Hz);
     ESMO_setSpeedRef(obj->esmoHandle, obj->speed_int_Hz);
     ESMO_run(obj->esmoHandle, obj->adcData.VdcBus_V,
@@ -1518,7 +1524,9 @@ __interrupt void motor1CtrlISR(void)
     {
         obj->angleFOC_rad = obj->anglePLL_rad;
 
+#ifndef eSMO_SLIDE
         ESMO_updateKslide(obj->esmoHandle);
+#endif //!eSMO_SLIDE
     }
     else if(obj->controlStatus == MOTOR_OL_END_ANGLE)
     {

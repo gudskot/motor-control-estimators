@@ -82,9 +82,10 @@
                                     <listOptionValue value="_FLASH"/>
                                     <listOptionValue value="_FULL_FAST_LIB"/>
                                     <listOptionValue value="FAST_N"/>
-                                    <listOptionValue value="eSMO_N"/>
+                                    <listOptionValue value="eSMO"/>
                                     <listOptionValue value="LUEN_N"/>
-                                    <listOptionValue value="ORTEGA"/>
+                                    <listOptionValue value="ORTEGA_N"/>
+                                    <listOptionValue value="eSMO_SLIDE"/>
                                 </option>
                                 <option id="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.OPT_LEVEL.605729992" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.OPT_LEVEL" value="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.OPT_LEVEL.2" valueType="enumerated"/>
                                 <option id="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.GEN_FUNC_SUBSECTIONS.1260749016" superClass="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.GEN_FUNC_SUBSECTIONS" value="com.ti.ccstudio.buildDefinitions.C2000_22.6.compilerID.GEN_FUNC_SUBSECTIONS.on" valueType="enumerated"/>
